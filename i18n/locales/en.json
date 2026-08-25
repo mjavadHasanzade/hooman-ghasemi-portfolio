@@ -1,0 +1,21 @@
+{
+  "WebsiteMenu": {
+    "title": "Frontend project",
+    "homepage": "Home",
+    "products": {
+      "title": "Products",
+      "items": ["Stock Products", "RX Products"]
+    },
+    "categories": {
+      "title": "Categories",
+      "items": [
+        { "label": "White", "slug": "white" },
+        { "label": "Photochromic", "slug": "photochromic" },
+        { "label": "Polarized", "slug": "polarized" }
+      ]
+    },
+    "blog": "Blog",
+    "about": "About Us",
+    "contact": "Contact Us"
+  }
+}

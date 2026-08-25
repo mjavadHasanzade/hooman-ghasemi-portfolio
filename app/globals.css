@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* =========================
+     BRAND / PRIMARY
+  ========================= */
+  --color-primary: rgb(52 51 145);
+
+  --color-primary-50: rgb(241 242 255);
+  --color-primary-100: rgb(225 227 255);
+  --color-primary-200: rgb(196 200 255);
+  --color-primary-300: rgb(158 165 255);
+  --color-primary-400: rgb(113 123 255);
+  --color-primary-500: rgb(79 91 235);
+  --color-primary-600: rgb(52 51 145); /* base */
+  --color-primary-700: rgb(40 39 112);
+  --color-primary-800: rgb(30 30 84);
+  --color-primary-900: rgb(21 22 59);
+  --color-primary-950: rgb(10 12 32);
+
+  /* =========================
+     ACCENT
+     Electric Blue
+  ========================= */
+  --color-accent: rgb(77 168 255); /* #4DA8FF */
+
+  --color-accent-50: rgb(239 248 255);
+  --color-accent-100: rgb(219 238 255);
+  --color-accent-200: rgb(187 222 255);
+  --color-accent-300: rgb(143 201 255);
+  --color-accent-400: rgb(77 168 255); /* base */
+  --color-accent-500: rgb(37 140 251);
+  --color-accent-600: rgb(22 113 214);
+  --color-accent-700: rgb(20 89 168);
+  --color-accent-800: rgb(23 76 138);
+  --color-accent-900: rgb(22 65 114);
+  --color-accent-950: rgb(16 40 71);
+
+  /* =========================
+     GRAY SCALE
+  ========================= */
+  --color-gray-50: rgb(248 250 252);
+  --color-gray-100: rgb(241 245 249);
+  --color-gray-200: rgb(226 232 240);
+  --color-gray-300: rgb(203 213 225);
+  --color-gray-400: rgb(148 163 184);
+  --color-gray-500: rgb(100 116 139);
+  --color-gray-600: rgb(71 85 105);
+  --color-gray-700: rgb(51 65 85);
+  --color-gray-800: rgb(30 41 59);
+  --color-gray-900: rgb(15 23 42);
+  --color-gray-950: rgb(2 6 23);
+
+  /* =========================
+     BREAKPOINTS
+  ========================= */
+  --breakpoint-xxs: 320px;
+
+  /* =========================
+     FONTS
+  ========================= */
+  --font-vazir:
+    vazir, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* =========================
+     FONT SIZES
+  ========================= */
+  --text-xxs: 10px;
+
+  --color-background-light: rgb(247 248 250);
+  --color-foreground-light: rgb(17 24 39);
+}
+
+@theme dark {
+  /* =========================
+     BRAND / PRIMARY
+  ========================= */
+  --color-primary: rgb(113 123 255);
+
+  /* =========================
+     ACCENT
+  ========================= */
+  --color-accent: rgb(77 168 255);
+
+  --color-background-dark: rgb(17 24 39);
+  --color-foreground-dark: rgb(249 250 251);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
+
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-border);
+  }
+
+  body {
+    @apply font-vazir antialiased;
+  }
+
+  html[lang="fa"].ss01 {
+    -moz-font-feature-settings: "ss01";
+    -webkit-font-feature-settings: "ss01";
+    font-feature-settings: "ss01";
+  }
+}
+
+@layer base {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px rgba(52, 51, 145, 0.03) inset !important;
+
+    -webkit-text-fill-color: #111827 !important;
+
+    caret-color: #111827;
+
+    transition: background-color 9999s ease-in-out 0s;
+  }
+
+  .dark input:-webkit-autofill,
+  .dark input:-webkit-autofill:hover,
+  .dark input:-webkit-autofill:focus,
+  .dark textarea:-webkit-autofill,
+  .dark select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.04) inset !important;
+
+    -webkit-text-fill-color: #fff !important;
+
+    caret-color: #fff;
+
+    transition: background-color 9999s ease-in-out 0s;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.swiper-wrapper.marquee-swiper {
+  transition-timing-function: linear !important;
+}

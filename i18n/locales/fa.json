@@ -1,0 +1,21 @@
+{
+  "WebsiteMenu": {
+    "title": "فرانت ",
+    "homepage": "صفحه اصلی",
+    "products": {
+      "title": "محصولات",
+      "items": ["محصولات Stock", "محصولات RX"]
+    },
+    "categories": {
+      "title": "دسته بندی ها",
+      "items": [
+        { "label": "سفید", "slug": "سفید" },
+        { "label": "فتوکرومیک", "slug": "فتوکرومیک" },
+        { "label": "پلاریزه", "slug": "پلاریزه" }
+      ]
+    },
+    "blog": "بلاگ",
+    "about": "درباره ما",
+    "contact": "تماس با ما"
+  }
+}
