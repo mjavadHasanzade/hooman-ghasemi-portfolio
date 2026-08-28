@@ -1,3 +1,4 @@
+import Hero from "@/components/organisms/Hero";
 import { getTranslations } from "next-intl/server";
 
 export async function generateStaticParams() {
@@ -17,5 +18,9 @@ export default async function Home({ params }: Props) {
     locale,
   });
 
-  return <div className="md:mt-12">{t("WebsiteMenu.homepage")}</div>;
+  return (
+    <>
+      <Hero />
+    </>
+  );
 }

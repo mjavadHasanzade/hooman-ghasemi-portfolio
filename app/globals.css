@@ -39,6 +39,22 @@
   --color-accent-950: rgb(16 40 71);
 
   /* =========================
+     TEAL
+     (استفاده در سکشن‌های تیره / گرافیک‌های تکنولوژیک)
+  ========================= */
+  --color-teal-50: rgb(237 247 250);
+  --color-teal-100: rgb(210 232 238);
+  --color-teal-200: rgb(168 214 229);
+  --color-teal-300: rgb(120 190 212);
+  --color-teal-400: rgb(90 170 194);
+  --color-teal-500: rgb(63 168 196); /* base */
+  --color-teal-600: rgb(74 144 164);
+  --color-teal-700: rgb(55 118 138);
+  --color-teal-800: rgb(40 92 108);
+  --color-teal-900: rgb(26 66 78);
+  --color-teal-950: rgb(14 42 50);
+
+  /* =========================
      GRAY SCALE
   ========================= */
   --color-gray-50: rgb(248 250 252);
@@ -52,6 +68,13 @@
   --color-gray-800: rgb(30 41 59);
   --color-gray-900: rgb(15 23 42);
   --color-gray-950: rgb(2 6 23);
+
+  /* =========================
+     PRIMITIVES
+     (رنگ‌های خام، مستقل از تم)
+  ========================= */
+  --color-black: rgb(0 0 0);
+  --color-white: rgb(255 255 255);
 
   /* =========================
      BREAKPOINTS
@@ -70,18 +93,21 @@
   ========================= */
   --text-xxs: 10px;
 
+  /* =========================
+     LIGHT MODE BASE
+  ========================= */
   --color-background-light: rgb(247 248 250);
   --color-foreground-light: rgb(17 24 39);
 }
 
 @theme dark {
   /* =========================
-     BRAND / PRIMARY
+     BRAND / PRIMARY (dark)
   ========================= */
   --color-primary: rgb(113 123 255);
 
   /* =========================
-     ACCENT
+     ACCENT (dark)
   ========================= */
   --color-accent: rgb(77 168 255);
 

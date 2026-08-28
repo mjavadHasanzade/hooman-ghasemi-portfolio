@@ -17,5 +17,23 @@
     "blog": "Blog",
     "about": "About Us",
     "contact": "Contact Us"
+  },
+  "Hero": {
+    "logo": "BilloDesign",
+    "nav": {
+      "portfolio": "Portfolio",
+      "about": "About me",
+      "contact": "Contact"
+    },
+    "headingDark1": "DESIGN",
+    "headingLight1": "BEYOND PIXELS.",
+    "headingDark2": "BUILD",
+    "headingLight2": "BEYOND LIMITS.",
+    "description1": "Webflow sites that don't just look stunning —",
+    "description2": "they think, scale, and convert.",
+    "cta": "Work With Me",
+    "sideBadge": "W.",
+    "sideLabel": "NOMINEE",
+    "muteLabel": "Toggle sound"
   }
 }
