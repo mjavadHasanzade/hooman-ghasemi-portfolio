@@ -57,5 +57,17 @@
       "titleBold": "SEO",
       "description": "Optimized for speed, search, and seamless experience across all devices."
     }
+  },
+
+  "TechStack": {
+    "label": "TECH STACK",
+    "heading": "Tools I used",
+    "tools": {
+      "webflow": "Webflow",
+      "gsap": "GSAP",
+      "framer": "Framer",
+      "figma": "Figma",
+      "code": "Custom Code"
+    }
   }
 }

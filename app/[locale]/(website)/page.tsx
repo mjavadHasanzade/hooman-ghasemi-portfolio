@@ -1,6 +1,6 @@
 import Hero from "@/components/organisms/Hero";
 import ServicesSection from "@/components/organisms/ServicesSection";
-import { getTranslations } from "next-intl/server";
+import TechStackSection from "@/components/organisms/TechStackSection";
 
 export async function generateStaticParams() {
   return [{ locale: "fa" }, { locale: "en" }];
@@ -15,14 +15,11 @@ type Props = {
 export default async function Home({ params }: Props) {
   const { locale } = await params;
 
-  const t = await getTranslations({
-    locale,
-  });
-
   return (
     <>
       <Hero />
       <ServicesSection />
+      <TechStackSection />
     </>
   );
 }
