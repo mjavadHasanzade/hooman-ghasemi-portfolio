@@ -35,5 +35,27 @@
     "sideBadge": "W.",
     "sideLabel": "NOMINEE",
     "muteLabel": "Toggle sound"
+  },
+  "Services": {
+    "label": "SERVICES",
+    "watermark": "SERVICES",
+    "headingLight": "What I",
+    "headingBold": "Build",
+    "description1": "From concept to clean Webflow code — I design and develop future-proof digital experiences.",
+    "card1": {
+      "titleThin": "Web",
+      "titleBold": "Design",
+      "description": "UI/UX design that feels intuitive, intelligent, and on-brand."
+    },
+    "card2": {
+      "titleThin": "Webflow",
+      "titleBold": "Development",
+      "description": "Lightning-fast, scalable websites built with clean semantic code."
+    },
+    "card3": {
+      "titleThin": "Performance &",
+      "titleBold": "SEO",
+      "description": "Optimized for speed, search, and seamless experience across all devices."
+    }
   }
 }

@@ -1,4 +1,5 @@
 import Hero from "@/components/organisms/Hero";
+import ServicesSection from "@/components/organisms/ServicesSection";
 import { getTranslations } from "next-intl/server";
 
 export async function generateStaticParams() {
@@ -21,6 +22,7 @@ export default async function Home({ params }: Props) {
   return (
     <>
       <Hero />
+      <ServicesSection />
     </>
   );
 }

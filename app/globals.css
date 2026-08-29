@@ -2,6 +2,23 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ============================================
+   این دو مورد باید در سطح بالای فایل باشند،
+   نه داخل @layer — در غیر این صورت مرورگر
+   انیمیشن را نادیده می‌گیرد.
+============================================ */
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes border-rotate {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
 @theme {
   /* =========================
      BRAND / PRIMARY
@@ -179,6 +196,53 @@
 
   .scrollbar-hidden::-webkit-scrollbar {
     display: none;
+  }
+
+  /* ============================================
+     بردر گرادینتی محو با چرخش فقط روی هاور
+     استفاده: کارت باید هم کلاس "group" داشته باشد
+     هم کلاس "border-fade-teal"
+  ============================================ */
+  .border-fade-teal {
+    position: relative;
+  }
+
+  .border-fade-teal::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    background: conic-gradient(
+      from var(--border-angle),
+      transparent 0%,
+      rgba(125, 211, 235, 0.05) 8%,
+      rgba(125, 211, 235, 0.9) 16%,
+      rgba(125, 211, 235, 0.05) 26%,
+      transparent 40%,
+      transparent 60%,
+      rgba(125, 211, 235, 0.05) 74%,
+      rgba(125, 211, 235, 0.55) 82%,
+      rgba(125, 211, 235, 0.05) 90%,
+      transparent 100%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    animation: border-rotate 5s linear infinite;
+    animation-play-state: paused;
+  }
+
+  .group:hover .border-fade-teal::before {
+    animation-play-state: running;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .border-fade-teal::before {
+      animation: none !important;
+    }
   }
 }
 

@@ -35,5 +35,27 @@
     "sideBadge": "و.",
     "sideLabel": "برگزیده",
     "muteLabel": "قطع/وصل صدا"
+  },
+  "Services": {
+    "label": "خدمات",
+    "watermark": "SERVICES",
+    "headingLight": "چیزی که",
+    "headingBold": "می‌سازم",
+    "description1": "از ایده تا کد تمیز وب‌فلو — طراحی و توسعه‌ی تجربه‌های دیجیتال آینده‌نگر.",
+    "card1": {
+      "titleThin": "طراحی",
+      "titleBold": "وب",
+      "description": "طراحی UI/UX که شهودی، هوشمند و متناسب با برند حس می‌شه."
+    },
+    "card2": {
+      "titleThin": "توسعه",
+      "titleBold": "وب‌فلو",
+      "description": "سایت‌های سریع و مقیاس‌پذیر با کدی تمیز و معنایی."
+    },
+    "card3": {
+      "titleThin": "کارایی و",
+      "titleBold": "سئو",
+      "description": "بهینه برای سرعت، جستجو و تجربه‌ی یکپارچه در همه‌ی دستگاه‌ها."
+    }
   }
 }
