@@ -1,4 +1,5 @@
 import Hero from "@/components/organisms/Hero";
+import PortfolioSection from "@/components/organisms/PortfolioSection";
 import ServicesSection from "@/components/organisms/ServicesSection";
 import TechStackSection from "@/components/organisms/TechStackSection";
 
@@ -20,6 +21,7 @@ export default async function Home({ params }: Props) {
       <Hero />
       <ServicesSection />
       <TechStackSection />
+      <PortfolioSection />
     </>
   );
 }

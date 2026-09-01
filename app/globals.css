@@ -249,3 +249,19 @@
 .swiper-wrapper.marquee-swiper {
   transition-timing-function: linear !important;
 }
+.portfolio-bullet {
+  display: inline-block !important;
+  height: 4px !important;
+  width: 44px !important;
+  border-radius: 2px !important;
+  background-color: rgb(55 65 81) !important; /* gray-700, تیره‌تر مثل عکس */
+  opacity: 1 !important;
+  margin: 0 3px !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.portfolio-bullet.swiper-pagination-bullet-active {
+  background-color: rgb(45 212 191) !important;
+  width: 44px !important;
+}

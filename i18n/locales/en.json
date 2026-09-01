@@ -69,5 +69,26 @@
       "figma": "Figma",
       "code": "Custom Code"
     }
+  },
+  "Portfolio": {
+    "label": "PROJECTS",
+    "heading": "Selected Work",
+    "description": "Craft meets conversion. Here are a few recent projects that pushed boundaries.",
+    "visitSite": "Visit Site",
+    "viewProject": "View Project",
+    "items": {
+      "sysadmin": {
+        "title": "IT System Administrator Portfolio",
+        "description": "This project involved transforming Fadil's professional vision into a premium, enterprise-grade digital presence."
+      },
+      "orbitai": {
+        "title": "OrbitAI",
+        "description": "OrbitAI is a personal AI productivity hub designed to help users focus, plan intelligently, and work in alignment with their energy — not against it."
+      },
+      "elegantnast": {
+        "title": "Elegantnast",
+        "description": "Luxury Beauty Brand Website for Elegantnast, crafted to reflect the brand's aesthetics."
+      }
+    }
   }
 }
