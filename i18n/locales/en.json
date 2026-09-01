@@ -90,5 +90,13 @@
         "description": "Luxury Beauty Brand Website for Elegantnast, crafted to reflect the brand's aesthetics."
       }
     }
+  },
+  "About": {
+    "label": "MY BIO",
+    "heading": "About Me",
+    "greeting": "Hey, I'm Muhammad.",
+    "description": "I'm a Web designer and Webflow Certified Partner obsessed with blending design, code, and intelligence. Whether you're building a brand or reinventing a platform, I help you craft digital experiences that work hard — and look alive.",
+    "email": "hello@billodesign.com",
+    "imageAlt": "Portrait of Muhammad"
   }
 }
