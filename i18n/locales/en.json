@@ -98,5 +98,19 @@
     "description": "I'm a Web designer and Webflow Certified Partner obsessed with blending design, code, and intelligence. Whether you're building a brand or reinventing a platform, I help you craft digital experiences that work hard — and look alive.",
     "email": "hello@billodesign.com",
     "imageAlt": "Portrait of Muhammad"
+  },
+  "ContactCTA": {
+    "heading": "Let's Bring Your Vision to Life",
+    "description": "Have a project, an idea, or just curious if we're a good fit? Let's build something smart, beautiful, and future-ready.",
+    "connectLabel": "Let's connect",
+    "connectHref": "mailto:hello@billodesign.com",
+    "typewriterPhrases": [
+      "What are you waiting for?",
+      "Smash that button and let's talk.",
+      "Let's build something amazing together."
+    ]
+  },
+  "Footer": {
+    "copyright": "Muhammad/ © All rights reserved - BilloDesign"
   }
 }

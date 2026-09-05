@@ -266,3 +266,28 @@
   width: 44px !important;
 }
 
+.pulse-dot-ping {
+  animation: pulse-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes pulse-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  75%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.typewriter-cursor {
+  animation: cursor-blink 0.9s step-start infinite;
+}
+
+@keyframes cursor-blink {
+  50% {
+    opacity: 0;
+  }
+}
