@@ -1,0 +1,1 @@
+export const REFRESH_TOKEN_STORAGE_KEY = "cms_refresh_token";

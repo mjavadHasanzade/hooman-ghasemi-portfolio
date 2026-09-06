@@ -1,8 +1,8 @@
 import { Metadata } from "next";
+import { getMessages } from "next-intl/server";
 import "../globals.css";
-import { NextIntlClientProvider } from "next-intl";
-import { Toaster } from "sonner";
 import { vazirFont } from "@/utils";
+import { Providers } from "../providers";
 
 export const metadata: Metadata = {
   title: "Frontend project | پروژه فرانت اند",
@@ -26,9 +26,10 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const messages = await getMessages();
 
   const rtlLocales = ["fa", "ar"];
-  const dir = rtlLocales.includes(locale) ? "rtl" : "ltr ";
+  const dir = rtlLocales.includes(locale) ? "rtl" : "ltr";
 
   return (
     <html
@@ -37,14 +38,9 @@ export default async function RootLayout({
       dir={dir}
     >
       <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
-
-        <Toaster
-          position="bottom-right"
-          richColors
-          closeButton
-          toastOptions={{ className: "font-vazir" }}
-        />
+        <Providers locale={locale} messages={messages}>
+          {children}
+        </Providers>
       </body>
     </html>
   );
