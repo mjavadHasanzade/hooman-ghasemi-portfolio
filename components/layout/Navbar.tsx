@@ -2,12 +2,22 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { LayoutDashboard } from "lucide-react";
+import { Link } from "@/i18n/navigation";
+import { useAuthStore } from "@/lib/auth/auth-store";
 import HamburgerButton from "./HamburgerButton";
 import MobileMenu from "./MobileMenu";
 
-export default function Navbar() {
-  const t = useTranslations("Hero");
+type NavbarProps = {
+  siteName?: string;
+};
+
+export default function Navbar({ siteName }: NavbarProps) {
+  const t = useTranslations("SiteNavigation");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isAuthenticated = useAuthStore(
+    (state) => state.status === "authenticated",
+  );
 
   return (
     <>
@@ -33,7 +43,7 @@ export default function Navbar() {
             />
           </svg>
           <span className="text-lg font-semibold italic tracking-tight text-teal-500 sm:text-xl md:text-2xl">
-            {t("logo")}
+            {siteName || t("brandFallback")}
           </span>
         </div>
 
@@ -42,20 +52,29 @@ export default function Navbar() {
             href="#"
             className="text-white/90 transition-colors hover:text-teal-400"
           >
-            {t("nav.portfolio")}
+            {t("portfolio")}
           </a>
           <a
             href="#"
             className="text-white/90 transition-colors hover:text-teal-400"
           >
-            {t("nav.about")}
+            {t("about")}
           </a>
           <a
             href="#"
             className="text-white/90 transition-colors hover:text-teal-400"
           >
-            {t("nav.contact")}
+            {t("contact")}
           </a>
+          {isAuthenticated && (
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center gap-2 rounded border border-teal-500/70 px-3 py-1.5 text-sm font-medium text-teal-300 transition-colors hover:bg-teal-500/15 hover:text-white"
+            >
+              <LayoutDashboard className="h-4 w-4" />
+              {t("panel")}
+            </Link>
+          )}
         </nav>
 
         <HamburgerButton
@@ -65,7 +84,11 @@ export default function Navbar() {
         />
       </header>
 
-      <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      <MobileMenu
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        siteName={siteName}
+      />
     </>
   );
 }

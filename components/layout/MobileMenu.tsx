@@ -3,11 +3,14 @@
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { LayoutDashboard } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { useAuthStore } from "@/lib/auth/auth-store";
 
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
+  siteName?: string;
 }
 
 type NavKey = "portfolio" | "about" | "contact";
@@ -18,8 +21,15 @@ const navItems: { key: NavKey; href: string }[] = [
   { key: "contact", href: "#" },
 ];
 
-export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
-  const t = useTranslations("Hero");
+export default function MobileMenu({
+  isOpen,
+  onClose,
+  siteName,
+}: MobileMenuProps) {
+  const t = useTranslations("SiteNavigation");
+  const isAuthenticated = useAuthStore(
+    (state) => state.status === "authenticated",
+  );
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -83,7 +93,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                         0{i + 1}
                       </span>
                       <span className="relative">
-                        {t(`nav.${item.key}`)}
+                        {t(item.key)}
                         <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-teal-500 transition-all duration-300 group-hover:w-full" />
                       </span>
                     </Link>
@@ -109,10 +119,20 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     transition-colors hover:bg-teal-500/20
                   "
                 >
-                  {t("cta")}
+                  {t("contact")}
                 </a>
+                {isAuthenticated && (
+                  <Link
+                    href="/dashboard"
+                    onClick={onClose}
+                    className="flex items-center justify-center gap-2 rounded-[3px] border border-white/25 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+                  >
+                    <LayoutDashboard className="h-4 w-4" />
+                   {t("panel")}
+                  </Link>
+                )}
                 <span className="text-center text-xs text-gray-400">
-                  {t("logo")} © {new Date().getFullYear()}
+                  {siteName || t("brandFallback")} © {new Date().getFullYear()}
                 </span>
               </motion.div>
             </div>

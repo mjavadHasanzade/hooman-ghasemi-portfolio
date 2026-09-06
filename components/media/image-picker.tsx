@@ -66,10 +66,10 @@ export function ImagePicker({ value, onChange, label }: ImagePickerProps) {
         </div>
 
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button type="button" variant="outline">
-              انتخاب تصویر
-            </Button>
+          <DialogTrigger
+            render={<Button type="button" variant="outline" />}
+          >
+            انتخاب تصویر
           </DialogTrigger>
           <DialogContent className="max-h-[85vh] max-w-3xl overflow-y-auto">
             <DialogHeader>

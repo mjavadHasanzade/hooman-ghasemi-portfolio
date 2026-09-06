@@ -3,20 +3,26 @@ import { getMessages } from "next-intl/server";
 import "../globals.css";
 import { vazirFont } from "@/utils";
 import { Providers } from "../providers";
+import {
+  getPublicSiteSettings,
+  publicMediaUrl,
+} from "@/lib/api/public-content";
 
-export const metadata: Metadata = {
-  title: "Frontend project | پروژه فرانت اند",
-  description: "",
-  keywords: [],
-  icons: {
-    icon: [
-      { url: "/favicon.png" },
-      { url: "/favicon.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: [{ url: "/favicon.png", sizes: "180x180", type: "image/png" }],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const settings = await getPublicSiteSettings();
+    const faviconUrl = publicMediaUrl(settings.faviconMedia);
+    const ogImageUrl = publicMediaUrl(settings.ogImageMedia);
+
+    return {
+      title: settings.siteName,
+      icons: faviconUrl ? { icon: faviconUrl } : undefined,
+      openGraph: ogImageUrl ? { images: [{ url: ogImageUrl }] } : undefined,
+    };
+  } catch {
+    return { title: "Frontend project | پروژه فرانت اند" };
+  }
+}
 
 export default async function RootLayout({
   children,

@@ -16,25 +16,15 @@
     },
     "blog": "بلاگ",
     "about": "درباره ما",
-    "contact": "تماس با ما"
+    "contact": "تماس با ما",
+    "panel": "پنل مدیریت"
   },
-  "Hero": {
-    "logo": "BilloDesign",
-    "nav": {
-      "portfolio": "نمونه‌کارها",
-      "about": "درباره من",
-      "contact": "تماس با من"
-    },
-    "headingDark1": "طراحی",
-    "headingLight1": "فراتر از پیکسل.",
-    "headingDark2": "توسعه",
-    "headingLight2": "فراتر از محدودیت.",
-    "description1": "سایت‌های وب‌فلویی که فقط زیبا نیستن —",
-    "description2": "فکر می‌کنن، رشد می‌کنن و تبدیل ایجاد می‌کنن.",
-    "cta": "همکاری با من",
-    "sideBadge": "و.",
-    "sideLabel": "برگزیده",
-    "muteLabel": "قطع/وصل صدا"
+  "SiteNavigation": {
+    "brandFallback": "BilloDesign",
+    "portfolio": "نمونه‌کارها",
+    "about": "درباره من",
+    "contact": "تماس با من",
+    "panel": "پنل مدیریت"
   },
   "Services": {
     "label": "خدمات",
