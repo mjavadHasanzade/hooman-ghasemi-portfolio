@@ -2,21 +2,19 @@ import "server-only";
 
 import type { Locale, SuccessResponse } from "../types/api";
 import type { Media } from "../types/media";
+import type {
+  PublicAbout,
+  PublicFooter,
+  PublicHero,
+  PublicSiteSettings,
+} from "../types/public-content";
 
-export type PublicSiteSettings = {
-  siteName: string;
-  contactEmail: string;
-  defaultLocale: Locale;
-  faviconMedia: Media | null;
-  ogImageMedia: Media | null;
-};
-
-export type PublicHero = {
-  backgroundImage: Media | null;
-  title: string;
-  subtitle: string;
-  ctaLabel: string;
-};
+export type {
+  PublicAbout,
+  PublicFooter,
+  PublicHero,
+  PublicSiteSettings,
+} from "../types/public-content";
 
 function getApiUrl() {
   const apiUrl = process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL;
@@ -47,6 +45,14 @@ export function getPublicSiteSettings() {
 
 export function getPublicHero(locale: Locale) {
   return getPublicData<PublicHero>(`/hero?locale=${locale}`);
+}
+
+export function getPublicAbout(locale: Locale) {
+  return getPublicData<PublicAbout>(`/about?locale=${locale}`);
+}
+
+export function getPublicFooter(locale: Locale) {
+  return getPublicData<PublicFooter>(`/footer?locale=${locale}`);
 }
 
 export function publicMediaUrl(media: Media | null | undefined) {

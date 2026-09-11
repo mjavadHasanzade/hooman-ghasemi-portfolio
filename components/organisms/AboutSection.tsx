@@ -2,18 +2,19 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 import { Mail } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import type { PublicAbout } from "@/lib/types/public-content";
+import { mediaUrl } from "@/lib/types/media";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function AboutSection() {
-  const t = useTranslations("About");
+export default function AboutSection({ about }: { about: PublicAbout }) {
 
   const sectionRef = useRef<HTMLElement>(null);
   const imageWrapRef = useRef<HTMLDivElement>(null);
+  const imageUrl = mediaUrl(about.image);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -100,14 +101,15 @@ export default function AboutSection() {
                 borderRadius: "62% 38% 55% 45% / 48% 55% 45% 52%",
               }}
             >
-              <Image
-                src="/images/about/rectangle.avif"
-                alt={t("imageAlt")}
-                fill
-                sizes="(max-width: 1024px) 60vw, 300px"
-                className="object-cover grayscale"
-                priority
-              />
+              {imageUrl && (
+                <Image
+                  src={imageUrl}
+                  alt={about.heading}
+                  fill
+                  sizes="(max-width: 1024px) 60vw, 300px"
+                  className="object-cover grayscale"
+                />
+              )}
               <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black/50 to-transparent" />
             </div>
           </div>
@@ -192,30 +194,28 @@ export default function AboutSection() {
           </div>
 
           <p className="about-item font-mono text-sm tracking-[0.5em] text-teal-400 sm:text-base">
-            {t("label")}
+            {about.label}
           </p>
 
           <h2 className="about-item mt-3 font-mono text-4xl font-bold text-gray-400 sm:text-5xl">
-            {t("heading")}
+            {about.heading}
           </h2>
 
           <p className="about-item relative z-10 mt-10 font-mono text-xl text-gray-300 sm:mt-12 sm:text-2xl">
-            {t("greeting")}
+            {about.greeting}
           </p>
 
           <p className="about-item mt-5 max-w-2xl text-base leading-relaxed text-gray-500 sm:text-lg">
-            {t.rich("description", {
-              em: (chunks) => <span className="text-gray-200">{chunks}</span>,
-            })}
+            {about.description}
           </p>
 
           <a
-            href={`mailto:${t("email")}`}
+            href={`mailto:${about.email}`}
             className="about-item mt-6 flex items-center gap-3 transition-colors hover:opacity-80"
           >
             <Mail className="h-5 w-5 text-gray-300" strokeWidth={1.75} />
             <span className="font-mono text-base text-teal-400 sm:text-lg">
-              {t("email")}
+              {about.email}
             </span>
           </a>
         </div>

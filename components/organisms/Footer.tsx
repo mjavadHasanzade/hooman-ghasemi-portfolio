@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useTranslations } from "next-intl";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import type { PublicFooter } from "@/lib/types/public-content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Footer() {
-  const t = useTranslations("Footer");
+export default function Footer({ footer }: { footer: PublicFooter }) {
 
   const footerRef = useRef<HTMLElement>(null);
 
@@ -49,7 +48,7 @@ export default function Footer() {
         />
 
         <p className="footer-item mt-8 font-mono text-sm text-gray-500 sm:text-base">
-          {t("copyright", { year: new Date().getFullYear() })}
+          {footer.copyrightText}
         </p>
       </div>
     </footer>

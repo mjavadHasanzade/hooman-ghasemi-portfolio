@@ -5,7 +5,12 @@ import Hero from "@/components/organisms/Hero";
 import PortfolioSection from "@/components/organisms/PortfolioSection";
 import ServicesSection from "@/components/organisms/ServicesSection";
 import TechStackSection from "@/components/organisms/TechStackSection";
-import { getPublicHero, getPublicSiteSettings } from "@/lib/api/public-content";
+import {
+  getPublicAbout,
+  getPublicFooter,
+  getPublicHero,
+  getPublicSiteSettings,
+} from "@/lib/api/public-content";
 
 export async function generateStaticParams() {
   return [{ locale: "fa" }, { locale: "en" }];
@@ -19,9 +24,11 @@ type Props = {
 
 export default async function Home({ params }: Props) {
   const { locale } = await params;
-  const [siteSettings, hero] = await Promise.all([
+  const [siteSettings, hero, about, footer] = await Promise.all([
     getPublicSiteSettings(),
     getPublicHero(locale),
+    getPublicAbout(locale),
+    getPublicFooter(locale),
   ]);
 
   return (
@@ -30,9 +37,9 @@ export default async function Home({ params }: Props) {
       <ServicesSection />
       <TechStackSection />
       <PortfolioSection />
-      <AboutSection />
+      <AboutSection about={about} />
       <ContactCTASection />
-      <Footer />
+      <Footer footer={footer} />
     </>
   );
 }
