@@ -51,3 +51,57 @@ export type UpdateHeroInput = {
   backgroundImageId?: string | null;
   translations?: HeroTranslationInput[];
 };
+
+export type AboutTranslation = {
+  id: string;
+  aboutId: string;
+  locale: Locale;
+  label: string;
+  heading: string;
+  greeting: string;
+  description: string;
+};
+
+export type About = {
+  id: "singleton";
+  email: string;
+  imageId: string | null;
+  image: Media | null;
+  translations: AboutTranslation[];
+  availableLocales: Locale[];
+  updatedAt: string;
+};
+
+export type AboutTranslationInput = Pick<
+  AboutTranslation,
+  "locale" | "label" | "heading" | "greeting" | "description"
+>;
+
+export type UpdateAboutInput = {
+  email?: string;
+  imageId?: string | null;
+  translations?: AboutTranslationInput[];
+};
+
+export type FooterTranslation = {
+  id: string;
+  footerId: string;
+  locale: Locale;
+  copyrightText: string;
+};
+
+export type Footer = {
+  id: "singleton";
+  translations: FooterTranslation[];
+  availableLocales: Locale[];
+  updatedAt: string;
+};
+
+export type FooterTranslationInput = Pick<
+  FooterTranslation,
+  "locale" | "copyrightText"
+>;
+
+export type UpdateFooterInput = {
+  translations?: FooterTranslationInput[];
+};

@@ -1,7 +1,11 @@
 import { apiGet, apiPatch } from "./client";
 import type {
   Hero,
+  About,
+  Footer,
   SiteSettings,
+  UpdateAboutInput,
+  UpdateFooterInput,
   UpdateHeroInput,
   UpdateSiteSettingsInput,
 } from "../types/content";
@@ -20,4 +24,20 @@ export function getHero() {
 
 export function updateHero(body: UpdateHeroInput) {
   return apiPatch<Hero>("/admin/hero", body);
+}
+
+export function getAbout() {
+  return apiGet<About>("/admin/about");
+}
+
+export function updateAbout(body: UpdateAboutInput) {
+  return apiPatch<About>("/admin/about", body);
+}
+
+export function getFooter() {
+  return apiGet<Footer>("/admin/footer");
+}
+
+export function updateFooter(body: UpdateFooterInput) {
+  return apiPatch<Footer>("/admin/footer", body);
 }

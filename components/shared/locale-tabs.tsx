@@ -34,7 +34,8 @@ export function LocaleTabs({
             onClick={() => onChange(locale)}
             className={cn(
               "relative px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground",
-              isSelected && "text-primary after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-primary",
+              isSelected &&
+                "text-primary after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-primary",
             )}
           >
             {localeLabels[locale]}

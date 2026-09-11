@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { ContentFormSkeleton } from "@/components/content/content-form-skeleton";
-import { LocaleTabs } from "@/components/content/locale-tabs";
+import { LocaleTabs } from "@/components/shared/locale-tabs";
 import { ImagePicker } from "@/components/media/image-picker";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
