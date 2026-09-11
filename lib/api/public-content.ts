@@ -1,7 +1,6 @@
 import "server-only";
 
 import type { Locale, SuccessResponse } from "../types/api";
-import type { Media } from "../types/media";
 import type {
   PublicAbout,
   PublicFooter,
@@ -19,6 +18,10 @@ export type {
   PublicProject,
   PublicSiteSettings,
 } from "../types/public-content";
+
+// تابع client-safe رو از فایل جدا re-export می‌کنیم
+// تا کدهای سرور که قبلاً از اینجا ایمپورتش می‌کردن نشکنن
+export { publicMediaUrl } from "../media/public-media-url";
 
 function getApiUrl() {
   const apiUrl = process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL;
@@ -65,14 +68,4 @@ export function getPublicProjects(locale: Locale) {
 
 export function getPublicHome(locale: Locale) {
   return getPublicData<PublicHome>(`/page/home?locale=${locale}`);
-}
-
-
-export function publicMediaUrl(media: Media | null | undefined) {
-  if (!media?.path) return null;
-
-  const backendOrigin =
-    process.env.BACKEND_ORIGIN ?? process.env.NEXT_PUBLIC_ASSET_ORIGIN;
-
-  return backendOrigin ? `${backendOrigin}${media.path}` : null;
 }

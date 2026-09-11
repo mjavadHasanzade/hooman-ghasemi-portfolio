@@ -1,92 +1,69 @@
+"use client";
+
 import { ReactNode } from "react";
 
 interface ServiceCardProps {
   icon: ReactNode;
-  titleThin: string;
-  titleBold: string;
+  title: string;
   description: string;
 }
 
 export default function ServiceCard({
   icon,
-  titleThin,
-  titleBold,
+  title,
   description,
 }: ServiceCardProps) {
+  const [firstWord, ...rest] = title.split(" ");
+  const restOfTitle = rest.join(" ");
+
   return (
-    <div
-      className="
-        group border-fade-teal relative flex min-h-80 flex-col
-        overflow-hidden bg-black
-        px-8 py-9
-        transition-transform duration-500 ease-out
-        hover:-translate-y-1
-        sm:min-h-100 sm:px-9 sm:py-10
-        lg:min-h-120 lg:px-10 lg:py-10
-      "
-    >
+    <div className="group relative overflow-hidden rounded p-px">
       <div
         aria-hidden="true"
         className="
-          pointer-events-none absolute inset-0
-          bg-[radial-gradient(120%_70%_at_18%_-8%,rgba(255,255,255,0.22),transparent_62%)]
-        "
-      />
-      <div
-        aria-hidden="true"
-        className="
-          pointer-events-none absolute inset-0
-          bg-[radial-gradient(75%_50%_at_88%_0%,rgba(125,211,235,0.20),transparent_68%)]
-        "
-      />
-      <div
-        aria-hidden="true"
-        className="
-          pointer-events-none absolute inset-0
-          bg-[radial-gradient(65%_45%_at_10%_100%,rgba(125,211,235,0.12),transparent_65%)]
+          absolute inset-[-55%]
+          animate-[spin_11s_linear_infinite]
+          bg-[conic-gradient(from_171deg,transparent_0deg,transparent_100deg,rgba(45,212,191,0.22)_140deg,rgba(94,234,212,0.95)_234deg,rgba(45,212,191,0.22)_290deg,transparent_360deg)]
         "
       />
 
       <div
-        aria-hidden="true"
         className="
-          pointer-events-none absolute inset-0
-          bg-[radial-gradient(130%_75%_at_18%_-8%,rgba(255,255,255,0.16),transparent_65%)]
-          opacity-0 transition-opacity duration-500
-          group-hover:opacity-100
+          relative z-10 flex h-full min-h-80 flex-col
+          overflow-hidden rounded
+          bg-[#050505] px-8 py-9
+          transition-transform duration-500 ease-out
+          hover:-translate-y-1
+          sm:min-h-88 sm:px-9 sm:py-10
+          lg:min-h-96
         "
-      />
-      <div
-        aria-hidden="true"
-        className="
-          pointer-events-none absolute inset-0
-          bg-[radial-gradient(85%_55%_at_88%_0%,rgba(125,211,235,0.16),transparent_70%)]
-          opacity-0 transition-opacity duration-500
-          group-hover:opacity-100
-        "
-      />
-      <div
-        aria-hidden="true"
-        className="
-          pointer-events-none absolute inset-0
-          bg-[radial-gradient(75%_50%_at_10%_100%,rgba(125,211,235,0.14),transparent_68%)]
-          opacity-0 transition-opacity duration-500
-          group-hover:opacity-100
-        "
-      />
+      >
+        <div
+          aria-hidden="true"
+          className="
+            pointer-events-none absolute inset-0
+            bg-[radial-gradient(60%_50%_at_82%_8%,rgba(255,255,255,0.055),transparent_70%)]
+          "
+        />
 
-      <div className="relative mb-8 h-14 w-14 transition-transform duration-500 group-hover:scale-105 sm:mb-9 sm:h-16 sm:w-16 lg:h-[72px] lg:w-[72px]">
-        {icon}
+        <div className="relative mb-8 h-20 w-20 sm:mb-9 sm:h-24 sm:w-24">
+          {icon}
+        </div>
+
+        <h3 className="relative mb-5 font-mono text-3xl font-bold leading-[1.2] tracking-tight sm:text-4xl">
+          <span className="font-normal text-gray-400">{firstWord}</span>
+          {restOfTitle && (
+            <>
+              {" "}
+              <span className="text-gray-100">{restOfTitle}</span>
+            </>
+          )}
+        </h3>
+
+        <p className="relative max-w-xs text-base leading-relaxed text-gray-300 sm:text-lg">
+          {description}
+        </p>
       </div>
-
-      <h3 className="relative mb-5 ltr:font-mono text-3xl font-bold leading-[1.15] tracking-tight sm:text-4xl lg:text-[40px]">
-        <span className="font-normal text-gray-400">{titleThin}</span>{" "}
-        <span className="text-gray-100">{titleBold}</span>
-      </h3>
-
-      <p className="relative max-w-75 text-[15px] leading-relaxed text-gray-300 sm:text-base lg:text-lg">
-        {description}
-      </p>
     </div>
   );
 }

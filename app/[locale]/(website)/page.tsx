@@ -36,11 +36,11 @@ export default async function Home({ params }: Props) {
   return (
     <>
       <Hero hero={hero} siteName={siteSettings.siteName} />
-      <ServicesSection />
+      <ServicesSection services={home.services} />
       <TechStackSection techIcons={home.techIcons} />
       <PortfolioSection projects={home.projects} />
       <AboutSection about={about} />
-      <ContactCTASection />
+      <ContactCTASection contactCta={home.contactCta} socialLinks={home.socialLinks} />
       <Footer footer={footer} />
     </>
   );

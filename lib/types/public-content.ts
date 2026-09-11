@@ -24,9 +24,36 @@ export type PublicProject = {
   techIcons: PublicProjectTechIcon[];
 };
 
+export type PublicService = {
+  id: string;
+  iconKey: string;
+  order: number;
+  title: string;
+  description: string;
+};
+
+export type PublicContactCta = {
+  connectHref: string;
+  heading: string;
+  description: string;
+  connectLabel: string;
+  phrases: string[];
+};
+
+export type PublicSocialLink = {
+  id: string;
+  platform: string;
+  url: string;
+  iconKey: string;
+  order: number;
+};
+
 export type PublicHome = {
   projects: PublicProject[];
   techIcons: PublicTechIcon[];
+  services: PublicService[];
+  contactCta: PublicContactCta;
+  socialLinks: PublicSocialLink[];
 };
 
 export type PublicSiteSettings = {

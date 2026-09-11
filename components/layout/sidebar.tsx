@@ -12,6 +12,7 @@ import {
   Briefcase,
   MessageSquare,
   Share2,
+  Layers3,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +24,7 @@ const navItems = [
   { href: "/footer", label: "فوتر", icon: FileText },
   { href: "/tech-icons", label: "آیکون‌های تکنولوژی", icon: Wrench },
   { href: "/projects", label: "پروژه‌ها", icon: Briefcase },
+  { href: "/services", label: "سرویس‌ها", icon: Layers3 },
   { href: "/contact-cta", label: "دعوت به اقدام", icon: MessageSquare },
   { href: "/social-links", label: "شبکه‌های اجتماعی", icon: Share2 },
   { href: "/media", label: "کتابخانه‌ی رسانه", icon: ImageIcon },

@@ -1,32 +1,28 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useTranslations } from "next-intl";
 // import { Linkedin } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTypewriter } from "../../hooks/useTypewriter";
+import type { PublicContactCta, PublicSocialLink } from "@/lib/types/public-content";
 
 gsap.registerPlugin(ScrollTrigger);
 
 // آیکون‌های شبکه‌های اجتماعی؛ در صورت وجود فایل SVG اختصاصی برند،
 // آن‌ها را جایگزین این پیاده‌سازی موقت کنید
-const socialLinks = [
-//   { id: "linkedin", href: "#", icon: <Linkedin className="h-4 w-4" /> },
-  { id: "upwork", href: "#", label: "Up" },
-  { id: "clutch", href: "#", label: "✛" },
-  { id: "webflow", href: "#", label: "W" },
-  { id: "behance", href: "#", label: "Bē" },
-];
-
-export default function ContactCTASection() {
-  const t = useTranslations("ContactCTA");
+export default function ContactCTASection({
+  contactCta,
+  socialLinks,
+}: {
+  contactCta: PublicContactCta;
+  socialLinks: PublicSocialLink[];
+}) {
 
   const sectionRef = useRef<HTMLElement>(null);
 
   // متن‌های چرخشی افکت تایپ‌رایتر از فایل ترجمه خوانده می‌شوند
-  const typewriterWords = t.raw("typewriterPhrases") as string[];
-  const typedText = useTypewriter(typewriterWords);
+  const typedText = useTypewriter(contactCta.phrases);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -85,17 +81,17 @@ export default function ContactCTASection() {
     >
       <div className="relative mx-auto max-w-4xl px-5 text-center sm:px-8">
         <h2 className="cta-item font-mono text-3xl font-bold text-gray-300 sm:text-4xl md:text-5xl">
-          {t("heading")}
+          {contactCta.heading}
         </h2>
 
         <p className="cta-item mx-auto mt-6 max-w-2xl text-base leading-relaxed text-gray-400 sm:text-lg">
-          {t("description")}
+          {contactCta.description}
         </p>
 
         {/* دکمه + کره‌های هم‌پوشان */}
         <div className="relative mt-10 flex items-center justify-center">
           <a
-            href={t("connectHref")}
+            href={contactCta.connectHref}
             className="cta-item pulse-btn group relative z-10 flex items-center gap-3 rounded-full border border-teal-500/40 bg-black px-6 py-3.5 font-mono text-sm font-bold text-white transition-colors hover:border-teal-400 sm:text-base"
           >
             {/* دایره‌ی چشمک‌زن reusable */}
@@ -103,7 +99,7 @@ export default function ContactCTASection() {
               <span className="pulse-dot-ping absolute inline-flex h-full w-full rounded-full bg-teal-400" />
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-teal-400" />
             </span>
-            {t("connectLabel")}
+            {contactCta.connectLabel}
           </a>
 
           {/* دو کره‌ی هم‌پوشان گلاسی */}
@@ -151,11 +147,13 @@ export default function ContactCTASection() {
           {socialLinks.map((social) => (
             <a
               key={social.id}
-              href={social.href}
-              aria-label={social.id}
+              href={social.url}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={social.platform}
               className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-800/80 text-sm font-bold text-gray-200 transition-colors hover:bg-gray-700"
             >
-              {social.icon ?? social.label}
+              {social.iconKey.slice(0, 2).toUpperCase()}
             </a>
           ))}
         </div>

@@ -1,56 +1,93 @@
 "use client";
+import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Gauge } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ServiceCard from "../molecules/ServiceCard";
 import SectionHeading from "../common/SectionHeading";
+import type { PublicService } from "@/lib/types/public-content";
+import type { PublicSectionHeadings } from "@/lib/types/public-content";
 
-export default function ServicesSection() {
+if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
+
+export default function ServicesSection({
+  services,
+  sectionHeadings,
+}: {
+  services: PublicService[];
+  sectionHeadings: PublicSectionHeadings;
+}) {
   const t = useTranslations("Services");
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!cardsRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        cardsRef.current!.children,
+        { opacity: 0, y: 32 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          stagger: 0.12,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 75%",
+            once: true,
+          },
+        },
+      );
+    }, sectionRef);
+    return () => ctx.revert();
+  }, [services.length]);
+
+  function iconFor(key: string) {
+    if (key === "web-design" || key === "design")
+      return <WebDesignIcon className="h-full w-full" />;
+    if (key === "webflow" || key === "development")
+      return <WebflowIcon className="h-full w-full" />;
+    return <Gauge className="h-full w-full" strokeWidth={1.5} />;
+  }
 
   return (
-    <section className="relative w-full overflow-hidden bg-black py-16 text-white sm:py-20 md:py-24 lg:py-28">
+    <section
+      ref={sectionRef}
+      className="relative w-full overflow-hidden bg-black py-16 text-white sm:py-20 md:py-24 lg:py-28"
+    >
       <div className="relative z-10 px-5 sm:px-8 md:px-12 lg:px-15 xl:px-20">
         <SectionHeading
           label={t("label")}
-          heading={[
-            [
-              { text: t("headingLight") },
-              { text: t("headingBold"), emphasis: true },
-            ],
-          ]}
-          description={[t("description1")]}
+          heading={[[{ text: sectionHeadings.servicesTitle, emphasis: true }]]}
+          description={[sectionHeadings.servicesSubtitle]}
         />
 
-        <div className="relative mt-14 grid grid-cols-1 sm:mt-16 md:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-x-6 lg:gap-y-8 xl:gap-x-8">
-          <ServiceCard
-            icon={<WebDesignIcon className="h-full w-full" />}
-            titleThin={t("card1.titleThin")}
-            titleBold={t("card1.titleBold")}
-            description={t("card1.description")}
-          />
-
-          <div className="lg:-ml-px">
+        <div
+          ref={cardsRef}
+          className="
+            relative mt-14 grid grid-cols-1 gap-6
+            sm:mt-16 sm:gap-7
+            md:grid-cols-2
+            lg:mt-20 lg:grid-cols-3 lg:gap-8
+          "
+        >
+          {services.map((service) => (
             <ServiceCard
-              icon={<WebflowIcon className="h-full w-full" />}
-              titleThin={t("card2.titleThin")}
-              titleBold={t("card2.titleBold")}
-              description={t("card2.description")}
+              key={service.id}
+              icon={iconFor(service.iconKey)}
+              title={service.title}
+              description={service.description}
             />
-          </div>
-
-          <div className="lg:-ml-px">
-            <ServiceCard
-              icon={<Gauge className="h-full w-full" strokeWidth={1.8} />}
-              titleThin={t("card3.titleThin")}
-              titleBold={t("card3.titleBold")}
-              description={t("card3.description")}
-            />
-          </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
+
 export function WebDesignIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 64 64" fill="none" className={className}>
@@ -80,6 +117,7 @@ export function WebDesignIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
 export function WebflowIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 64 64" fill="none" className={className}>
