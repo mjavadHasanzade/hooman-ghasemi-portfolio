@@ -11,7 +11,6 @@ import { mediaUrl } from "@/lib/types/media";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function AboutSection({ about }: { about: PublicAbout }) {
-
   const sectionRef = useRef<HTMLElement>(null);
   const imageWrapRef = useRef<HTMLDivElement>(null);
   const imageUrl = mediaUrl(about.image);
@@ -108,6 +107,7 @@ export default function AboutSection({ about }: { about: PublicAbout }) {
                   fill
                   sizes="(max-width: 1024px) 60vw, 300px"
                   className="object-cover grayscale"
+                  unoptimized
                 />
               )}
               <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black/50 to-transparent" />

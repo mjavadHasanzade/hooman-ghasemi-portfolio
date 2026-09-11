@@ -13,78 +13,15 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import SectionHeading from "../common/SectionHeading";
-import {
-  WebflowLogo,
-  FigmaLogo,
-  FramerLogo,
-  GsapLogo,
-} from "../atoms/icons/TechIcons";
 import ProjectCard from "../molecules/ProjectCard";
+import type { PublicProject } from "@/lib/types/public-content";
+import { mediaUrl } from "@/lib/types/media";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const projects = [
-  {
-    id: "sysadmin",
-    key: "sysadmin",
-    image: "/images/projects/sysadmin.jpg",
-    icons: [
-      <WebflowLogo key="w" className="h-full w-full" />,
-      <FigmaLogo key="f" className="h-full w-full" />,
-    ],
-  },
-  {
-    id: "orbitai",
-    key: "orbitai",
-    image: "/images/projects/orbitai.jpg",
-    icons: [
-      <WebflowLogo key="w" className="h-full w-full" />,
-      <FramerLogo key="fr" className="h-full w-full" />,
-      <GsapLogo key="g" className="h-full w-full" />,
-    ],
-  },
-  {
-    id: "elegantnast",
-    key: "elegantnast",
-    image: "/images/projects/elegantnast.jpg",
-    icons: [
-      <WebflowLogo key="w" className="h-full w-full" />,
-      <FigmaLogo key="f" className="h-full w-full" />,
-    ],
-  },
-  {
-    id: "sysadmin-1",
-    key: "sysadmin",
-    image: "/images/projects/sysadmin.jpg",
-    icons: [
-      <WebflowLogo key="w" className="h-full w-full" />,
-      <FigmaLogo key="f" className="h-full w-full" />,
-    ],
-  },
-  {
-    id: "orbitai-1",
-    key: "orbitai",
-    image: "/images/projects/orbitai.jpg",
-    icons: [
-      <WebflowLogo key="w" className="h-full w-full" />,
-      <FramerLogo key="fr" className="h-full w-full" />,
-      <GsapLogo key="g" className="h-full w-full" />,
-    ],
-  },
-  {
-    id: "elegantnast-1",
-    key: "elegantnast",
-    image: "/images/projects/elegantnast.jpg",
-    icons: [
-      <WebflowLogo key="w" className="h-full w-full" />,
-      <FigmaLogo key="f" className="h-full w-full" />,
-    ],
-  },
-] as const;
-
-export default function PortfolioSection() {
+export default function PortfolioSection({ projects }: { projects: PublicProject[] }) {
   const t = useTranslations("Portfolio");
 
   const portfolioRef = useRef<HTMLElement>(null);
@@ -214,24 +151,41 @@ export default function PortfolioSection() {
           }}
           className="px-5! pb-2! sm:px-8! md:px-12! lg:px-15! xl:px-20!"
         >
-          {projects.map((project) => (
-            <SwiperSlide
-              key={project.id}
-              className="portfolio-project-card h-auto"
-            >
-              <ProjectCard
-                image={project.image}
-                title={t(`items.${project.key}.title`)}
-                description={t(`items.${project.key}.description`)}
-                visitSiteLabel={t("visitSite")}
-                viewProjectLabel={t("viewProject")}
-                viewProjectIcon={
-                  <Circle className="h-3.5 w-3.5 fill-teal-500 text-teal-500" />
-                }
-                techIcons={[...project.icons]}
-              />
-            </SwiperSlide>
-          ))}
+          {projects
+            .slice()
+            .sort((a, b) => a.order - b.order)
+            .map((project) => {
+              return (
+                <SwiperSlide
+                  key={project.id}
+                  className="portfolio-project-card h-auto"
+                >
+                  <ProjectCard
+                    image={mediaUrl(project.image)}
+                    title={project.title || project.slug}
+                    description={project.description}
+                    visitSiteLabel={t("visitSite")}
+                    viewProjectLabel={t("viewProject")}
+                    viewProjectIcon={
+                      <Circle className="h-3.5 w-3.5 fill-teal-500 text-teal-500" />
+                    }
+                    liveUrl={project.liveUrl}
+                    techIcons={project.techIcons
+                      .slice()
+                      .sort((a, b) => a.order - b.order)
+                      .map((techIcon) => (
+                        <span
+                          key={techIcon.key}
+                          className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-700 text-xxs text-teal-400"
+                          title={techIcon.label}
+                        >
+                          {techIcon.label.slice(0, 1).toUpperCase()}
+                        </span>
+                      ))}
+                  />
+                </SwiperSlide>
+              );
+            })}
         </Swiper>
 
         {/* Controls */}

@@ -4,13 +4,14 @@ import OutlinedButton from "../common/OutlinedButton";
 import TechBadge from "../atoms/TechBadge";
 
 interface ProjectCardProps {
-  image: string;
+  image: string | null;
   title: string;
   description: string;
   visitSiteLabel: string;
   viewProjectLabel: string;
   viewProjectIcon?: ReactNode;
   techIcons: ReactNode[];
+  liveUrl?: string | null;
 }
 
 export default function ProjectCard({
@@ -21,23 +22,33 @@ export default function ProjectCard({
   viewProjectLabel,
   viewProjectIcon,
   techIcons,
+  liveUrl,
 }: ProjectCardProps) {
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-[6px] border border-gray-800 bg-black transition-colors duration-300 hover:border-teal-500/60">
       {/* تصویر پروژه */}
-      <div className="relative aspect-[16/10.5] w-full overflow-hidden bg-gray-900">
-        <Image
-          src={image}
-          alt={title}
-          fill
-          className="object-cover object-top"
-          sizes="(max-width: 768px) 90vw, (max-width: 1280px) 45vw, 30vw"
-        />
+      <div className="relative aspect-16/10.5 w-full overflow-hidden bg-gray-900">
+        {image ? (
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover object-top"
+            sizes="(max-width: 768px) 90vw, (max-width: 1280px) 45vw, 30vw"
+            unoptimized
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center text-sm text-gray-500">
+            {title}
+          </div>
+        )}
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/80 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-black/80 to-transparent" />
 
         <a
-          href="#"
+          href={liveUrl ?? undefined}
+          target={liveUrl ? "_blank" : undefined}
+          rel={liveUrl ? "noreferrer" : undefined}
           className="absolute bottom-2.5 right-3 flex items-center gap-1 text-xs font-medium text-teal-300 underline decoration-teal-300/50 underline-offset-2 transition-colors hover:text-teal-200 sm:text-sm"
         >
           {visitSiteLabel}

@@ -1,5 +1,34 @@
 import type { Media } from "./media";
 
+export type PublicTechIcon = {
+  id: string;
+  key: string;
+  label: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type PublicProjectTechIcon = PublicTechIcon & {
+  order: number;
+};
+
+export type PublicProject = {
+  id: string;
+  slug: string;
+  order: number;
+  isPublished: boolean;
+  liveUrl: string | null;
+  image: Media | null;
+  title: string;
+  description: string;
+  techIcons: PublicProjectTechIcon[];
+};
+
+export type PublicHome = {
+  projects: PublicProject[];
+  techIcons: PublicTechIcon[];
+};
+
 export type PublicSiteSettings = {
   siteName: string;
   contactEmail: string;

@@ -5,14 +5,18 @@ import type { Media } from "../types/media";
 import type {
   PublicAbout,
   PublicFooter,
+  PublicHome,
   PublicHero,
+  PublicProject,
   PublicSiteSettings,
 } from "../types/public-content";
 
 export type {
   PublicAbout,
   PublicFooter,
+  PublicHome,
   PublicHero,
+  PublicProject,
   PublicSiteSettings,
 } from "../types/public-content";
 
@@ -54,6 +58,15 @@ export function getPublicAbout(locale: Locale) {
 export function getPublicFooter(locale: Locale) {
   return getPublicData<PublicFooter>(`/footer?locale=${locale}`);
 }
+
+export function getPublicProjects(locale: Locale) {
+  return getPublicData<PublicProject[]>(`/projects?locale=${locale}`);
+}
+
+export function getPublicHome(locale: Locale) {
+  return getPublicData<PublicHome>(`/page/home?locale=${locale}`);
+}
+
 
 export function publicMediaUrl(media: Media | null | undefined) {
   if (!media?.path) return null;

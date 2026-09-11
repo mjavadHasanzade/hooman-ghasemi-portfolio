@@ -9,6 +9,7 @@ import {
   getPublicAbout,
   getPublicFooter,
   getPublicHero,
+  getPublicHome,
   getPublicSiteSettings,
 } from "@/lib/api/public-content";
 
@@ -24,19 +25,20 @@ type Props = {
 
 export default async function Home({ params }: Props) {
   const { locale } = await params;
-  const [siteSettings, hero, about, footer] = await Promise.all([
+  const [siteSettings, hero, about, footer, home] = await Promise.all([
     getPublicSiteSettings(),
     getPublicHero(locale),
     getPublicAbout(locale),
     getPublicFooter(locale),
+    getPublicHome(locale),
   ]);
 
   return (
     <>
       <Hero hero={hero} siteName={siteSettings.siteName} />
       <ServicesSection />
-      <TechStackSection />
-      <PortfolioSection />
+      <TechStackSection techIcons={home.techIcons} />
+      <PortfolioSection projects={home.projects} />
       <AboutSection about={about} />
       <ContactCTASection />
       <Footer footer={footer} />

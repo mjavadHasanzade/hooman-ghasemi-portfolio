@@ -13,22 +13,34 @@ import {
   FramerLogo,
   CodeLogo,
 } from "../atoms/icons/TechIcons";
+import type { PublicTechIcon } from "@/lib/types/public-content";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-export default function TechStackSection() {
+function getTechIcon(key: string) {
+  switch (key) {
+    case "webflow":
+      return <WebflowLogo className="h-full w-full" />;
+    case "gsap":
+      return <GsapLogo className="h-full w-full" />;
+    case "framer":
+      return <FramerLogo className="h-full w-full" />;
+    case "figma":
+      return <FigmaLogo className="h-full w-full" />;
+    default:
+      return <CodeLogo className="h-full w-full text-teal-500" />;
+  }
+}
+
+export default function TechStackSection({
+  techIcons,
+}: {
+  techIcons: PublicTechIcon[];
+}) {
   const t = useTranslations("TechStack");
   const gridRef = useRef<HTMLDivElement>(null);
-
-  const tools = [
-    { key: "webflow", icon: <WebflowLogo className="h-full w-full" /> },
-    { key: "gsap", icon: <GsapLogo className="h-full w-full" /> },
-    { key: "framer", icon: <FramerLogo className="h-full w-full" /> },
-    { key: "figma", icon: <FigmaLogo className="h-full w-full" /> },
-    { key: "code", icon: <CodeLogo className="h-full w-full text-teal-500" /> },
-  ];
 
   useEffect(() => {
     if (!gridRef.current) return;
@@ -57,7 +69,7 @@ export default function TechStackSection() {
 
   return (
     <section className="relative w-full overflow-hidden bg-black py-16 text-white sm:py-20 md:py-24 lg:py-28">
-      <div className="relative z-10 px-5 sm:px-8 md:px-12 lg:px-[60px] xl:px-[80px]">
+      <div className="relative z-10 px-5 sm:px-8 md:px-12 lg:px-15 xl:px-20">
         <SectionHeading
           label={t("label")}
           heading={[[{ text: t("heading"), emphasis: true }]]}
@@ -73,12 +85,11 @@ export default function TechStackSection() {
             lg:mt-20 lg:flex-nowrap lg:gap-12
           "
         >
-          {tools.map((tool) => (
+          {techIcons.map((tool) => (
             <TechBox
               key={tool.key}
-              icon={tool.icon}
-              //@ts-ignore
-              name={t(`tools.${tool.key}`)}
+              icon={getTechIcon(tool.key)}
+              name={tool.label}
             />
           ))}
         </div>
