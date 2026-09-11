@@ -14,5 +14,5 @@ export type Media = {
 
 export function mediaUrl(media: Media | null | undefined): string | null {
   if (!media?.path) return null;
-  return `${process.env.NEXT_PUBLIC_ASSET_ORIGIN}${media.path}`;
+  return media.path.startsWith("/") ? media.path : `/${media.path}`;
 }

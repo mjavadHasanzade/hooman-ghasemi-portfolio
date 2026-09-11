@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/lib/auth/auth-provider";
 import { NextIntlClientProvider, type AbstractIntlMessages } from "next-intl";
+import SiteLoader from "@/components/common/SiteLoader";
 
 export function Providers({
   children,
@@ -37,6 +38,7 @@ export function Providers({
         messages={messages as AbstractIntlMessages}
       >
         <AuthProvider>
+          <SiteLoader />
           {children}
           <Toaster richColors position="top-center" />
         </AuthProvider>
