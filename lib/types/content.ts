@@ -10,7 +10,21 @@ export type SiteSettings = {
   faviconMedia: Media | null;
   ogImageMediaId: string | null;
   ogImageMedia: Media | null;
+  translations: SiteSettingsTranslation[];
+  availableLocales: Locale[];
   updatedAt: string;
+};
+
+export type SiteSettingsTranslation = {
+  id: string;
+  siteSettingsId: string;
+  locale: Locale;
+  servicesTitle: string;
+  servicesSubtitle: string;
+  technologiesTitle: string;
+  technologiesSubtitle: string;
+  projectsTitle: string;
+  projectsSubtitle: string;
 };
 
 export type UpdateSiteSettingsInput = Partial<
@@ -22,7 +36,9 @@ export type UpdateSiteSettingsInput = Partial<
     | "faviconMediaId"
     | "ogImageMediaId"
   >
->;
+> & {
+  translations?: Array<Omit<SiteSettingsTranslation, "id" | "siteSettingsId">>;
+};
 
 export type HeroTranslation = {
   id: string;

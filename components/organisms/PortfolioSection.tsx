@@ -14,14 +14,14 @@ import "swiper/css/pagination";
 
 import SectionHeading from "../common/SectionHeading";
 import ProjectCard from "../molecules/ProjectCard";
-import type { PublicProject } from "@/lib/types/public-content";
+import type { PublicProject, PublicSectionHeadings } from "@/lib/types/public-content";
 import { mediaUrl } from "@/lib/types/media";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-export default function PortfolioSection({ projects }: { projects: PublicProject[] }) {
+export default function PortfolioSection({ projects, sectionHeadings }: { projects: PublicProject[]; sectionHeadings: PublicSectionHeadings }) {
   const t = useTranslations("Portfolio");
 
   const portfolioRef = useRef<HTMLElement>(null);
@@ -110,8 +110,8 @@ export default function PortfolioSection({ projects }: { projects: PublicProject
       <div className="px-5 sm:px-8 md:px-12 lg:px-15 xl:px-20">
         <SectionHeading
           label={t("label")}
-          heading={[[{ text: t("heading"), emphasis: true }]]}
-          description={[t("description")]}
+          heading={[[{ text: sectionHeadings.projectsTitle, emphasis: true }]]}
+          description={[sectionHeadings.projectsSubtitle]}
         />
       </div>
 

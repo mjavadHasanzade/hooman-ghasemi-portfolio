@@ -36,9 +36,11 @@ function buildSineWavePath(
 
 type WaveParams = { amplitude: number; cycles: number };
 
+// یک پله‌ی میانی برای تبلت اضافه شد تا موج بین موبایل و دسکتاپ به‌طور طبیعی رشد کنه
 function getWaveParamsForWidth(width: number): WaveParams {
-  if (width < 640) return { amplitude: 34, cycles: 2 };
-  if (width < 1024) return { amplitude: 52, cycles: 2.6 };
+  if (width < 640) return { amplitude: 30, cycles: 1.8 };
+  if (width < 768) return { amplitude: 42, cycles: 2.2 };
+  if (width < 1024) return { amplitude: 56, cycles: 2.7 };
   return { amplitude: 70, cycles: 3.2 };
 }
 
@@ -82,32 +84,40 @@ export default function Hero({ hero, siteName }: HeroProps) {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
 
-      // نکته‌ی مهم: باید هر دو شرط رو تعریف کنیم تا حتماً یکیشون مچ بشه
-      // وگرنه روی دسکتاپ (که "isMobile" فالسه) کل callback هیچ‌وقت اجرا نمی‌شه
+      // بازه‌ی تبلت (640px تا 1023px) به‌عنوان یک شرط مستقل اضافه شد
+      // تا انیمیشن‌های ورودی هم متناسب با فضای تبلت تنظیم بشن، نه فقط موبایل/دسکتاپ خام
       mm.add(
         {
           isMobile: "(max-width: 639px)",
-          isDesktop: "(min-width: 640px)",
+          isTablet: "(min-width: 640px) and (max-width: 1023px)",
+          isDesktop: "(min-width: 1024px)",
         },
         (context) => {
-          const { isMobile } = context.conditions as { isMobile: boolean };
+          const { isMobile, isTablet } = context.conditions as {
+            isMobile: boolean;
+            isTablet: boolean;
+          };
+          const isCompact = isMobile || isTablet;
 
           const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-          // حالت اولیه‌ی همه‌ی المان‌ها رو با JS ست می‌کنیم
-          // (نه با کلاس دائمی Tailwind) تا اگه انیمیشن اجرا نشد،
-          // المان‌ها به‌صورت پیش‌فرض visible بمونن، نه مخفی برای همیشه
           if (glowRef.current) {
             gsap.set(glowRef.current, { opacity: 0, scale: 0.85 });
           }
           if (titleRef.current) {
-            gsap.set(titleRef.current, { opacity: 0, y: isMobile ? 20 : 36 });
+            gsap.set(titleRef.current, {
+              opacity: 0,
+              y: isMobile ? 16 : isTablet ? 24 : 36,
+            });
           }
           if (subtitleRef.current) {
-            gsap.set(subtitleRef.current, { opacity: 0, y: 18 });
+            gsap.set(subtitleRef.current, {
+              opacity: 0,
+              y: isCompact ? 14 : 18,
+            });
           }
           if (buttonRef.current) {
-            gsap.set(buttonRef.current, { opacity: 0, y: 14 });
+            gsap.set(buttonRef.current, { opacity: 0, y: isCompact ? 12 : 14 });
           }
 
           if (wavePathRef.current) {
@@ -119,7 +129,10 @@ export default function Hero({ hero, siteName }: HeroProps) {
             });
             tl.to(
               wavePathRef.current,
-              { strokeDashoffset: 0, duration: isMobile ? 1.5 : 2.2 },
+              {
+                strokeDashoffset: 0,
+                duration: isMobile ? 1.5 : isTablet ? 1.8 : 2.2,
+              },
               0,
             );
           }
@@ -136,23 +149,23 @@ export default function Hero({ hero, siteName }: HeroProps) {
             tl.to(
               subtitleRef.current,
               { opacity: 1, y: 0, duration: 0.8 },
-              0.45,
+              0.4,
             );
           }
 
           if (buttonRef.current) {
-            tl.to(buttonRef.current, { opacity: 1, y: 0, duration: 0.7 }, 0.65);
+            tl.to(buttonRef.current, { opacity: 1, y: 0, duration: 0.7 }, 0.58);
           }
 
           if (wavePathRef.current) {
             gsap.to(wavePathRef.current, {
-              x: isMobile ? -8 : -22,
-              y: isMobile ? 3 : 7,
-              duration: isMobile ? 6 : 9,
+              x: isMobile ? -8 : isTablet ? -14 : -22,
+              y: isMobile ? 3 : isTablet ? 5 : 7,
+              duration: isMobile ? 6 : isTablet ? 7.5 : 9,
               ease: "sine.inOut",
               yoyo: true,
               repeat: -1,
-              delay: isMobile ? 1.4 : 2,
+              delay: isMobile ? 1.4 : isTablet ? 1.7 : 2,
             });
           }
 
@@ -169,7 +182,7 @@ export default function Hero({ hero, siteName }: HeroProps) {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden bg-black text-white"
+      className="relative flex min-h-screen w-full flex-col overflow-hidden bg-black text-white"
       style={
         backgroundImageUrl
           ? {
@@ -182,20 +195,30 @@ export default function Hero({ hero, siteName }: HeroProps) {
     >
       <Navbar siteName={siteName} />
 
-      {/* نکته: دیگه کلاس opacity-0 دائمی نداره، GSAP خودش موقع اجرا ست می‌کنه */}
       <div
         ref={glowRef}
-        className="pointer-events-none absolute left-0 top-0 z-0 h-[380px] w-[380px] -translate-x-1/4 -translate-y-1/4 xxs:h-[440px] xxs:w-[440px] sm:h-[600px] sm:w-[600px] md:h-[750px] md:w-[750px] lg:h-[850px] lg:w-[850px]"
+        className="pointer-events-none absolute left-0 top-0 z-0 h-[320px] w-[320px] -translate-x-1/4 -translate-y-1/4 xxs:h-[380px] xxs:w-[380px] sm:h-[520px] sm:w-[520px] md:h-[650px] md:w-[650px] lg:h-[850px] lg:w-[850px]"
         style={{
           background:
             "radial-gradient(circle, rgba(45,212,191,0.20) 0%, rgba(45,212,191,0.08) 42%, rgba(45,212,191,0) 72%)",
         }}
       />
 
+      {/*
+        ارتفاع موج در بازه‌ی تبلت (sm/md) به‌تدریج بزرگ می‌شه، نه یکهو
+        تا از حالت موبایل به دسکتاپ گذار نرمی داشته باشه
+      */}
       {mounted && (
-        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[62%] overflow-hidden xxs:h-[58%] sm:h-[56%] md:h-[62%] lg:h-[70%]"
+          style={{
+            maskImage: "linear-gradient(to bottom, transparent 0%, black 35%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, transparent 0%, black 35%)",
+          }}
+        >
           <svg
-            className="absolute bottom-0 left-0 h-[45%] w-full xxs:h-[50%] sm:h-[60%] md:h-[65%] lg:h-[70%]"
+            className="absolute bottom-0 left-0 h-full w-full"
             viewBox="0 0 1600 500"
             preserveAspectRatio="none"
             fill="none"
@@ -239,23 +262,29 @@ export default function Hero({ hero, siteName }: HeroProps) {
         </div>
       )}
 
-      <div className="relative z-10 px-5 pt-16 sm:px-8 sm:pt-20 md:px-12 md:pt-24 lg:px-15 lg:pt-32.5 xl:px-20 xl:pt-37.5">
-        <div className="max-w-75 xxs:max-w-sm sm:max-w-xl md:max-w-2xl lg:max-w-180 xl:max-w-200">
+      {/*
+        justify-center تا md ادامه پیدا می‌کنه (یعنی موبایل + تبلت)
+        و فقط از lg به بعد (دسکتاپ واقعی) به justify-start با pt بزرگ برمی‌گرده.
+        این باعث می‌شه در تبلت هم محتوا به‌جای چسبیدن به بالا، به‌طور متعادل
+        در ارتفاع صفحه پخش بشه.
+      */}
+      <div className="relative z-10 flex flex-1 flex-col justify-center px-5 pb-20 pt-24 sm:px-8 sm:pb-16 md:px-12 md:pb-14 lg:justify-start lg:px-15 lg:pb-0 lg:pt-32.5 xl:px-20 xl:pt-37.5">
+        <div className="flex max-w-75 flex-col gap-6 xxs:max-w-sm sm:max-w-xl sm:gap-7 md:max-w-2xl md:gap-8 lg:max-w-180 lg:gap-0 xl:max-w-200">
           <h1
             ref={titleRef}
-            className="font-mono text-[28px] font-bold uppercase leading-[1.15] tracking-wide text-teal-200 xxs:text-[32px] sm:text-[40px] md:text-[48px] lg:text-[52px] xl:text-[58px]"
+            className="font-mono text-[26px] font-bold uppercase leading-[1.2] tracking-wide text-teal-200 xxs:text-[30px] sm:text-[38px] sm:leading-[1.18] md:text-[46px] lg:text-[52px] xl:text-[58px]"
           >
             {hero.title}
           </h1>
 
           <p
             ref={subtitleRef}
-            className="mt-6 max-w-md text-[15px] leading-relaxed text-gray-300 sm:mt-7 sm:text-lg md:text-xl lg:max-w-lg"
+            className="max-w-md text-[15px] leading-relaxed text-gray-300 sm:text-lg md:text-xl lg:mt-7 lg:max-w-lg"
           >
             {hero.subtitle}
           </p>
 
-          <div ref={buttonRef} className="mt-8 sm:mt-9">
+          <div ref={buttonRef} className="mt-2 sm:mt-0 lg:mt-9">
             <button
               className="
                 group relative flex items-center gap-3

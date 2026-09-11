@@ -36,9 +36,9 @@ export default async function Home({ params }: Props) {
   return (
     <>
       <Hero hero={hero} siteName={siteSettings.siteName} />
-      <ServicesSection services={home.services} />
-      <TechStackSection techIcons={home.techIcons} />
-      <PortfolioSection projects={home.projects} />
+      <ServicesSection services={home.services} sectionHeadings={home.siteSettings.sectionHeadings} />
+      <TechStackSection techIcons={home.techIcons} sectionHeadings={home.siteSettings.sectionHeadings} />
+      <PortfolioSection projects={home.projects} sectionHeadings={home.siteSettings.sectionHeadings} />
       <AboutSection about={about} />
       <ContactCTASection contactCta={home.contactCta} socialLinks={home.socialLinks} />
       <Footer footer={footer} />

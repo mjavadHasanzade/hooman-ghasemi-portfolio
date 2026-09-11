@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { ImagePicker } from "@/components/media/image-picker";
+import { LocaleTabs } from "@/components/shared/locale-tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,6 +14,7 @@ import { getErrorMessage } from "@/lib/api/error";
 import { useSiteSettings, useUpdateSiteSettings } from "@/lib/hooks/use-content";
 import type { Locale } from "@/lib/types/api";
 import type { Media } from "@/lib/types/media";
+import type { SiteSettings, SiteSettingsTranslation } from "@/lib/types/content";
 
 type SiteSettingsForm = {
   siteName: string;
@@ -22,9 +24,69 @@ type SiteSettingsForm = {
   ogImageMedia: Media | null;
 };
 
+type SectionHeadingsForm = Omit<SiteSettingsTranslation, "id" | "siteSettingsId" | "locale"> & { locale: Locale };
+
+const emptySectionHeadings = (locale: Locale): SectionHeadingsForm => ({
+  locale,
+  servicesTitle: "",
+  servicesSubtitle: "",
+  technologiesTitle: "",
+  technologiesSubtitle: "",
+  projectsTitle: "",
+  projectsSubtitle: "",
+});
+
+function SectionHeadingsTranslationForm({ settings, locale }: { settings: SiteSettings; locale: Locale }) {
+  const updateSettings = useUpdateSiteSettings();
+  const translation = settings.translations.find((item) => item.locale === locale);
+  const form = useForm<SectionHeadingsForm>({ defaultValues: translation ? { ...translation, locale } : emptySectionHeadings(locale) });
+
+  useEffect(() => {
+    form.reset(translation ? { ...translation, locale } : emptySectionHeadings(locale));
+  }, [form, locale, translation]);
+
+  async function onSubmit(values: SectionHeadingsForm) {
+    try {
+      await updateSettings.mutateAsync({ translations: [values] });
+      form.reset(values);
+      toast.success("متن‌های سکشن ذخیره شد.");
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
+  }
+
+  const fields = [
+    ["servicesTitle", "Services Title", "عنوان سکشن خدمات"],
+    ["servicesSubtitle", "Services Subtitle", "زیرعنوان سکشن خدمات"],
+    ["technologiesTitle", "Technologies Title", "عنوان سکشن تکنولوژی‌ها"],
+    ["technologiesSubtitle", "Technologies Subtitle", "زیرعنوان سکشن تکنولوژی‌ها"],
+    ["projectsTitle", "Projects Title", "عنوان سکشن پروژه‌ها"],
+    ["projectsSubtitle", "Projects Subtitle", "زیرعنوان سکشن پروژه‌ها"],
+  ] as const;
+
+  return (
+    <form dir={locale === "fa" ? "rtl" : "ltr"} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-6">
+      <div className="grid gap-5 sm:grid-cols-2">
+        {fields.map(([name, englishLabel, persianLabel]) => (
+          <div className="space-y-2" key={name}>
+            <Label htmlFor={`section-heading-${name}-${locale}`}>{locale === "fa" ? persianLabel : englishLabel}</Label>
+            <Input id={`section-heading-${name}-${locale}`} {...form.register(name)} />
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-end">
+        <Button type="submit" disabled={updateSettings.isPending || !form.formState.isDirty}>
+          {updateSettings.isPending ? "در حال ذخیره…" : "ذخیره ترجمه"}
+        </Button>
+      </div>
+    </form>
+  );
+}
+
 export default function SiteSettingsPage() {
   const { data: settings, isLoading, isError } = useSiteSettings();
   const updateSettings = useUpdateSiteSettings();
+  const [activeLocale, setActiveLocale] = useState<Locale>("fa");
   const form = useForm<SiteSettingsForm>({
     defaultValues: {
       siteName: "",
@@ -112,6 +174,17 @@ export default function SiteSettingsPage() {
           </CardFooter>
         </Card>
       </form>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>متن سکشن‌های سایت</CardTitle>
+          <p className="text-sm text-muted-foreground">عنوان و زیرعنوان سکشن‌ها را برای هر زبان جداگانه مدیریت کنید.</p>
+        </CardHeader>
+        <CardContent>
+          <LocaleTabs value={activeLocale} onChange={setActiveLocale} availableLocales={settings.availableLocales} />
+          <SectionHeadingsTranslationForm key={activeLocale} settings={settings} locale={activeLocale} />
+        </CardContent>
+      </Card>
     </div>
   );
 }

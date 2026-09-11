@@ -48,7 +48,17 @@ export type PublicSocialLink = {
   order: number;
 };
 
+export type PublicSectionHeadings = {
+  servicesTitle: string;
+  servicesSubtitle: string;
+  technologiesTitle: string;
+  technologiesSubtitle: string;
+  projectsTitle: string;
+  projectsSubtitle: string;
+};
+
 export type PublicHome = {
+  siteSettings: PublicSiteSettings & { sectionHeadings: PublicSectionHeadings };
   projects: PublicProject[];
   techIcons: PublicTechIcon[];
   services: PublicService[];

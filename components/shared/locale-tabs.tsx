@@ -11,7 +11,7 @@ const localeLabels: Record<Locale, string> = {
 type LocaleTabsProps = {
   value: Locale;
   onChange: (locale: Locale) => void;
-  availableLocales: Locale[];
+  availableLocales?: Locale[];
 };
 
 export function LocaleTabs({
@@ -19,11 +19,13 @@ export function LocaleTabs({
   onChange,
   availableLocales,
 }: LocaleTabsProps) {
+  const safeAvailableLocales = availableLocales ?? [];
+
   return (
     <div className="flex gap-2 border-b" role="tablist" aria-label="زبان محتوا">
       {(Object.keys(localeLabels) as Locale[]).map((locale) => {
         const isSelected = locale === value;
-        const isAvailable = availableLocales.includes(locale);
+        const isAvailable = safeAvailableLocales.includes(locale);
 
         return (
           <button

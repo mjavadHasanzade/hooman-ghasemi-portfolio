@@ -13,7 +13,7 @@ import {
   FramerLogo,
   CodeLogo,
 } from "../atoms/icons/TechIcons";
-import type { PublicTechIcon } from "@/lib/types/public-content";
+import type { PublicSectionHeadings, PublicTechIcon } from "@/lib/types/public-content";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -36,8 +36,10 @@ function getTechIcon(key: string) {
 
 export default function TechStackSection({
   techIcons,
+  sectionHeadings,
 }: {
   techIcons: PublicTechIcon[];
+  sectionHeadings: PublicSectionHeadings;
 }) {
   const t = useTranslations("TechStack");
   const gridRef = useRef<HTMLDivElement>(null);
@@ -72,7 +74,8 @@ export default function TechStackSection({
       <div className="relative z-10 px-5 sm:px-8 md:px-12 lg:px-15 xl:px-20">
         <SectionHeading
           label={t("label")}
-          heading={[[{ text: t("heading"), emphasis: true }]]}
+          heading={[[{ text: sectionHeadings.technologiesTitle, emphasis: true }]]}
+          description={[sectionHeadings.technologiesSubtitle]}
           className="mx-auto text-center"
         />
 
