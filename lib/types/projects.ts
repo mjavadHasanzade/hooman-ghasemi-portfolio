@@ -5,11 +5,12 @@ export type TechIcon = {
   id: string;
   key: string;
   label: string;
+  image: Media | null;
   createdAt: string;
   updatedAt: string;
 };
 
-export type TechIconInput = Pick<TechIcon, "key" | "label">;
+export type TechIconInput = Pick<TechIcon, "key" | "label"> & { image?: File | null };
 
 export type ProjectTranslation = {
   id: string;

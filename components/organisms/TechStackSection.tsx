@@ -13,7 +13,11 @@ import {
   FramerLogo,
   CodeLogo,
 } from "../atoms/icons/TechIcons";
-import type { PublicSectionHeadings, PublicTechIcon } from "@/lib/types/public-content";
+import type {
+  PublicSectionHeadings,
+  PublicTechIcon,
+} from "@/lib/types/public-content";
+import { publicMediaUrl } from "@/lib/media/public-media-url";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -69,12 +73,16 @@ export default function TechStackSection({
     return () => ctx.revert();
   }, []);
 
+  console.log({ techIcons });
+
   return (
     <section className="relative w-full overflow-hidden bg-black py-16 text-white sm:py-20 md:py-24 lg:py-28">
       <div className="relative z-10 px-5 sm:px-8 md:px-12 lg:px-15 xl:px-20">
         <SectionHeading
           label={t("label")}
-          heading={[[{ text: sectionHeadings.technologiesTitle, emphasis: true }]]}
+          heading={[
+            [{ text: sectionHeadings.technologiesTitle, emphasis: true }],
+          ]}
           description={[sectionHeadings.technologiesSubtitle]}
           className="mx-auto text-center"
         />
@@ -88,13 +96,28 @@ export default function TechStackSection({
             lg:mt-20 lg:flex-nowrap lg:gap-12
           "
         >
-          {techIcons.map((tool) => (
-            <TechBox
-              key={tool.key}
-              icon={getTechIcon(tool.key)}
-              name={tool.label}
-            />
-          ))}
+          {techIcons.map((tool) => {
+            const path = publicMediaUrl(tool.image ?? "");
+            console.log({ path });
+
+            return (
+              <TechBox
+                key={tool.key}
+                icon={
+                  tool.image ? (
+                    <img
+                      src={path}
+                      alt={tool.label}
+                      className="h-full w-full object-contain"
+                    />
+                  ) : (
+                    getTechIcon(tool.key)
+                  )
+                }
+                name={tool.label}
+              />
+            );
+          })}
         </div>
       </div>
     </section>

@@ -576,6 +576,7 @@ body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-picker { border:
 body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-option { border-color: rgba(148, 163, 184, .2); background: rgba(255, 255, 255, .045); color: #cbd5e1; }
 body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-option:hover { border-color: rgba(98, 230, 209, .55); background: rgba(98, 230, 209, .1); color: #f8fafc; }
 body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-option.is-selected { border-color: rgba(98, 230, 209, .75); background: linear-gradient(135deg, rgba(98, 230, 209, .22), rgba(92, 169, 255, .18)); color: #b9fff3; box-shadow: 0 0 18px rgba(98, 230, 209, .1); }
+body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-placeholder { display: grid; width: 1.25rem; height: 1.25rem; place-items: center; border-radius: 5px; background: rgba(98, 230, 209, .12); color: #62e6d1; font-size: .7rem; font-weight: 800; }
 body:has(.admin-shell) [data-slot="dialog-content"] .admin-selected-tech { border-color: rgba(148, 163, 184, .14); background: rgba(255, 255, 255, .025); }
 body:has(.admin-shell) [data-slot="dialog-content"] .admin-selected-tech > div { background: rgba(255, 255, 255, .035); }
 body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-control,

@@ -16,6 +16,7 @@ import SectionHeading from "../common/SectionHeading";
 import ProjectCard from "../molecules/ProjectCard";
 import type { PublicProject, PublicSectionHeadings } from "@/lib/types/public-content";
 import { mediaUrl } from "@/lib/types/media";
+import { publicMediaUrl } from "@/lib/media/public-media-url";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -176,10 +177,10 @@ export default function PortfolioSection({ projects, sectionHeadings }: { projec
                       .map((techIcon) => (
                         <span
                           key={techIcon.key}
-                          className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-700 text-xxs text-teal-400"
+                          className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full border border-gray-700 bg-gray-950 text-xxs text-teal-400"
                           title={techIcon.label}
                         >
-                          {techIcon.label.slice(0, 1).toUpperCase()}
+                          {techIcon.image ? <img src={publicMediaUrl(techIcon.image) ?? undefined} alt="" className="h-full w-full object-contain p-1" /> : techIcon.label.slice(0, 1).toUpperCase()}
                         </span>
                       ))}
                   />

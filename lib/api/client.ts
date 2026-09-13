@@ -126,8 +126,22 @@ export async function apiPost<T>(url: string, body?: unknown): Promise<T> {
   return res.data.data;
 }
 
+export async function apiPostForm<T>(url: string, body: FormData): Promise<T> {
+  const res = await apiClient.post<SuccessResponse<T>>(url, body, {
+    headers: { "Content-Type": undefined },
+  });
+  return res.data.data;
+}
+
 export async function apiPatch<T>(url: string, body?: unknown): Promise<T> {
   const res = await apiClient.patch<SuccessResponse<T>>(url, body);
+  return res.data.data;
+}
+
+export async function apiPatchForm<T>(url: string, body: FormData): Promise<T> {
+  const res = await apiClient.patch<SuccessResponse<T>>(url, body, {
+    headers: { "Content-Type": undefined },
+  });
   return res.data.data;
 }
 
