@@ -511,3 +511,75 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+.admin-shell { --background: #080b12; --foreground: #f8fafc; --card: rgba(18, 24, 37, 0.7); --card-foreground: #f8fafc; --popover: #111827; --popover-foreground: #f8fafc; --primary: #62e6d1; --primary-foreground: #071312; --secondary: rgba(255,255,255,.07); --secondary-foreground: #e2e8f0; --muted: rgba(255,255,255,.06); --muted-foreground: #94a3b8; --border: rgba(148,163,184,.16); --input: rgba(148,163,184,.22); --ring: #62e6d1; background-color: #080b12; background-image: linear-gradient(rgba(148,163,184,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,.035) 1px, transparent 1px), radial-gradient(circle at 75% 0%, rgba(28,104,116,.16), transparent 34rem); background-size: 44px 44px, 44px 44px, auto; color: #f8fafc; }
+.admin-sidebar { background: rgba(8,11,18,.82); border-inline-end: 1px solid rgba(148,163,184,.12); }
+.admin-brand { border-bottom: 1px solid rgba(148,163,184,.12); }
+.admin-brand-mark { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid rgba(98,230,209,.55); border-radius: 12px; color: #62e6d1; font-size: 18px; font-weight: 800; box-shadow: 0 0 22px rgba(98,230,209,.14); }
+.admin-nav-active { background: linear-gradient(100deg, rgba(98,230,209,.18), rgba(98,230,209,.04)); box-shadow: inset 3px 0 #62e6d1, 0 8px 24px rgba(0,0,0,.14); }
+.admin-header { border-bottom: 1px solid rgba(148,163,184,.12); background: rgba(8,11,18,.6); backdrop-filter: blur(18px); }
+.admin-icon-button { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid rgba(148,163,184,.17); border-radius: 12px; color: #94a3b8; background: rgba(255,255,255,.035); }
+.admin-avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 13px; background: linear-gradient(135deg, #62e6d1, #5ca9ff); color: #071312; font-weight: 800; }
+.admin-main [data-slot="card"] { border: 1px solid rgba(148,163,184,.15); background: rgba(18,24,37,.68); box-shadow: 0 18px 60px rgba(0,0,0,.16); backdrop-filter: blur(18px); }
+.admin-main [data-slot="card-footer"] { border-color: rgba(148,163,184,.12); background: rgba(255,255,255,.025); }
+.admin-main input, .admin-main textarea, .admin-main select { border-color: rgba(148,163,184,.2); background: rgba(3,7,18,.4); color: #f8fafc; }
+.admin-main input:focus, .admin-main textarea:focus, .admin-main select:focus { border-color: rgba(98,230,209,.7); box-shadow: 0 0 0 3px rgba(98,230,209,.1); }
+.admin-main option { background: #111827; color: white; }
+.admin-welcome { border: 1px solid rgba(98,230,209,.2); background: linear-gradient(110deg, rgba(18,44,51,.92), rgba(16,24,39,.72)); box-shadow: 0 24px 80px rgba(0,0,0,.24); }
+.admin-welcome-orb { position: absolute; width: 280px; height: 280px; border: 1px solid rgba(98,230,209,.2); border-radius: 50%; inset-inline-end: 9%; top: -55%; box-shadow: 0 0 0 28px rgba(98,230,209,.035), 0 0 80px rgba(98,230,209,.12); }
+.admin-quick-card { display: flex; align-items: center; gap: 14px; padding: 20px; border: 1px solid rgba(148,163,184,.14); border-radius: 20px; background: rgba(18,24,37,.58); color: #f8fafc; transition: .25s ease; }
+.admin-quick-card:hover { transform: translateY(-3px); border-color: rgba(98,230,209,.4); background: rgba(24,37,48,.72); }
+.admin-quick-card strong, .admin-quick-card small { display: block; }.admin-quick-card small { margin-top: 4px; color: #94a3b8; font-size: 12px; }.admin-quick-icon { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 14px; color: #62e6d1; background: rgba(98,230,209,.1); }.admin-quick-icon svg { width: 19px; }
+.admin-section-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; color: #62e6d1; background: rgba(98,230,209,.1); }.admin-section-icon svg { width: 18px; }
+.admin-settings-card [data-slot="card-header"] { padding-top: 22px; }
+body [data-locale-tabs="en"] ~ form,
+body form:has([data-locale-tabs="en"]) { direction: ltr; }
+body [data-locale-tabs="fa"] ~ form,
+body form:has([data-locale-tabs="fa"]) { direction: rtl; }
+body [data-locale-tabs="en"] ~ form input:not([dir]),
+body [data-locale-tabs="en"] ~ form textarea:not([dir]),
+body form:has([data-locale-tabs="en"]) input:not([dir]),
+body form:has([data-locale-tabs="en"]) textarea:not([dir]) { direction: ltr; text-align: left; unicode-bidi: plaintext; }
+body [data-locale-tabs="fa"] ~ form input:not([dir]),
+body [data-locale-tabs="fa"] ~ form textarea:not([dir]),
+body form:has([data-locale-tabs="fa"]) input:not([dir]),
+body form:has([data-locale-tabs="fa"]) textarea:not([dir]) { direction: rtl; text-align: right; unicode-bidi: plaintext; }
+
+/* Premium admin dialogs. The portal is mounted on body, so scope through the
+  admin shell marker while keeping the public site's dialogs untouched. */
+body:has(.admin-shell) [data-slot="dialog-overlay"] { background: rgba(2, 5, 12, .78); backdrop-filter: blur(10px); }
+body:has(.admin-shell) [data-slot="dialog-content"] { max-height: calc(100vh - 2rem); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; border: 1px solid rgba(148, 163, 184, .2); border-radius: 26px; background: linear-gradient(145deg, rgba(20, 29, 44, .98), rgba(8, 13, 23, .98)); box-shadow: 0 32px 100px rgba(0, 0, 0, .58), 0 0 0 1px rgba(98, 230, 209, .04); color: #f8fafc; }
+body:has(.admin-shell) [data-slot="dialog-content"] > [data-slot="dialog-header"] { position: relative; margin: -1rem -1rem 0; padding: 1.4rem 1.5rem 1.35rem; border-bottom: 1px solid rgba(148, 163, 184, .14); background: linear-gradient(110deg, rgba(98, 230, 209, .12), rgba(92, 169, 255, .04) 55%, transparent); }
+body:has(.admin-shell) [data-slot="dialog-content"] > [data-slot="dialog-header"]::before { position: absolute; inset-inline-start: 0; top: 0; width: 5rem; height: 2px; border-radius: 999px; background: #62e6d1; content: ""; box-shadow: 0 0 22px rgba(98, 230, 209, .8); }
+body:has(.admin-shell) [data-slot="dialog-content"] [data-slot="dialog-title"] { color: #f8fafc; font-size: 1.1rem; letter-spacing: -.01em; }
+body:has(.admin-shell) [data-slot="dialog-content"] [data-slot="dialog-description"] { color: #94a3b8; }
+body:has(.admin-shell) [data-slot="dialog-content"] > form { min-width: 0; }
+body:has(.admin-shell) [data-slot="dialog-content"] form > .rounded-xl.border,
+body:has(.admin-shell) [data-slot="dialog-content"] form > .border-primary\/20 { border-color: rgba(148, 163, 184, .14); background: rgba(255, 255, 255, .035); box-shadow: none; }
+body:has(.admin-shell) [data-slot="dialog-content"] form > .rounded-xl.border:hover { border-color: rgba(98, 230, 209, .22); }
+body:has(.admin-shell) [data-slot="dialog-content"] input,
+body:has(.admin-shell) [data-slot="dialog-content"] textarea { border-color: rgba(148, 163, 184, .2); background: rgba(2, 7, 17, .48); }
+body:has(.admin-shell) [data-slot="dialog-content"] input:focus,
+body:has(.admin-shell) [data-slot="dialog-content"] textarea:focus { border-color: rgba(98, 230, 209, .75); background: rgba(2, 7, 17, .72); box-shadow: 0 0 0 3px rgba(98, 230, 209, .1); }
+body:has(.admin-shell) [data-slot="dialog-content"] [data-slot="dialog-close"] { z-index: 4; top: 1.1rem; inset-inline-end: 1.1rem; color: #94a3b8; border-radius: 10px; }
+body:has(.admin-shell) [data-slot="dialog-content"] [data-slot="dialog-close"]:hover { background: rgba(244, 63, 94, .12); color: #fda4af; }
+body:has(.admin-shell) [data-slot="dialog-content"] form > .flex.justify-end { position: sticky; bottom: -1.5rem; z-index: 2; margin-inline: -1.5rem; margin-bottom: -1.5rem; padding: 1rem 1.5rem; border-top: 1px solid rgba(148, 163, 184, .14); background: rgba(8, 13, 23, .9); backdrop-filter: blur(14px); }
+body:has(.admin-shell) [data-slot="dialog-content"] form > .flex.justify-end button[type="submit"] { min-width: 9rem; height: 2.7rem; border-radius: 12px; background: linear-gradient(135deg, #62e6d1, #5ca9ff); color: #061311; font-weight: 800; box-shadow: 0 10px 28px rgba(98, 230, 209, .16); }
+body:has(.admin-shell) [data-slot="dialog-content"] form > .flex.justify-end button[type="submit"]:hover { filter: brightness(1.08); transform: translateY(-1px); }
+body:has(.admin-shell) [data-slot="dialog-content"].admin-project-dialog { display: flex; flex-direction: column; overflow: hidden; }
+body:has(.admin-shell) [data-slot="dialog-content"].admin-project-dialog > .admin-project-form { min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-gutter: stable; padding: 1.5rem .25rem .25rem; }
+body:has(.admin-shell) [data-slot="dialog-content"].admin-project-dialog > .admin-project-form > .flex.justify-end { position: sticky; bottom: 0; margin-inline: -.25rem; margin-bottom: 0; }
+body:has(.admin-shell) [data-slot="dialog-content"] [data-locale-tabs] { border-color: rgba(148, 163, 184, .16); }
+body:has(.admin-shell) [data-slot="dialog-content"] [data-locale-tabs] button { color: #64748b; }
+body:has(.admin-shell) [data-slot="dialog-content"] [data-locale-tabs] button[aria-selected="true"] { color: #62e6d1; }
+body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-picker { border: 1px solid rgba(148, 163, 184, .12); background: rgba(2, 7, 17, .42); }
+body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-option { border-color: rgba(148, 163, 184, .2); background: rgba(255, 255, 255, .045); color: #cbd5e1; }
+body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-option:hover { border-color: rgba(98, 230, 209, .55); background: rgba(98, 230, 209, .1); color: #f8fafc; }
+body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-option.is-selected { border-color: rgba(98, 230, 209, .75); background: linear-gradient(135deg, rgba(98, 230, 209, .22), rgba(92, 169, 255, .18)); color: #b9fff3; box-shadow: 0 0 18px rgba(98, 230, 209, .1); }
+body:has(.admin-shell) [data-slot="dialog-content"] .admin-selected-tech { border-color: rgba(148, 163, 184, .14); background: rgba(255, 255, 255, .025); }
+body:has(.admin-shell) [data-slot="dialog-content"] .admin-selected-tech > div { background: rgba(255, 255, 255, .035); }
+body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-control,
+body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-remove { color: #94a3b8; background: rgba(255, 255, 255, .06); }
+body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-control:hover:not(:disabled) { background: rgba(98, 230, 209, .14); color: #62e6d1; }
+body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-remove:hover { background: rgba(244, 63, 94, .14); color: #fda4af; }
+body:has(.admin-shell) [data-slot="dialog-content"] .admin-tech-control:disabled { color: #475569; background: rgba(255, 255, 255, .025); }

@@ -22,7 +22,13 @@ export function LocaleTabs({
   const safeAvailableLocales = availableLocales ?? [];
 
   return (
-    <div className="flex gap-2 border-b" role="tablist" aria-label="زبان محتوا">
+    <div
+      data-locale-tabs={value}
+      dir={value === "fa" ? "rtl" : "ltr"}
+      className="flex gap-2 border-b"
+      role="tablist"
+      aria-label="زبان محتوا"
+    >
       {(Object.keys(localeLabels) as Locale[]).map((locale) => {
         const isSelected = locale === value;
         const isAvailable = safeAvailableLocales.includes(locale);

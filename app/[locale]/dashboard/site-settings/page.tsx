@@ -15,6 +15,7 @@ import { useSiteSettings, useUpdateSiteSettings } from "@/lib/hooks/use-content"
 import type { Locale } from "@/lib/types/api";
 import type { Media } from "@/lib/types/media";
 import type { SiteSettings, SiteSettingsTranslation } from "@/lib/types/content";
+import { Check, Globe2, SlidersHorizontal } from "lucide-react";
 
 type SiteSettingsForm = {
   siteName: string;
@@ -74,7 +75,7 @@ function SectionHeadingsTranslationForm({ settings, locale }: { settings: SiteSe
           </div>
         ))}
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-end border-t border-white/10 pt-5">
         <Button type="submit" disabled={updateSettings.isPending || !form.formState.isDirty}>
           {updateSettings.isPending ? "در حال ذخیره…" : "ذخیره ترجمه"}
         </Button>
@@ -139,16 +140,21 @@ export default function SiteSettingsPage() {
   }
 
   return (
-    <div className="max-w-3xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">تنظیمات سایت</h1>
-        <p className="text-muted-foreground">اطلاعات عمومی و تصاویر متادیتای سایت را مدیریت کنید.</p>
+    <div className="admin-page max-w-5xl space-y-7">
+      <div className="flex flex-col justify-between gap-5 border-b border-white/10 pb-7 sm:flex-row sm:items-end">
+        <div>
+          <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300"><SlidersHorizontal className="h-4 w-4" /> تنظیمات مرکزی</div>
+          <h1 className="text-3xl font-bold tracking-tight text-white">تنظیمات سایت</h1>
+          <p className="mt-2 text-sm text-slate-400">هویت، زبان و تصاویر متادیتای تجربه‌ی دیجیتال را مدیریت کنید.</p>
+        </div>
+        <div className="flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-2 text-xs text-emerald-300"><Check className="h-3.5 w-3.5" /> همه چیز همگام است</div>
       </div>
 
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card>
-          <CardHeader><CardTitle>اطلاعات عمومی</CardTitle></CardHeader>
-          <CardContent className="space-y-6">
+        <Card className="admin-settings-card">
+          <CardHeader className="border-b border-white/10 pb-5"><div className="flex items-center gap-3"><span className="admin-section-icon"><Globe2 /></span><div><CardTitle>اطلاعات عمومی</CardTitle><p className="mt-1 text-xs text-slate-500">مشخصات اصلی که در سراسر سایت استفاده می‌شوند.</p></div></div></CardHeader>
+          <CardContent className="space-y-6 pt-6">
+            <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="site-name">نام سایت</Label>
               <Input id="site-name" {...form.register("siteName", { required: true })} />
@@ -156,6 +162,7 @@ export default function SiteSettingsPage() {
             <div className="space-y-2">
               <Label htmlFor="contact-email">ایمیل تماس</Label>
               <Input id="contact-email" type="email" dir="ltr" {...form.register("contactEmail", { required: true })} />
+            </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="default-locale">زبان پیش‌فرض</Label>
@@ -167,7 +174,8 @@ export default function SiteSettingsPage() {
             <ImagePicker label="Favicon" value={faviconMedia} onChange={(media) => form.setValue("faviconMedia", media, { shouldDirty: true })} />
             <ImagePicker label="تصویر Open Graph" value={ogImageMedia} onChange={(media) => form.setValue("ogImageMedia", media, { shouldDirty: true })} />
           </CardContent>
-          <CardFooter className="justify-end">
+          <CardFooter className="justify-between gap-4">
+            <span className="text-xs text-slate-500">تغییرات ذخیره‌نشده با دکمه‌ی زیر ثبت می‌شوند.</span>
             <Button type="submit" disabled={updateSettings.isPending || !form.formState.isDirty}>
               {updateSettings.isPending ? "در حال ذخیره…" : "ذخیره تغییرات"}
             </Button>
@@ -175,10 +183,10 @@ export default function SiteSettingsPage() {
         </Card>
       </form>
 
-      <Card>
-        <CardHeader>
+      <Card className="admin-settings-card">
+        <CardHeader className="border-b border-white/10 pb-5">
           <CardTitle>متن سکشن‌های سایت</CardTitle>
-          <p className="text-sm text-muted-foreground">عنوان و زیرعنوان سکشن‌ها را برای هر زبان جداگانه مدیریت کنید.</p>
+          <p className="text-sm text-slate-400">عنوان و زیرعنوان سکشن‌ها را برای هر زبان جداگانه مدیریت کنید.</p>
         </CardHeader>
         <CardContent>
           <LocaleTabs value={activeLocale} onChange={setActiveLocale} availableLocales={settings.availableLocales} />

@@ -48,7 +48,7 @@ function FooterTranslationForm({ locale }: { locale: Locale }) {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-6">
+    <form dir={locale === "fa" ? "rtl" : "ltr"} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-6">
       <div className="space-y-2">
         <Label htmlFor={`footer-copyright-${locale}`}>متن کپی‌رایت</Label>
         <Input id={`footer-copyright-${locale}`} {...form.register("copyrightText")} />

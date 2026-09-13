@@ -35,11 +35,16 @@ export function Sidebar() {
   const params = useParams<{ locale: string }>();
 
   return (
-    <aside className="hidden w-64 shrink-0 border-e bg-background md:block">
-      <div className="flex h-14 items-center border-b px-4 font-bold">
-        پنل مدیریت
+    <aside className="admin-sidebar hidden w-72 shrink-0 md:block">
+      <div className="admin-brand flex h-20 items-center gap-3 px-6">
+        <span className="admin-brand-mark">E</span>
+        <div>
+          <div className="text-sm font-bold tracking-wide text-white">ETEMAD</div>
+          <div className="text-xxs uppercase tracking-[0.22em] text-slate-500">Control room</div>
+        </div>
       </div>
-      <nav className="flex flex-col gap-1 p-3">
+      <div className="px-6 pb-3 pt-7 text-xxs font-semibold uppercase tracking-[0.2em] text-slate-500">مدیریت محتوا</div>
+      <nav className="flex flex-col gap-1 px-3">
         {navItems.map((item) => {
           const href = `/${params.locale}/dashboard${item.href}`;
           const isActive = pathname === href;
@@ -50,10 +55,10 @@ export function Sidebar() {
               key={item.href}
               href={href}
               className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+                "admin-nav-item flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-colors",
                 isActive
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                  ? "admin-nav-active text-white"
+                  : "text-slate-400 hover:bg-white/5 hover:text-white",
               )}
             >
               <Icon className="h-4 w-4" />

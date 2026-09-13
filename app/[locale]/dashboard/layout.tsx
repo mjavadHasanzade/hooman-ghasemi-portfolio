@@ -36,11 +36,11 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="admin-shell dark flex min-h-screen">
       <Sidebar />
       <div className="flex flex-1 flex-col">
         <Header />
-        <main className="flex-1 p-6">{children}</main>
+        <main className="admin-main flex-1 p-4 md:p-8">{children}</main>
       </div>
     </div>
   );
