@@ -35,7 +35,7 @@ function getApiUrl() {
 
 async function getPublicData<T>(path: string): Promise<T> {
   const response = await fetch(`${getApiUrl()}${path}`, {
-    next: { revalidate: 60 },
+    cache: "no-store",
   });
 
   if (!response.ok) {

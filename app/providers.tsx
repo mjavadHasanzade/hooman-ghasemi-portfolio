@@ -24,7 +24,8 @@ export function Providers({
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 60 * 1000 * 2,
+            staleTime: 0,
+            refetchOnMount: "always",
             retry: 1,
           },
         },

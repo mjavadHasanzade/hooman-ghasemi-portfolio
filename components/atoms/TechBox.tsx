@@ -7,7 +7,7 @@ interface TechBoxProps {
 
 export default function TechBox({ icon, name }: TechBoxProps) {
   return (
-    <div className="tech-box flex flex-col items-center gap-3 opacity-0">
+    <div className="tech-box flex min-w-0 flex-col items-center gap-3 opacity-0">
       <div
         className="
           group relative flex aspect-square w-20 items-center justify-center
@@ -30,7 +30,7 @@ export default function TechBox({ icon, name }: TechBoxProps) {
         </div>
       </div>
 
-      <span className="font-mono text-xs uppercase tracking-wider text-gray-400 sm:text-sm">
+      <span className="w-full truncate text-center font-mono text-xs uppercase tracking-wider text-gray-400 sm:text-sm">
         {name}
       </span>
     </div>

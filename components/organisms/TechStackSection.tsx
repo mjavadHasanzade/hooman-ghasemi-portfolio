@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -73,8 +74,6 @@ export default function TechStackSection({
     return () => ctx.revert();
   }, []);
 
-  console.log({ techIcons });
-
   return (
     <section className="relative w-full overflow-hidden bg-black py-16 text-white sm:py-20 md:py-24 lg:py-28">
       <div className="relative z-10 px-5 sm:px-8 md:px-12 lg:px-15 xl:px-20">
@@ -90,24 +89,25 @@ export default function TechStackSection({
         <div
           ref={gridRef}
           className="
-            mx-auto mt-14 flex max-w-4xl flex-wrap
-            justify-center gap-8
-            sm:mt-16 sm:gap-10
-            lg:mt-20 lg:flex-nowrap lg:gap-12
+            mx-auto mt-14 grid max-w-5xl grid-cols-2 items-start gap-x-4 gap-y-10
+            sm:mt-16 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-12
+            md:grid-cols-4 md:gap-x-10
+            lg:mt-20 lg:grid-cols-5 lg:gap-x-6 lg:gap-y-10
           "
         >
           {techIcons.map((tool) => {
-            const path = publicMediaUrl(tool.image ?? "");
-            console.log({ path });
+            const path = publicMediaUrl(tool.image);
 
             return (
               <TechBox
                 key={tool.key}
                 icon={
-                  tool.image ? (
-                    <img
+                  tool.image && path ? (
+                    <Image
                       src={path}
                       alt={tool.label}
+                      width={48}
+                      height={48}
                       className="h-full w-full object-contain"
                     />
                   ) : (

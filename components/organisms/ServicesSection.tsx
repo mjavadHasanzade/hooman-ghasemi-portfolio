@@ -68,10 +68,10 @@ export default function ServicesSection({
         <div
           ref={cardsRef}
           className="
-            relative mt-14 grid grid-cols-1 gap-6
-            sm:mt-16 sm:gap-7
-            md:grid-cols-2
-            lg:mt-20 lg:grid-cols-3 lg:gap-8
+            relative mx-auto mt-12 grid max-w-6xl grid-cols-1 gap-4
+            sm:mt-14 sm:grid-cols-2 sm:gap-5
+            lg:mt-16 lg:grid-cols-3
+             xl:gap-4
           "
         >
           {services.map((service) => (
