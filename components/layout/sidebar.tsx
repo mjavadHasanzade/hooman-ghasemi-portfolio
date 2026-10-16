@@ -39,7 +39,7 @@ export function Sidebar() {
       <div className="admin-brand flex h-20 items-center gap-3 px-6">
         <span className="admin-brand-mark">E</span>
         <div>
-          <div className="text-sm font-bold tracking-wide text-white">ETEMAD</div>
+          <div className="text-sm font-bold tracking-wide text-white">nova</div>
           <div className="text-xxs uppercase tracking-[0.22em] text-slate-500">Control room</div>
         </div>
       </div>

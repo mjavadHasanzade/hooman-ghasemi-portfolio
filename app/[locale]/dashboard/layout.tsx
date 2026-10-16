@@ -3,9 +3,11 @@
 import { useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import Footer from "@/components/organisms/Footer";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
 import { useAuthStore } from "@/lib/auth/auth-store";
+import { useFooter } from "@/lib/hooks/use-content";
 
 export default function DashboardLayout({
   children,
@@ -16,6 +18,7 @@ export default function DashboardLayout({
   const params = useParams();
   const locale = params.locale as string;
   const status = useAuthStore((s) => s.status);
+  const { data: footer } = useFooter();
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -36,12 +39,15 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="admin-shell dark flex min-h-screen">
-      <Sidebar />
-      <div className="flex flex-1 flex-col">
-        <Header />
-        <main className="admin-main flex-1 p-4 md:p-8">{children}</main>
+    <div className="admin-shell dark flex min-h-screen flex-col">
+      <div className="flex min-h-screen flex-1">
+        <Sidebar />
+        <div className="flex flex-1 flex-col">
+          <Header />
+          <main className="admin-main flex-1 p-4 md:p-8">{children}</main>
+        </div>
       </div>
+      {footer ? <Footer footer={footer} /> : null}
     </div>
   );
 }
