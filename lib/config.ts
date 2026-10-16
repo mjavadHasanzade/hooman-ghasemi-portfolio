@@ -11,7 +11,7 @@ type TConfig = {
 const envConfig: TConfig = {
   apiUrl: process.env.NEXT_PUBLIC_API_URL || "",
   loginURL: "/login",
-  defaultLocale: process.env.DEFAULT_LOCALE || "fa",
+  defaultLocale: process.env.DEFAULT_LOCALE || "en",
   fallbackLocale: process.env.FALLBACK_LOCALE || "fa",
 };
 

@@ -10,7 +10,7 @@ const envLocale = appConfig.defaultLocale;
 
 const defaultLocale: Locale = locales.includes(envLocale as Locale)
   ? (envLocale as Locale)
-  : "fa";
+  : "en";
 
 export const routing = defineRouting({
   localeDetection: false,
