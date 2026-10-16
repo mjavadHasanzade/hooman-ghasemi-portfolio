@@ -1,13 +1,20 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { PublicFooter } from "@/lib/types/public-content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Footer({ footer }: { footer: PublicFooter }) {
+export default function Footer({
+  footer,
+  logoUrl,
+}: {
+  footer: PublicFooter;
+  logoUrl?: string | null;
+}) {
 
   const footerRef = useRef<HTMLElement>(null);
 
@@ -35,9 +42,21 @@ export default function Footer({ footer }: { footer: PublicFooter }) {
   return (
     <footer
       ref={footerRef}
-      className="relative w-full overflow-hidden bg-black py-12 text-white sm:py-14"
+      className="relative w-full overflow-hidden bg-black text-white"
     >
       <div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
+        <div className="footer-item mb-2 flex h-34 items-center justify-center overflow-hidden sm:mb-3 sm:h-40">
+          {logoUrl ? (
+            <Image
+              src={logoUrl}
+              alt=""
+              width={160}
+              height={160}
+              unoptimized
+              className="h-60 w-auto scale-[1.75] object-contain sm:h-64"
+            />
+          ) : null}
+        </div>
         {/* خط جداکننده‌ی محو - روشن در وسط، شفاف در دو طرف */}
         <div
           className="footer-item mx-auto h-px w-full max-w-xs sm:max-w-sm"

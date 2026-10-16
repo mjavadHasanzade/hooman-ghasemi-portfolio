@@ -20,6 +20,7 @@ export type PublicProject = {
   isPublished: boolean;
   liveUrl: string | null;
   image: Media | null;
+  galleryImages: Array<{ order: number; media: Media }>;
   title: string;
   description: string;
   techIcons: PublicProjectTechIcon[];
@@ -28,6 +29,7 @@ export type PublicProject = {
 export type PublicService = {
   id: string;
   iconKey: string;
+  image: Media | null;
   order: number;
   title: string;
   description: string;
@@ -46,6 +48,7 @@ export type PublicSocialLink = {
   platform: string;
   url: string;
   iconKey: string;
+  image: Media | null;
   order: number;
 };
 
@@ -70,7 +73,10 @@ export type PublicHome = {
 export type PublicSiteSettings = {
   siteName: string;
   contactEmail: string;
+  phoneNumber: string;
   defaultLocale: "en" | "fa";
+  logoMedia?: Media | null;
+  footerLogoMedia: Media | null;
   faviconMedia: Media | null;
   ogImageMedia: Media | null;
 };

@@ -1,6 +1,13 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import {
+  CSSProperties,
+  MouseEvent,
+  ReactNode,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useTranslations } from "next-intl";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -14,7 +21,10 @@ import "swiper/css/pagination";
 
 import SectionHeading from "../common/SectionHeading";
 import ProjectCard from "../molecules/ProjectCard";
-import type { PublicProject, PublicSectionHeadings } from "@/lib/types/public-content";
+import type {
+  PublicProject,
+  PublicSectionHeadings,
+} from "@/lib/types/public-content";
 import { mediaUrl } from "@/lib/types/media";
 import { publicMediaUrl } from "@/lib/media/public-media-url";
 
@@ -22,7 +32,13 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-export default function PortfolioSection({ projects, sectionHeadings }: { projects: PublicProject[]; sectionHeadings: PublicSectionHeadings }) {
+export default function PortfolioSection({
+  projects,
+  sectionHeadings,
+}: {
+  projects: PublicProject[];
+  sectionHeadings: PublicSectionHeadings;
+}) {
   const t = useTranslations("Portfolio");
 
   const portfolioRef = useRef<HTMLElement>(null);
@@ -159,7 +175,7 @@ export default function PortfolioSection({ projects, sectionHeadings }: { projec
               return (
                 <SwiperSlide
                   key={project.id}
-                  className="portfolio-project-card h-auto"
+                  className="portfolio-project-card flex h-auto"
                 >
                   <ProjectCard
                     image={mediaUrl(project.image)}
@@ -171,17 +187,25 @@ export default function PortfolioSection({ projects, sectionHeadings }: { projec
                       <Circle className="h-3.5 w-3.5 fill-teal-500 text-teal-500" />
                     }
                     liveUrl={project.liveUrl}
+                    slug={project.slug}
                     techIcons={project.techIcons
                       .slice()
                       .sort((a, b) => a.order - b.order)
                       .map((techIcon) => (
-                        <span
-                          key={techIcon.key}
-                          className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full border border-gray-700 bg-gray-950 text-xxs text-teal-400"
-                          title={techIcon.label}
-                        >
-                          {techIcon.image ? <img src={publicMediaUrl(techIcon.image) ?? undefined} alt="" className="h-full w-full object-contain p-1" /> : techIcon.label.slice(0, 1).toUpperCase()}
-                        </span>
+                        <TechIconGlow key={techIcon.key} label={techIcon.label}>
+                          {techIcon.image ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={publicMediaUrl(techIcon.image) ?? undefined}
+                              alt=""
+                              className="h-full w-full object-contain"
+                            />
+                          ) : (
+                            <span className="text-xxs text-teal-400">
+                              {techIcon.label.slice(0, 1).toUpperCase()}
+                            </span>
+                          )}
+                        </TechIconGlow>
                       ))}
                   />
                 </SwiperSlide>
@@ -217,5 +241,59 @@ export default function PortfolioSection({ projects, sectionHeadings }: { projec
         </div>
       </div>
     </section>
+  );
+}
+
+interface TechIconGlowProps {
+  children: ReactNode;
+  label?: string;
+}
+
+export function TechIconGlow({ children, label }: TechIconGlowProps) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    el.style.setProperty("--x", `${x}px`);
+    el.style.setProperty("--y", `${y}px`);
+  };
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      title={label}
+      style={{ "--x": "50%", "--y": "50%" } as CSSProperties}
+      className="group relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg transition-all duration-300  hover:shadow-[0_0_5px_rgba(45,212,191,0.1)]"
+    >
+      {/* base ambient glow — always visible */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(circle at 50% 50%, rgba(45, 212, 191, 0.35), transparent 70%)",
+        }}
+      />
+
+      {/* cursor-tracking glow — appears on hover */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background:
+            "radial-gradient(60px circle at var(--x) var(--y), rgba(45, 212, 191, 0.6), transparent 70%)",
+        }}
+      />
+
+      {/* icon content */}
+      <div className="relative z-10 flex h-full w-full items-center justify-center p-1.5 text-teal-400">
+        {children}
+      </div>
+    </div>
   );
 }

@@ -42,35 +42,7 @@ export default function AboutSection({ about }: { about: PublicAbout }) {
             ease: "power3.out",
           },
           "-=0.5",
-        )
-        .from(
-          ".about-orb",
-          {
-            opacity: 0,
-            scale: 0.4,
-            duration: 0.6,
-            stagger: 0.2,
-            ease: "back.out(1.8)",
-          },
-          "-=0.35",
         );
-
-      gsap.to(".teal-orb", {
-        y: -12,
-        duration: 2.2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
-      gsap.to(".glass-orb", {
-        y: 12,
-        duration: 2.8,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 0.4,
-      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -106,7 +78,7 @@ export default function AboutSection({ about }: { about: PublicAbout }) {
                   alt={about.heading}
                   fill
                   sizes="(max-width: 1024px) 60vw, 300px"
-                  className="object-cover grayscale"
+                  className="object-cover"
                   unoptimized
                 />
               )}
@@ -120,80 +92,7 @@ export default function AboutSection({ about }: { about: PublicAbout }) {
         </div>
 
         <div className="relative w-full lg:w-2/3 lg:pt-1">
-          <div className="pointer-events-none absolute inset-0 hidden sm:block">
-            <div
-              className="about-orb glass-orb absolute end-[8%] top-0 h-28 w-28 rounded-full sm:h-32 sm:w-32"
-              style={{
-                border: "1px solid rgba(255,255,255,0.12)",
-                background:
-                  "radial-gradient(circle at 30% 26%, #6b7280 0%, #374151 28%, #111827 62%, #000000 100%)",
-                boxShadow:
-                  "inset -10px -10px 22px rgba(0,0,0,0.65), inset 8px 8px 16px rgba(255,255,255,0.1), 0 12px 32px -6px rgba(0,0,0,0.6)",
-              }}
-            >
-              <div
-                className="absolute rounded-full"
-                style={{
-                  top: "10%",
-                  left: "14%",
-                  width: "34%",
-                  height: "22%",
-                  background:
-                    "radial-gradient(circle, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.15) 45%, transparent 75%)",
-                  filter: "blur(2px)",
-                }}
-              />
-              <div
-                className="absolute rounded-full"
-                style={{
-                  bottom: "10%",
-                  right: "14%",
-                  width: "26%",
-                  height: "12%",
-                  background:
-                    "radial-gradient(circle, rgba(148,163,184,0.25) 0%, transparent 70%)",
-                  filter: "blur(2px)",
-                }}
-              />
-            </div>
-
-            <div
-              className="about-orb teal-orb absolute end-[26%] top-[88px] h-24 w-24 rounded-full sm:h-28 sm:w-28"
-              style={{
-                background:
-                  "radial-gradient(circle at 32% 28%, #99f6e4 0%, #2dd4bf 22%, #0d9488 50%, #0f3d3a 78%, #041b19 100%)",
-                boxShadow:
-                  "inset -10px -10px 24px rgba(0,0,0,0.55), inset 8px 8px 18px rgba(255,255,255,0.18), 0 18px 40px -8px rgba(20,184,166,0.55), 0 0 60px -10px rgba(45,212,191,0.4)",
-              }}
-            >
-              <div
-                className="absolute rounded-full"
-                style={{
-                  top: "10%",
-                  left: "16%",
-                  width: "38%",
-                  height: "26%",
-                  background:
-                    "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.35) 45%, transparent 75%)",
-                  filter: "blur(2px)",
-                }}
-              />
-              <div
-                className="absolute rounded-full"
-                style={{
-                  bottom: "8%",
-                  right: "12%",
-                  width: "30%",
-                  height: "14%",
-                  background:
-                    "radial-gradient(circle, rgba(153,246,228,0.35) 0%, transparent 70%)",
-                  filter: "blur(3px)",
-                }}
-              />
-            </div>
-          </div>
-
-          <p className="about-item font-mono text-sm tracking-[0.5em] text-teal-400 sm:text-base">
+          <p className="about-item font-mono text-base tracking-[0.5em] text-teal-400 sm:text-lg">
             {about.label}
           </p>
 
@@ -201,20 +100,21 @@ export default function AboutSection({ about }: { about: PublicAbout }) {
             {about.heading}
           </h2>
 
-          <p className="about-item relative z-10 mt-10 font-mono text-xl text-gray-300 sm:mt-12 sm:text-2xl">
+          <p className="about-item relative z-10 mt-10 font-mono text-2xl text-gray-100 sm:mt-12 sm:text-3xl">
             {about.greeting}
           </p>
 
-          <p className="about-item mt-5 max-w-2xl text-base leading-relaxed text-gray-500 sm:text-lg">
-            {about.description}
-          </p>
+          <div
+            className="about-item mt-5 max-w-2xl text-justify text-lg leading-relaxed text-gray-200 sm:text-xl [&_p+p]:mt-4 [&_strong]:font-semibold [&_ul]:my-4 [&_ul]:list-disc [&_ul]:ps-6 [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:ps-6"
+            dangerouslySetInnerHTML={{ __html: about.description }}
+          />
 
           <a
             href={`mailto:${about.email}`}
             className="about-item mt-6 flex items-center gap-3 transition-colors hover:opacity-80"
           >
             <Mail className="h-5 w-5 text-gray-300" strokeWidth={1.75} />
-            <span className="font-mono text-base text-teal-400 sm:text-lg">
+            <span className="font-mono text-lg text-teal-400 sm:text-xl">
               {about.email}
             </span>
           </a>

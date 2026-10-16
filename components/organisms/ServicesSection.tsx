@@ -1,15 +1,26 @@
 "use client";
+
 import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Gauge } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ServiceCard from "../molecules/ServiceCard";
 import SectionHeading from "../common/SectionHeading";
-import type { PublicService } from "@/lib/types/public-content";
-import type { PublicSectionHeadings } from "@/lib/types/public-content";
+import { publicMediaUrl } from "@/lib/media/public-media-url";
+import type {
+  PublicService,
+  PublicSectionHeadings,
+} from "@/lib/types/public-content";
 
-if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
+import "swiper/css";
+import "swiper/css/pagination";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function ServicesSection({
   services,
@@ -24,9 +35,10 @@ export default function ServicesSection({
 
   useEffect(() => {
     if (!cardsRef.current) return;
+
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        cardsRef.current!.children,
+        cardsRef.current!.querySelectorAll(".service-card-item"),
         { opacity: 0, y: 32 },
         {
           opacity: 1,
@@ -42,14 +54,19 @@ export default function ServicesSection({
         },
       );
     }, sectionRef);
+
     return () => ctx.revert();
   }, [services.length]);
 
   function iconFor(key: string) {
-    if (key === "web-design" || key === "design")
+    if (key === "web-design" || key === "design") {
       return <WebDesignIcon className="h-full w-full" />;
-    if (key === "webflow" || key === "development")
+    }
+
+    if (key === "webflow" || key === "development") {
       return <WebflowIcon className="h-full w-full" />;
+    }
+
     return <Gauge className="h-full w-full" strokeWidth={1.5} />;
   }
 
@@ -61,27 +78,57 @@ export default function ServicesSection({
       <div className="relative z-10 px-5 sm:px-8 md:px-12 lg:px-15 xl:px-20">
         <SectionHeading
           label={t("label")}
-          heading={[[{ text: sectionHeadings.servicesTitle, emphasis: true }]]}
+          heading={[
+            [
+              {
+                text: sectionHeadings.servicesTitle,
+                emphasis: true,
+              },
+            ],
+          ]}
           description={[sectionHeadings.servicesSubtitle]}
         />
 
-        <div
-          ref={cardsRef}
-          className="
-            relative mx-auto mt-12 grid max-w-6xl grid-cols-1 gap-4
-            sm:mt-14 sm:grid-cols-2 sm:gap-5
-            lg:mt-16 lg:grid-cols-3
-             xl:gap-4
-          "
-        >
-          {services.map((service) => (
-            <ServiceCard
-              key={service.id}
-              icon={iconFor(service.iconKey)}
-              title={service.title}
-              description={service.description}
-            />
-          ))}
+        <div ref={cardsRef} className="relative mx-auto mt-12 sm:mt-14 lg:mt-16">
+          <div className="sm:hidden">
+            <Swiper
+              modules={[Pagination]}
+              slidesPerView={1.08}
+              spaceBetween={14}
+              pagination={{ clickable: true, el: ".services-pagination" }}
+              className="overflow-visible! pb-9!"
+            >
+              {services.map((service) => (
+                <SwiperSlide key={service.id} className="service-card-item h-auto">
+                  <ServiceCard
+                    icon={iconFor(service.iconKey)}
+                    image={publicMediaUrl(service.image)}
+                    title={service.title}
+                    description={service.description}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            {services.length > 1 && (
+              <div className="services-pagination mt-5 flex justify-center gap-1.5" />
+            )}
+          </div>
+
+          <div className="hidden max-w-6xl flex-wrap items-center justify-center gap-5 sm:flex xl:gap-4">
+            {services.map((service) => (
+              <div
+                key={service.id}
+                className="service-card-item w-[calc(50%-0.625rem)] lg:w-[calc(33.333333%-0.667rem)]"
+              >
+                <ServiceCard
+                  icon={iconFor(service.iconKey)}
+                  image={publicMediaUrl(service.image)}
+                  title={service.title}
+                  description={service.description}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

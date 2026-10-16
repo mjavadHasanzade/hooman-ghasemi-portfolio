@@ -4,79 +4,25 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Navbar from "../layout/Navbar";
 import type { PublicHero } from "@/lib/api/public-content";
-import { publicMediaUrl } from "@/lib/media/public-media-url";
 
 type HeroProps = {
   hero: PublicHero;
   siteName: string;
+  logoUrl: string | null;
 };
 
-function buildSineWavePath(
-  width: number,
-  height: number,
-  amplitude: number,
-  cycles: number,
-  verticalOffset: number,
-) {
-  const steps = 240;
-  const points: string[] = [];
-
-  for (let i = 0; i <= steps; i++) {
-    const t = i / steps;
-    const x = width * t;
-    const damping = 0.15 + t * 0.85;
-    const y =
-      verticalOffset + amplitude * damping * Math.sin(t * Math.PI * 2 * cycles);
-
-    points.push(`${x.toFixed(2)},${y.toFixed(2)}`);
-  }
-
-  return `M${points.join(" L")}`;
-}
-
-type WaveParams = { amplitude: number; cycles: number };
-
-// یک پله‌ی میانی برای تبلت اضافه شد تا موج بین موبایل و دسکتاپ به‌طور طبیعی رشد کنه
-function getWaveParamsForWidth(width: number): WaveParams {
-  if (width < 640) return { amplitude: 30, cycles: 1.8 };
-  if (width < 768) return { amplitude: 42, cycles: 2.2 };
-  if (width < 1024) return { amplitude: 56, cycles: 2.7 };
-  return { amplitude: 70, cycles: 3.2 };
-}
-
-export default function Hero({ hero, siteName }: HeroProps) {
-  const backgroundImageUrl = publicMediaUrl(hero.backgroundImage);
-
+export default function Hero({ hero, siteName, logoUrl }: HeroProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
-  const wavePathRef = useRef<SVGPathElement>(null);
 
   const [mounted, setMounted] = useState(false);
-  const [waveParams, setWaveParams] = useState<WaveParams>({
-    amplitude: 70,
-    cycles: 3.2,
-  });
 
   useEffect(() => {
-    const update = () =>
-      setWaveParams(getWaveParamsForWidth(window.innerWidth));
-    update();
     setMounted(true);
-
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
   }, []);
-
-  const wavePath = buildSineWavePath(
-    1600,
-    500,
-    waveParams.amplitude,
-    waveParams.cycles,
-    260,
-  );
 
   useEffect(() => {
     if (!mounted) return;
@@ -84,8 +30,6 @@ export default function Hero({ hero, siteName }: HeroProps) {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
 
-      // بازه‌ی تبلت (640px تا 1023px) به‌عنوان یک شرط مستقل اضافه شد
-      // تا انیمیشن‌های ورودی هم متناسب با فضای تبلت تنظیم بشن، نه فقط موبایل/دسکتاپ خام
       mm.add(
         {
           isMobile: "(max-width: 639px)",
@@ -120,23 +64,6 @@ export default function Hero({ hero, siteName }: HeroProps) {
             gsap.set(buttonRef.current, { opacity: 0, y: isCompact ? 12 : 14 });
           }
 
-          if (wavePathRef.current) {
-            const length = wavePathRef.current.getTotalLength();
-            gsap.set(wavePathRef.current, {
-              strokeDasharray: length,
-              strokeDashoffset: length,
-              opacity: 0.7,
-            });
-            tl.to(
-              wavePathRef.current,
-              {
-                strokeDashoffset: 0,
-                duration: isMobile ? 1.5 : isTablet ? 1.8 : 2.2,
-              },
-              0,
-            );
-          }
-
           if (glowRef.current) {
             tl.to(glowRef.current, { opacity: 1, scale: 1, duration: 1.3 }, 0);
           }
@@ -157,18 +84,6 @@ export default function Hero({ hero, siteName }: HeroProps) {
             tl.to(buttonRef.current, { opacity: 1, y: 0, duration: 0.7 }, 0.58);
           }
 
-          if (wavePathRef.current) {
-            gsap.to(wavePathRef.current, {
-              x: isMobile ? -8 : isTablet ? -14 : -22,
-              y: isMobile ? 3 : isTablet ? 5 : 7,
-              duration: isMobile ? 6 : isTablet ? 7.5 : 9,
-              ease: "sine.inOut",
-              yoyo: true,
-              repeat: -1,
-              delay: isMobile ? 1.4 : isTablet ? 1.7 : 2,
-            });
-          }
-
           return () => {
             tl.kill();
           };
@@ -179,21 +94,19 @@ export default function Hero({ hero, siteName }: HeroProps) {
     return () => ctx.revert();
   }, [mounted]);
 
+  function scrollToContact() {
+    document.getElementById("contact")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-screen w-full flex-col overflow-hidden bg-black text-white"
-      style={
-        backgroundImageUrl
-          ? {
-              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.82)), url(${backgroundImageUrl})`,
-              backgroundPosition: "center",
-              backgroundSize: "cover",
-            }
-          : undefined
-      }
+      className="relative flex min-h-screen w-full flex-col overflow-hidden bg-transparent text-white"
     >
-      <Navbar siteName={siteName} />
+      <Navbar siteName={siteName} logoUrl={logoUrl} />
 
       <div
         ref={glowRef}
@@ -204,70 +117,6 @@ export default function Hero({ hero, siteName }: HeroProps) {
         }}
       />
 
-      {/*
-        ارتفاع موج در بازه‌ی تبلت (sm/md) به‌تدریج بزرگ می‌شه، نه یکهو
-        تا از حالت موبایل به دسکتاپ گذار نرمی داشته باشه
-      */}
-      {mounted && (
-        <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[62%] overflow-hidden xxs:h-[58%] sm:h-[56%] md:h-[62%] lg:h-[70%]"
-          style={{
-            maskImage: "linear-gradient(to bottom, transparent 0%, black 35%)",
-            WebkitMaskImage:
-              "linear-gradient(to bottom, transparent 0%, black 35%)",
-          }}
-        >
-          <svg
-            className="absolute bottom-0 left-0 h-full w-full"
-            viewBox="0 0 1600 500"
-            preserveAspectRatio="none"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <linearGradient
-                id="waveGradient"
-                x1="100%"
-                y1="0%"
-                x2="0%"
-                y2="0%"
-              >
-                <stop offset="0%" stopColor="#2dd4bf" stopOpacity="0.9" />
-                <stop offset="55%" stopColor="#2dd4bf" stopOpacity="0.45" />
-                <stop offset="100%" stopColor="#2dd4bf" stopOpacity="0" />
-              </linearGradient>
-              <filter
-                id="waveGlow"
-                x="-20%"
-                y="-50%"
-                width="140%"
-                height="200%"
-              >
-                <feGaussianBlur stdDeviation="8" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-
-            <path
-              ref={wavePathRef}
-              d={wavePath}
-              stroke="url(#waveGradient)"
-              strokeWidth="2.5"
-              filter="url(#waveGlow)"
-            />
-          </svg>
-        </div>
-      )}
-
-      {/*
-        justify-center تا md ادامه پیدا می‌کنه (یعنی موبایل + تبلت)
-        و فقط از lg به بعد (دسکتاپ واقعی) به justify-start با pt بزرگ برمی‌گرده.
-        این باعث می‌شه در تبلت هم محتوا به‌جای چسبیدن به بالا، به‌طور متعادل
-        در ارتفاع صفحه پخش بشه.
-      */}
       <div className="relative z-10 flex flex-1 flex-col justify-center px-5 pb-20 pt-24 sm:px-8 sm:pb-16 md:px-12 md:pb-14 lg:justify-start lg:px-15 lg:pb-0 lg:pt-32.5 xl:px-20 xl:pt-37.5">
         <div className="flex max-w-75 flex-col gap-6 xxs:max-w-sm sm:max-w-xl sm:gap-7 md:max-w-2xl md:gap-8 lg:max-w-180 lg:gap-0 xl:max-w-200">
           <h1
@@ -286,6 +135,8 @@ export default function Hero({ hero, siteName }: HeroProps) {
 
           <div ref={buttonRef} className="mt-2 sm:mt-0 lg:mt-9">
             <button
+              type="button"
+              onClick={scrollToContact}
               className="
                 group relative flex items-center gap-3
                 rounded-[3px] border border-teal-500

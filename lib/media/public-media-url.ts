@@ -10,5 +10,7 @@ import type { Media } from "../types/media";
 export function publicMediaUrl(media: Media | null | undefined) {
   if (!media?.path) return null;
 
-  return media.path.startsWith("/") ? media.path : `/${media.path}`;
+  const path = media.path.startsWith("/") ? media.path : `/${media.path}`;
+  const origin = process.env.NEXT_PUBLIC_BACKEND_ORIGIN?.replace(/\/$/, "");
+  return origin ? `${origin}${path}` : path;
 }

@@ -28,12 +28,16 @@ function getTechIcon(key: string) {
   switch (key) {
     case "webflow":
       return <WebflowLogo className="h-full w-full" />;
+
     case "gsap":
       return <GsapLogo className="h-full w-full" />;
+
     case "framer":
       return <FramerLogo className="h-full w-full" />;
+
     case "figma":
       return <FigmaLogo className="h-full w-full" />;
+
     default:
       return <CodeLogo className="h-full w-full text-teal-500" />;
   }
@@ -53,25 +57,52 @@ export default function TechStackSection({
     if (!gridRef.current) return;
 
     const ctx = gsap.context(() => {
-      const boxes = gridRef.current!.querySelectorAll(".tech-box");
+      const boxes = gsap.utils.toArray<HTMLElement>(".tech-box");
 
-      gsap.to(boxes, {
-        opacity: 1,
-        y: 0,
-        stagger: 0.1,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: gridRef.current,
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        },
+      // --------------------------------------------------
+      // Initial state
+      // --------------------------------------------------
+
+      gsap.set(boxes, {
+        opacity: 0,
+        y: 24,
       });
 
-      gsap.set(boxes, { y: 24 });
+      // --------------------------------------------------
+      // Entrance animation
+      // --------------------------------------------------
+
+      gsap.fromTo(
+        boxes,
+        {
+          opacity: 0,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          stagger: {
+            amount: 0.1,
+            from: "start",
+          },
+          duration: 0.6,
+          ease: "power2.out",
+
+          scrollTrigger: {
+            trigger: gridRef.current,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        },
+      );
+
+      // --------------------------------------------------
+      // Random blinking
+      // --------------------------------------------------
     }, gridRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -80,7 +111,12 @@ export default function TechStackSection({
         <SectionHeading
           label={t("label")}
           heading={[
-            [{ text: sectionHeadings.technologiesTitle, emphasis: true }],
+            [
+              {
+                text: sectionHeadings.technologiesTitle,
+                emphasis: true,
+              },
+            ],
           ]}
           description={[sectionHeadings.technologiesSubtitle]}
           className="mx-auto text-center"
@@ -89,33 +125,54 @@ export default function TechStackSection({
         <div
           ref={gridRef}
           className="
-            mx-auto mt-14 grid max-w-5xl grid-cols-2 items-start gap-x-4 gap-y-10
-            sm:mt-16 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-12
-            md:grid-cols-4 md:gap-x-10
-            lg:mt-20 lg:grid-cols-5 lg:gap-x-6 lg:gap-y-10
+            mx-auto mt-14 flex max-w-5xl
+            flex-wrap items-center justify-center
+            gap-x-4 gap-y-10
+
+            sm:mt-16
+            sm:gap-x-8 sm:gap-y-12
+
+            md:gap-x-10
+
+            lg:mt-20
+            lg:gap-x-6 lg:gap-y-10
           "
         >
           {techIcons.map((tool) => {
             const path = publicMediaUrl(tool.image);
 
             return (
-              <TechBox
+              <div
                 key={tool.key}
-                icon={
-                  tool.image && path ? (
-                    <Image
-                      src={path}
-                      alt={tool.label}
-                      width={48}
-                      height={48}
-                      className="h-full w-full object-contain"
-                    />
-                  ) : (
-                    getTechIcon(tool.key)
-                  )
-                }
-                name={tool.label}
-              />
+                className="
+                  tech-box
+                  flex w-[calc((100%-2rem)/3)]
+                  justify-center
+
+                  sm:w-[calc((100%-4rem)/3)]
+
+                  md:w-[calc((100%-7.5rem)/4)]
+
+                  lg:w-[calc((100%-6rem)/5)]
+                "
+              >
+                <TechBox
+                  icon={
+                    tool.image && path ? (
+                      <Image
+                        src={path}
+                        alt={tool.label}
+                        width={48}
+                        height={48}
+                        className="h-full w-full object-contain"
+                      />
+                    ) : (
+                      getTechIcon(tool.key)
+                    )
+                  }
+                  name={tool.label}
+                />
+              </div>
             );
           })}
         </div>

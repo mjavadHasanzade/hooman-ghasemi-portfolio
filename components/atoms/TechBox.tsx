@@ -10,10 +10,10 @@ export default function TechBox({ icon, name }: TechBoxProps) {
     <div className="tech-box flex min-w-0 flex-col items-center gap-3 opacity-0">
       <div
         className="
-          group relative flex aspect-square w-20 items-center justify-center
+          tech-box-blink group relative flex aspect-square w-20 items-center justify-center
           overflow-hidden border border-gray-800 bg-black
-          transition-colors duration-300
-          hover:border-teal-500
+          transition-all duration-300
+          hover:-translate-y-1 hover:border-teal-400 hover:shadow-[0_10px_30px_rgba(45,212,191,0.2)]
           sm:w-24
           md:w-28
         "
@@ -22,15 +22,14 @@ export default function TechBox({ icon, name }: TechBoxProps) {
           aria-hidden="true"
           className="
             pointer-events-none absolute inset-0
-            bg-[radial-gradient(80%_60%_at_50%_0%,rgba(255,255,255,0.07),transparent_70%)]
           "
         />
-        <div className="relative h-9 w-9 grayscale transition-all duration-300 group-hover:grayscale-0 sm:h-11 sm:w-11 md:h-12 md:w-12">
+        <div className="tech-icon relative h-11 w-11 transition-transform duration-500 ease-out group-hover:scale-110 group-hover:rotate-6 sm:h-12 sm:w-12 md:h-14 md:w-14">
           {icon}
         </div>
       </div>
 
-      <span className="w-full truncate text-center font-mono text-xs uppercase tracking-wider text-gray-400 sm:text-sm">
+      <span className="w-full truncate text-center font-mono text-sm uppercase tracking-wider text-gray-400 sm:text-base">
         {name}
       </span>
     </div>

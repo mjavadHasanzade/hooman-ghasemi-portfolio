@@ -182,7 +182,7 @@ export default function SectionHeading({
       {description && description.length > 0 && (
         <p
           ref={descriptionRef}
-          className={`mt-3 max-w-2xl text-[20px] leading-normal font-light [word-spacing:0.5rem] ${descriptionClassName}`}
+          className={`mt-3 max-w-2xl text-[22px] leading-normal font-light [word-spacing:0.5rem] ${descriptionClassName}`}
         >
           {description.map((line, i) => (
             <span key={i} data-line={i} className="block">

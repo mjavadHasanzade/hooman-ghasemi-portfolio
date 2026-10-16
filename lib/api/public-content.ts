@@ -43,6 +43,9 @@ async function getPublicData<T>(path: string): Promise<T> {
   }
 
   const payload = (await response.json()) as SuccessResponse<T>;
+
+  console.log({ payload });
+
   return payload.data;
 }
 

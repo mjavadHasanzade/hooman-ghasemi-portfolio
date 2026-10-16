@@ -1,3 +1,4 @@
+import { Link } from "@/i18n/navigation";
 import { ReactNode } from "react";
 
 interface OutlinedButtonProps {
@@ -34,10 +35,10 @@ export default function OutlinedButton({
 
   if (href) {
     return (
-      <a href={href} className={classes}>
+      <Link href={href} className={classes}>
         {icon}
         <span>{children}</span>
-      </a>
+      </Link>
     );
   }
 

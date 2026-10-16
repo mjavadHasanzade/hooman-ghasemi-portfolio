@@ -1,21 +1,21 @@
 "use client";
 
+import Image from "next/image";
 import { ReactNode } from "react";
 
 interface ServiceCardProps {
   icon: ReactNode;
+  image: string | null;
   title: string;
   description: string;
 }
 
 export default function ServiceCard({
   icon,
+  image,
   title,
   description,
 }: ServiceCardProps) {
-  const [firstWord, ...rest] = title.split(" ");
-  const restOfTitle = rest.join(" ");
-
   return (
     <div className="group relative overflow-hidden rounded p-px">
       <div
@@ -29,21 +29,26 @@ export default function ServiceCard({
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_82%_8%,rgba(255,255,255,0.055),transparent_70%)]"
         />
 
-        <div className="relative mb-5 h-14 w-14 sm:mb-6 sm:h-16 sm:w-16">
-          {icon}
+        <div className="relative z-10 mb-5 h-14 w-14 overflow-hidden rounded-lg sm:mb-6 sm:h-16 sm:w-16">
+          {image ? (
+            <Image
+              src={image}
+              alt=""
+              fill
+              sizes="64px"
+              className="object-cover"
+              unoptimized
+            />
+          ) : (
+            icon
+          )}
         </div>
 
-        <h3 className="relative mb-3 font-mono text-2xl font-bold leading-[1.15] tracking-tight sm:text-3xl xl:text-2xl">
-          <span className="font-normal text-gray-400">{firstWord}</span>
-          {restOfTitle && (
-            <>
-              {" "}
-              <span className="text-gray-100">{restOfTitle}</span>
-            </>
-          )}
+        <h3 className="relative z-10 mb-3 font-mono text-2xl font-bold leading-[1.15] tracking-tight text-gray-100 sm:text-3xl xl:text-2xl">
+          {title}
         </h3>
 
-        <p className="relative max-w-xs text-sm leading-7 text-gray-300 sm:text-base xl:text-sm">
+        <p className="relative z-10 mt-2 max-w-xs text-base leading-7 tracking-wider text-gray-200 sm:text-lg xl:text-base">
           {description}
         </p>
       </div>
