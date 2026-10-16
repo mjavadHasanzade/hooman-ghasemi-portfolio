@@ -40,29 +40,39 @@ export default async function WebsiteLayout({
         }}
         aria-hidden="true"
       >
-        {/* <defs>
-          <filter id="site-backdrop-remove-white">
-            <feColorMatrix
-              type="matrix"
-              values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 -0.333 -0.333 -0.333 0 1"
-            />
+        <defs>
+          <filter id="star-glow" x="-200%" y="-200%" width="400%" height="400%">
+            <feGaussianBlur stdDeviation="3" result="softGlow" />
+            <feMerge>
+              <feMergeNode in="softGlow" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
-          <radialGradient id="hero-main-star-glow">
-            <stop offset="0" stopColor="#fffde4" stopOpacity="0.95" />
-            <stop offset="0.18" stopColor="#ffd66e" stopOpacity="0.7" />
-            <stop offset="1" stopColor="#ffae2d" stopOpacity="0" />
+          <radialGradient id="star-main-halo">
+            <stop offset="0" stopColor="#fff8d8" stopOpacity="0.95" />
+            <stop offset="0.12" stopColor="#ffc957" stopOpacity="0.68" />
+            <stop offset="0.4" stopColor="#17d6e8" stopOpacity="0.2" />
+            <stop offset="1" stopColor="#17d6e8" stopOpacity="0" />
           </radialGradient>
-          <radialGradient id="hero-cyan-star-glow">
-            <stop offset="0" stopColor="#e9ffff" />
-            <stop offset="0.2" stopColor="#24e8f4" stopOpacity="0.9" />
-            <stop offset="1" stopColor="#0ed9eb" stopOpacity="0" />
+          <radialGradient id="star-cyan-halo">
+            <stop offset="0" stopColor="#ecffff" stopOpacity="0.95" />
+            <stop offset="0.2" stopColor="#52e8f3" stopOpacity="0.52" />
+            <stop offset="1" stopColor="#16a8c2" stopOpacity="0" />
           </radialGradient>
-          <radialGradient id="hero-amber-star-glow">
-            <stop offset="0" stopColor="#fff9d9" />
-            <stop offset="0.2" stopColor="#ffb832" stopOpacity="0.9" />
-            <stop offset="1" stopColor="#ffa11b" stopOpacity="0" />
-          </radialGradient>
-        </defs> */}
+          <linearGradient id="star-flare" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#5af4ff" stopOpacity="0" />
+            <stop offset="0.42" stopColor="#c8ffff" stopOpacity="0.62" />
+            <stop offset="0.5" stopColor="#ffffff" stopOpacity="1" />
+            <stop offset="0.58" stopColor="#ffd26a" stopOpacity="0.62" />
+            <stop offset="1" stopColor="#ffb43e" stopOpacity="0" />
+          </linearGradient>
+          <linearGradient id="star-core" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#ffffff" />
+            <stop offset="0.32" stopColor="#dfffff" />
+            <stop offset="0.7" stopColor="#66dce7" />
+            <stop offset="1" stopColor="#d8942f" />
+          </linearGradient>
+        </defs>
         {showBackgroundImage && backgroundImageUrl && (
           <image
             href={backgroundImageUrl}
@@ -71,27 +81,27 @@ export default async function WebsiteLayout({
             width="1671"
             height="941"
             opacity="1"
-            filter="url(#site-backdrop-remove-white)"
           />
         )}
-        <g className="hero-star hero-star-main">
-          <circle cx="1462" cy="340" r="44" fill="url(#hero-main-star-glow)" />
-          <path
-            d="M1462 298C1466 328 1474 336 1504 340C1474 344 1466 352 1462 382C1458 352 1450 344 1420 340C1450 336 1458 328 1462 298Z"
-            fill="#ffe28a"
-          />
-          <circle cx="1462" cy="340" r="3" fill="#fffef0" />
+        <g className="hero-star hero-star-main" transform="translate(1462 340)">
+          <circle r="70" fill="url(#star-main-halo)" opacity="0.7" />
+          <g filter="url(#star-glow)">
+            <path d="M-50 0H50" stroke="url(#star-flare)" strokeWidth="1.5" />
+            <path d="M0 -48V48" stroke="url(#star-flare)" strokeWidth="1.5" />
+            <path d="M-28 -28L28 28M28 -28L-28 28" stroke="#c9ffff" strokeOpacity="0.34" strokeWidth="0.8" />
+            <path d="M0 -30C3 -5 5 -3 30 0C5 3 3 5 0 30C-3 5 -5 3 -30 0C-5 -3 -3 -5 0 -30Z" fill="url(#star-core)" />
+            <circle r="5" fill="#ffffff" />
+          </g>
+          <ellipse rx="25" ry="7" fill="none" stroke="#77f6ff" strokeOpacity="0.58" strokeWidth="1" transform="rotate(-25)" />
+          <ellipse rx="25" ry="7" fill="none" stroke="#ffd36d" strokeOpacity="0.45" strokeWidth="1" transform="rotate(55)" />
         </g>
-        <g className="hero-star hero-star-cyan">
-          <circle cx="470" cy="502" r="25" fill="url(#hero-cyan-star-glow)" />
-          <circle cx="470" cy="502" r="3.5" fill="#eaffff" />
-        </g>
-        <g className="hero-star hero-star-amber">
-          <circle cx="1322" cy="413" r="20" fill="url(#hero-amber-star-glow)" />
-          <path
-            d="M1322 401C1323.2 410 1325 411.8 1334 413C1325 414.2 1323.2 416 1322 425C1320.8 416 1319 414.2 1310 413C1319 411.8 1320.8 410 1322 401Z"
-            fill="#ffe28a"
-          />
+        <g className="hero-star hero-star-cyan" transform="translate(470 502)">
+          <circle r="42" fill="url(#star-cyan-halo)" opacity="0.68" />
+          <g filter="url(#star-glow)">
+            <path d="M-28 0H28M0 -28V28" stroke="#bfffff" strokeOpacity="0.58" strokeWidth="1" />
+            <path d="M0 -18C2 -3 3 -2 18 0C3 2 2 3 0 18C-2 3 -3 2 -18 0C-3 -2 -2 -3 0 -18Z" fill="url(#star-core)" />
+            <circle r="3.5" fill="#ffffff" />
+          </g>
         </g>
       </svg>
       <div className="site-content" style={{ position: "relative", zIndex: 2 }}>

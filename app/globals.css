@@ -1056,11 +1056,6 @@ body:has(.admin-shell)
   animation-delay: -2.1s;
 }
 
-.hero-star-amber {
-  animation-duration: 3.1s;
-  animation-delay: -1.4s;
-}
-
 /* Technology marks stay alive even when the user is not hovering them. Each
    card gets a different phase so the grid feels organic rather than synced. */
 .tech-box-blink {
