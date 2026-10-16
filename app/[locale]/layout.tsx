@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getMessages } from "next-intl/server";
 import "../globals.css";
 import { vazirFont } from "@/utils";
@@ -20,7 +21,10 @@ export async function generateMetadata(): Promise<Metadata> {
       openGraph: ogImageUrl ? { images: [{ url: ogImageUrl }] } : undefined,
     };
   } catch {
-    return { title: "Frontend project | پروژه فرانت اند" };
+    return {
+      title: "Frontend project | پروژه فرانت اند",
+      icons: { icon: "/favicon.png" },
+    };
   }
 }
 
@@ -32,6 +36,9 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  if (locale !== "fa" && locale !== "en") {
+    notFound();
+  }
   const messages = await getMessages();
 
   const rtlLocales = ["fa", "ar"];
