@@ -88,7 +88,7 @@ export default async function ProjectPage({
       <div className="mx-auto max-w-[90rem] px-5 py-7 sm:px-8 sm:py-10 lg:px-14 lg:py-14">
         <Link
           href={`/${locale}`}
-          className="group inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-gray-500 transition-colors hover:text-teal-300"
+          className="group inline-flex items-center gap-2 text-xs font-semibold ltr:uppercase tracking-[0.14em] text-gray-500 rtl:tracking-normal transition-colors hover:text-teal-300"
         >
           <BackIcon className="h-4 w-4 transition-transform group-hover:-translate-x-1 rtl:group-hover:translate-x-1" />
           {labels.back}
@@ -107,14 +107,14 @@ export default async function ProjectPage({
           </div>
 
           <div className="max-w-xl lg:pb-3">
-            <p className="flex items-center gap-3 font-mono text-[10px] font-semibold uppercase tracking-[0.3em] text-teal-400">
+            <p className="flex items-center gap-3 ltr:font-mono text-[10px] font-semibold ltr:uppercase tracking-[0.3em] text-teal-400 rtl:tracking-normal">
               <span className="h-px w-8 bg-teal-400/70" />
               {labels.selectedWork}
             </p>
             <h1 className="mt-5 max-w-2xl text-4xl font-bold leading-[1.08] tracking-tight text-gray-100 sm:text-6xl lg:text-7xl">
               {project.title}
             </h1>
-            <p className="mt-5 font-mono text-xs uppercase tracking-[0.18em] text-gray-600">
+            <p className="mt-5 ltr:font-mono text-xs ltr:uppercase tracking-[0.18em] text-gray-600 rtl:tracking-normal">
               {labels.project} / {project.slug}
             </p>
 
@@ -139,7 +139,7 @@ export default async function ProjectPage({
 
         {techIcons.length > 0 ? (
           <section className="mt-10 border-t border-white/10 pt-7 sm:mt-16 sm:pt-9">
-            <h2 className="text-[10px] font-semibold uppercase tracking-[0.24em] text-gray-500">
+            <h2 className="text-[10px] font-semibold ltr:uppercase tracking-[0.24em] text-gray-500 rtl:tracking-normal">
               {labels.technologies}
             </h2>
             <div className="mt-5 flex flex-wrap gap-2.5">

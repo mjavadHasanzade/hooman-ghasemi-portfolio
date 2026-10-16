@@ -44,7 +44,7 @@ export default function ServiceCard({
           )}
         </div>
 
-        <h3 className="relative z-10 mb-3 font-mono text-2xl font-bold leading-[1.15] tracking-tight text-gray-100 sm:text-3xl xl:text-2xl">
+        <h3 className="relative z-10 mb-3 ltr:font-mono text-2xl font-bold leading-[1.15] tracking-tight text-gray-100 rtl:leading-[1.4] sm:text-3xl xl:text-2xl">
           {title}
         </h3>
 

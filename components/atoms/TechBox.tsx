@@ -29,7 +29,7 @@ export default function TechBox({ icon, name }: TechBoxProps) {
         </div>
       </div>
 
-      <span className="w-full truncate text-center font-mono text-sm uppercase tracking-wider text-gray-400 sm:text-base">
+      <span className="w-full truncate text-center ltr:font-mono ltr:uppercase text-sm tracking-wider text-gray-400 rtl:tracking-normal sm:text-base">
         {name}
       </span>
     </div>

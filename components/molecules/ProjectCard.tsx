@@ -55,7 +55,7 @@ export default function ProjectCard({
       </div>
 
       <div className="relative z-10 flex flex-1 flex-col px-5 pb-5 pt-4 sm:px-6 sm:pb-6 sm:pt-5">
-        <h3 className="mb-2 font-mono text-lg font-bold leading-snug text-gray-100 sm:text-xl">
+        <h3 className="mb-2 ltr:font-mono text-lg font-bold leading-snug text-gray-100 sm:text-xl">
           {title}
         </h3>
 

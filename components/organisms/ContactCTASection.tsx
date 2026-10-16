@@ -22,7 +22,7 @@ const TypewriterText = memo(function TypewriterText({
 
   return (
     <div className="cta-item relative mt-16 flex justify-center">
-      <div className="min-h-19 w-full max-w-lg rounded-2xl border border-teal-500/40 px-6 py-4 text-center font-mono text-sm text-gray-200 sm:text-base">
+      <div className="min-h-19 w-full max-w-lg rounded-2xl border border-teal-500/40 px-6 py-4 text-center ltr:font-mono text-sm text-gray-200 rtl:leading-7 sm:text-base">
         {typedText}
         <span className="typewriter-cursor ms-0.5 inline-block h-4 w-0.5 translate-y-0.5 bg-teal-400 align-middle" />
       </div>
@@ -76,7 +76,7 @@ export default function ContactCTASection({
       className="relative w-full overflow-hidden bg-black py-20 text-white sm:py-24 md:py-28"
     >
       <div className="relative mx-auto max-w-4xl px-5 text-center sm:px-8">
-        <h2 className="cta-item font-mono text-3xl font-bold text-gray-300 sm:text-4xl md:text-5xl">
+        <h2 className="cta-item ltr:font-mono text-3xl font-bold text-gray-300 sm:text-4xl md:text-5xl">
           {contactCta.heading}
         </h2>
 
@@ -88,7 +88,7 @@ export default function ContactCTASection({
         <div className="relative mt-10 flex items-center justify-center">
           <button
             type="button"
-            className="cta-item pulse-btn group relative z-10 inline-flex rounded-full border border-teal-500/40 bg-black px-6 py-3.5 font-mono text-sm font-bold text-white transition-colors hover:border-teal-400 sm:text-base"
+            className="cta-item pulse-btn group relative z-10 inline-flex rounded-full border border-teal-500/40 bg-black px-6 py-3.5 ltr:font-mono text-sm font-bold text-white transition-colors hover:border-teal-400 sm:text-base"
           >
             {contactCta.connectLabel}
           </button>
@@ -96,7 +96,7 @@ export default function ContactCTASection({
         </div>
 
         {(email || phone) && (
-          <ul className="cta-item mx-auto mt-5 flex w-fit flex-col items-start gap-2 font-mono text-sm text-teal-300">
+          <ul className="cta-item mx-auto mt-5 flex w-fit flex-col items-start gap-2 text-sm text-teal-300">
             {email && (
               <li className="flex items-center gap-2">
                 <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-teal-400" />

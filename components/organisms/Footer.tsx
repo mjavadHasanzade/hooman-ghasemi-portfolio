@@ -66,7 +66,7 @@ export default function Footer({
           }}
         />
 
-        <p className="footer-item mt-8 font-mono text-sm text-gray-500 sm:text-base">
+        <p className="footer-item mt-8 pb-6 ltr:font-mono text-sm text-gray-500 sm:pb-8 sm:text-base">
           {footer.copyrightText}
         </p>
       </div>

@@ -92,15 +92,15 @@ export default function AboutSection({ about }: { about: PublicAbout }) {
         </div>
 
         <div className="relative w-full lg:w-2/3 lg:pt-1">
-          <p className="about-item font-mono text-base tracking-[0.5em] text-teal-400 sm:text-lg">
+          <p className="about-item ltr:font-mono text-base tracking-[0.5em] text-teal-400 rtl:tracking-normal sm:text-lg">
             {about.label}
           </p>
 
-          <h2 className="about-item mt-3 font-mono text-4xl font-bold text-gray-400 sm:text-5xl">
+          <h2 className="about-item mt-3 ltr:font-mono text-4xl font-bold text-gray-400 sm:text-5xl">
             {about.heading}
           </h2>
 
-          <p className="about-item relative z-10 mt-10 font-mono text-2xl text-gray-100 sm:mt-12 sm:text-3xl">
+          <p className="about-item relative z-10 mt-10 ltr:font-mono text-2xl text-gray-100 sm:mt-12 sm:text-3xl">
             {about.greeting}
           </p>
 

@@ -121,7 +121,7 @@ export default function Hero({ hero, siteName, logoUrl }: HeroProps) {
         <div className="flex max-w-75 flex-col gap-6 xxs:max-w-sm sm:max-w-xl sm:gap-7 md:max-w-2xl md:gap-8 lg:max-w-180 lg:gap-0 xl:max-w-200">
           <h1
             ref={titleRef}
-            className="font-mono text-[26px] font-bold uppercase leading-[1.2] tracking-wide text-teal-200 xxs:text-[30px] sm:text-[38px] sm:leading-[1.18] md:text-[46px] lg:text-[52px] xl:text-[58px]"
+            className="ltr:font-mono ltr:uppercase text-[26px] font-bold leading-[1.2] tracking-wide text-teal-200 rtl:leading-[1.45] rtl:tracking-normal xxs:text-[30px] sm:text-[38px] sm:leading-[1.18] md:text-[46px] lg:text-[52px] xl:text-[58px]"
           >
             {hero.title}
           </h1>

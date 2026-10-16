@@ -85,7 +85,7 @@ export default function MobileMenu({
                       onClick={onClose}
                       className="
                         group flex items-center gap-3 py-3
-                        text-2xl font-bold uppercase tracking-tight text-white
+                        ltr:uppercase text-2xl font-bold tracking-tight text-white rtl:tracking-normal
                         transition-colors
                       "
                     >
