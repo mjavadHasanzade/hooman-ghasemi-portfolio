@@ -10,7 +10,9 @@ export type TechIcon = {
   updatedAt: string;
 };
 
-export type TechIconInput = Pick<TechIcon, "key" | "label"> & { image?: File | null };
+export type TechIconInput = Pick<TechIcon, "key" | "label"> & {
+  imageMediaId?: string | null;
+};
 
 export type ProjectTranslation = {
   id: string;
@@ -33,6 +35,13 @@ export type Project = {
   liveUrl: string | null;
   imageId: string | null;
   image: Media | null;
+  galleryImages: Array<{
+    id: string;
+    projectId: string;
+    mediaId: string;
+    order: number;
+    media: Media;
+  }>;
   translations: ProjectTranslation[];
   availableLocales: Locale[];
   techIcons: Array<{ order: number; techIcon: TechIcon }>;
@@ -45,6 +54,7 @@ export type ProjectInput = {
   isPublished?: boolean;
   liveUrl?: string | null;
   imageId?: string | null;
+  galleryImageIds?: string[];
   translations: ProjectTranslationInput[];
   techIconIds?: string[];
 };

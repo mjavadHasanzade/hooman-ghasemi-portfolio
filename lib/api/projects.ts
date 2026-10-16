@@ -1,4 +1,4 @@
-import { apiDelete, apiGet, apiPatch, apiPatchForm, apiPost, apiPostForm } from "./client";
+import { apiDelete, apiGet, apiPatch, apiPost } from "./client";
 import type { Paginated } from "../types/api";
 import type { Project, ProjectInput, TechIcon, TechIconInput } from "../types/projects";
 
@@ -7,19 +7,11 @@ export function getTechIcons(page: number, limit: number) {
 }
 
 export function createTechIcon(input: TechIconInput) {
-  const body = new FormData();
-  body.append("key", input.key);
-  body.append("label", input.label);
-  if (input.image) body.append("image", input.image);
-  return apiPostForm<TechIcon>("/admin/tech-icons", body);
+  return apiPost<TechIcon>("/admin/tech-icons", input);
 }
 
 export function updateTechIcon(id: string, input: Partial<TechIconInput>) {
-  const body = new FormData();
-  if (input.key !== undefined) body.append("key", input.key);
-  if (input.label !== undefined) body.append("label", input.label);
-  if (input.image) body.append("image", input.image);
-  return apiPatchForm<TechIcon>(`/admin/tech-icons/${id}`, body);
+  return apiPatch<TechIcon>(`/admin/tech-icons/${id}`, input);
 }
 
 export function deleteTechIcon(id: string) {
