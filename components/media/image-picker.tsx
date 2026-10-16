@@ -71,14 +71,12 @@ export function ImagePicker({ value, onChange, label }: ImagePickerProps) {
           >
             انتخاب تصویر
           </DialogTrigger>
-          <DialogContent className="max-h-[85vh] max-w-3xl overflow-y-auto">
+          <DialogContent className="z-[100] max-h-[85vh] max-w-3xl overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>انتخاب تصویر</DialogTitle>
+              <DialogTitle>مدیریت و انتخاب تصویر</DialogTitle>
             </DialogHeader>
 
             <div className="space-y-4">
-              <MediaUploader />
-
               <MediaGrid
                 items={data?.items ?? []}
                 isLoading={isLoading}
@@ -98,6 +96,11 @@ export function ImagePicker({ value, onChange, label }: ImagePickerProps) {
                   onPageChange={setPage}
                 />
               )}
+
+              <div className="border-t pt-4">
+                <p className="mb-3 text-sm font-medium">آپلود فایل جدید</p>
+                <MediaUploader />
+              </div>
             </div>
           </DialogContent>
         </Dialog>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Pencil, Plus, Trash2, Wrench } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -10,12 +10,18 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PaginationControls } from "@/components/ui/pagination-controls";
+import { ImagePicker } from "@/components/media/image-picker";
 import { getErrorMessage } from "@/lib/api/error";
 import { useCreateTechIcon, useDeleteTechIcon, useTechIcons, useUpdateTechIcon } from "@/lib/hooks/use-projects";
 import type { TechIcon, TechIconInput } from "@/lib/types/projects";
-import { mediaUrl } from "@/lib/types/media";
+import { mediaUrl, type Media } from "@/lib/types/media";
 
-const emptyValues: TechIconInput = { key: "", label: "", image: null };
+type TechIconForm = Pick<TechIconInput, "key" | "label"> & {
+  image: Media | null;
+  imageChanged: boolean;
+};
+
+const emptyValues: TechIconForm = { key: "", label: "", image: null, imageChanged: false };
 const keyPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export default function TechIconsPage() {
@@ -26,19 +32,22 @@ export default function TechIconsPage() {
   const createIcon = useCreateTechIcon();
   const updateIcon = useUpdateTechIcon();
   const deleteIcon = useDeleteTechIcon();
-  const form = useForm<TechIconInput>({ defaultValues: emptyValues });
+  const form = useForm<TechIconForm>({ defaultValues: emptyValues });
+  const image = useWatch({ control: form.control, name: "image" });
 
   useEffect(() => {
-    form.reset(editing ? { key: editing.key, label: editing.label, image: null } : emptyValues);
+    form.reset(editing ? { key: editing.key, label: editing.label, image: editing.image, imageChanged: false } : emptyValues);
   }, [editing, form]);
 
   function showCreate() { setEditing(null); setOpen(true); }
   function showEdit(icon: TechIcon) { setEditing(icon); setOpen(true); }
 
-  async function onSubmit(values: TechIconInput) {
+  async function onSubmit(values: TechIconForm) {
     try {
-      if (editing) await updateIcon.mutateAsync({ id: editing.id, input: values });
-      else await createIcon.mutateAsync(values);
+      const imageInput = values.imageChanged ? { imageMediaId: values.image?.id ?? null } : {};
+      const input: TechIconInput = { key: values.key, label: values.label, ...imageInput };
+      if (editing) await updateIcon.mutateAsync({ id: editing.id, input });
+      else await createIcon.mutateAsync(input);
       toast.success(editing ? "آیکون به‌روزرسانی شد." : "آیکون اضافه شد.");
       setOpen(false);
     } catch (error) { toast.error(getErrorMessage(error)); }
@@ -76,7 +85,7 @@ export default function TechIconsPage() {
           <form className="space-y-5" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-2"><Label htmlFor="tech-label">نام نمایشی</Label><Input id="tech-label" {...form.register("label", { required: "نام الزامی است." })} />{form.formState.errors.label && <p className="text-xs text-destructive">{form.formState.errors.label.message}</p>}</div>
             <div className="space-y-2"><Label htmlFor="tech-key">کلید</Label><Input id="tech-key" dir="ltr" placeholder="next-js" {...form.register("key", { required: "کلید الزامی است.", pattern: { value: keyPattern, message: "فقط حروف کوچک، عدد و خط تیره بین کلمات مجاز است." } })} />{form.formState.errors.key && <p className="text-xs text-destructive">{form.formState.errors.key.message}</p>}</div>
-            <div className="space-y-2"><Label htmlFor="tech-image">تصویر تکنولوژی</Label><Input id="tech-image" type="file" accept="image/jpeg,image/png,image/webp,image/svg+xml" onChange={(event) => form.setValue("image", event.target.files?.[0] ?? null, { shouldDirty: true })} /><p className="text-xs text-muted-foreground">اختیاری؛ برای تغییر تصویر، فایل جدید انتخاب کنید.</p></div>
+            <ImagePicker label="تصویر تکنولوژی" value={image} onChange={(media) => { form.setValue("image", media, { shouldDirty: true }); form.setValue("imageChanged", true); }} />
             <div className="flex justify-end"><Button type="submit" disabled={createIcon.isPending || updateIcon.isPending}>{editing ? "ذخیره تغییرات" : "افزودن"}</Button></div>
           </form>
         </DialogContent>

@@ -5,6 +5,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { ContentFormSkeleton } from "@/components/content/content-form-skeleton";
 import { ImagePicker } from "@/components/media/image-picker";
+import { RichTextEditor } from "@/components/shared/rich-text-editor";
 import { LocaleTabs } from "@/components/shared/locale-tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -79,10 +80,14 @@ function AboutTranslationForm({ locale }: { locale: Locale }) {
       </div>
       <div className="space-y-2">
         <Label htmlFor={`about-description-${locale}`}>توضیحات</Label>
-        <textarea
-          id={`about-description-${locale}`}
-          className="min-h-32 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-          {...form.register("description")}
+        <RichTextEditor
+          value={form.watch("description")}
+          onChange={(description) =>
+            form.setValue("description", description, { shouldDirty: true })
+          }
+          dir={locale === "fa" ? "rtl" : "ltr"}
+          placeholder="توضیحات را بنویسید…"
+          className="[&_.ProseMirror]:text-justify"
         />
       </div>
       <div className="flex justify-end">

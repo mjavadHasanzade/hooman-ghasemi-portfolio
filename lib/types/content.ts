@@ -5,11 +5,14 @@ export type SiteSettings = {
   id: "singleton";
   siteName: string;
   contactEmail: string;
+  phoneNumber: string;
   defaultLocale: Locale;
   faviconMediaId: string | null;
   faviconMedia: Media | null;
   ogImageMediaId: string | null;
   ogImageMedia: Media | null;
+  footerLogoMediaId: string | null;
+  footerLogoMedia: Media | null;
   translations: SiteSettingsTranslation[];
   availableLocales: Locale[];
   updatedAt: string;
@@ -32,9 +35,11 @@ export type UpdateSiteSettingsInput = Partial<
     SiteSettings,
     | "siteName"
     | "contactEmail"
+    | "phoneNumber"
     | "defaultLocale"
     | "faviconMediaId"
     | "ogImageMediaId"
+    | "footerLogoMediaId"
   >
 > & {
   translations?: Array<Omit<SiteSettingsTranslation, "id" | "siteSettingsId">>;

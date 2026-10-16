@@ -1,4 +1,5 @@
 import type { Locale, Paginated } from "./api";
+import type { Media } from "./media";
 
 export type ServiceTranslation = {
   id: string;
@@ -11,6 +12,7 @@ export type ServiceTranslation = {
 export type Service = {
   id: string;
   iconKey: string;
+  image: Media | null;
   order: number;
   isPublished: boolean;
   translations: ServiceTranslation[];
@@ -23,6 +25,7 @@ export type ServiceTranslationInput = Pick<ServiceTranslation, "locale" | "title
 
 export type ServiceInput = {
   iconKey: string;
+  imageMediaId?: string | null;
   isPublished?: boolean;
   translations: ServiceTranslationInput[];
 };
