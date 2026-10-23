@@ -1,6 +1,3 @@
-import axios from "axios";
-import { auth } from "@/api/routes";
-
 type TConfig = {
   apiUrl: string;
   loginURL: string;

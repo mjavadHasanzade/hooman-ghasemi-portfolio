@@ -19,6 +19,9 @@ export default function DashboardLayout({
   const locale = params.locale as string;
   const status = useAuthStore((s) => s.status);
   const { data: footer } = useFooter();
+  const footerTranslation = footer?.translations.find(
+    (translation) => translation.locale === locale,
+  );
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -47,7 +50,9 @@ export default function DashboardLayout({
           <main className="admin-main flex-1 p-4 md:p-8">{children}</main>
         </div>
       </div>
-      {footer ? <Footer footer={footer} /> : null}
+      {footerTranslation ? (
+        <Footer footer={{ copyrightText: footerTranslation.copyrightText }} />
+      ) : null}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import Hero from "@/components/organisms/Hero";
 import PortfolioSection from "@/components/organisms/PortfolioSection";
 import ServicesSection from "@/components/organisms/ServicesSection";
 import TechStackSection from "@/components/organisms/TechStackSection";
+import { notFound } from "next/navigation";
 import { publicMediaUrl } from "@/lib/media/public-media-url";
 import {
   getPublicAbout,
@@ -18,12 +19,14 @@ export async function generateStaticParams() {
 
 type Props = {
   params: Promise<{
-    locale: "fa" | "en";
+    locale: string;
   }>;
 };
 
 export default async function Home({ params }: Props) {
-  const { locale } = await params;
+  const { locale: rawLocale } = await params;
+  if (rawLocale !== "fa" && rawLocale !== "en") notFound();
+  const locale = rawLocale;
   const [siteSettings, hero, about, home] = await Promise.all([
     getPublicSiteSettings(),
     getPublicHero(locale),
