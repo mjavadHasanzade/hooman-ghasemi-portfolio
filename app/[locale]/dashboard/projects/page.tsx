@@ -390,7 +390,7 @@ function ProjectDialog({
                   return (
                     <div key={galleryImage.id} className="overflow-hidden rounded-xl border bg-background/40">
                       <div className="relative aspect-video bg-muted">
-                        {url ? <Image src={url} alt={galleryImage.altText ?? ""} fill sizes="(max-width: 640px) 100vw, 260px" className="object-cover" /> : null}
+                        {url ? <Image src={url} alt={galleryImage.altText ?? ""} fill sizes="(max-width: 640px) 100vw, 260px" className="object-cover" unoptimized /> : null}
                         <span className="absolute start-2 top-2 rounded bg-black/70 px-2 py-1 font-mono text-xs text-white">{index + 1}</span>
                       </div>
                       <div className="flex items-center justify-between gap-2 p-2">

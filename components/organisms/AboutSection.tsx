@@ -6,14 +6,14 @@ import { Mail } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { PublicAbout } from "@/lib/types/public-content";
-import { mediaUrl } from "@/lib/types/media";
+import { publicMediaUrl } from "@/lib/media/public-media-url";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function AboutSection({ about }: { about: PublicAbout }) {
   const sectionRef = useRef<HTMLElement>(null);
   const imageWrapRef = useRef<HTMLDivElement>(null);
-  const imageUrl = mediaUrl(about.image);
+  const imageUrl = publicMediaUrl(about.image);
 
   useEffect(() => {
     const ctx = gsap.context(() => {

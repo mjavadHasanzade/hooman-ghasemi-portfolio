@@ -25,7 +25,6 @@ import type {
   PublicProject,
   PublicSectionHeadings,
 } from "@/lib/types/public-content";
-import { mediaUrl } from "@/lib/types/media";
 import { publicMediaUrl } from "@/lib/media/public-media-url";
 
 if (typeof window !== "undefined") {
@@ -178,7 +177,7 @@ export default function PortfolioSection({
                   className="portfolio-project-card flex h-auto"
                 >
                   <ProjectCard
-                    image={mediaUrl(project.image)}
+                    image={publicMediaUrl(project.image)}
                     title={project.title || project.slug}
                     description={project.description}
                     visitSiteLabel={t("visitSite")}

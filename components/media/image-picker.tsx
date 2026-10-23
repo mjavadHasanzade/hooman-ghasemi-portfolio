@@ -49,6 +49,7 @@ export function ImagePicker({ value, onChange, label }: ImagePickerProps) {
                 fill
                 sizes="96px"
                 className="object-cover"
+                unoptimized
               />
               <Button
                 type="button"

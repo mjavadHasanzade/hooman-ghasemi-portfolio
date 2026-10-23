@@ -12,7 +12,4 @@ export type Media = {
   updatedAt: string;
 };
 
-export function mediaUrl(media: Media | null | undefined): string | null {
-  if (!media?.path) return null;
-  return media.path.startsWith("/") ? media.path : `/${media.path}`;
-}
+export { mediaUrl } from "../media/media-url";

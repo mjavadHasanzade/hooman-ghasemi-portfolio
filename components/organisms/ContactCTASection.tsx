@@ -5,7 +5,7 @@ import { memo, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTypewriter } from "../../hooks/useTypewriter";
-import { mediaUrl } from "@/lib/types/media";
+import { publicMediaUrl } from "@/lib/media/public-media-url";
 import type {
   PublicContactCta,
   PublicSocialLink,
@@ -123,9 +123,9 @@ export default function ContactCTASection({
               aria-label={social.platform}
               className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-800/80 text-sm font-bold text-gray-200 transition-colors hover:bg-gray-700"
             >
-              {mediaUrl(social.image) ? (
+              {publicMediaUrl(social.image) ? (
                 <Image
-                  src={mediaUrl(social.image)!}
+                  src={publicMediaUrl(social.image)!}
                   alt={social.platform}
                   width={24}
                   height={24}

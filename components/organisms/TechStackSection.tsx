@@ -165,6 +165,7 @@ export default function TechStackSection({
                         width={48}
                         height={48}
                         className="h-full w-full object-contain"
+                        unoptimized
                       />
                     ) : (
                       getTechIcon(tool.key)
