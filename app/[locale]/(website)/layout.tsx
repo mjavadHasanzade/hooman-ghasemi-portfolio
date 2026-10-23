@@ -11,9 +11,10 @@ export default async function WebsiteLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: "fa" | "en" }>;
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
+  const { locale: rawLocale } = await params;
+  const locale = rawLocale === "fa" ? "fa" : "en";
   const [footer, hero, siteSettings] = await Promise.all([
     getPublicFooter(locale),
     getPublicHero(locale),

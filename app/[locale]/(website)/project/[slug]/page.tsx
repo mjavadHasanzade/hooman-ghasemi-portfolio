@@ -60,9 +60,11 @@ async function getProject(locale: Locale, slug: string) {
 export default async function ProjectPage({
   params,
 }: {
-  params: Promise<{ locale: Locale; slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { locale, slug } = await params;
+  const { locale: rawLocale, slug } = await params;
+  if (rawLocale !== "fa" && rawLocale !== "en") notFound();
+  const locale: Locale = rawLocale;
   const project = await getProject(locale, slug);
 
   if (!project) notFound();
