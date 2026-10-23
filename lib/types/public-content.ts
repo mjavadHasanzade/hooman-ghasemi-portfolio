@@ -74,6 +74,8 @@ export type PublicSiteSettings = {
   siteName: string;
   contactEmail: string;
   phoneNumber: string;
+  metaTitle: string;
+  metaDescription: string;
   defaultLocale: "en" | "fa";
   logoMedia?: Media | null;
   footerLogoMedia: Media | null;

@@ -6,6 +6,8 @@ export type SiteSettings = {
   siteName: string;
   contactEmail: string;
   phoneNumber: string;
+  metaTitle: string;
+  metaDescription: string;
   defaultLocale: Locale;
   faviconMediaId: string | null;
   faviconMedia: Media | null;
@@ -36,6 +38,8 @@ export type UpdateSiteSettingsInput = Partial<
     | "siteName"
     | "contactEmail"
     | "phoneNumber"
+    | "metaTitle"
+    | "metaDescription"
     | "defaultLocale"
     | "faviconMediaId"
     | "ogImageMediaId"

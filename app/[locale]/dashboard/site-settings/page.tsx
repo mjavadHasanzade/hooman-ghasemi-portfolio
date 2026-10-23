@@ -21,6 +21,8 @@ type SiteSettingsForm = {
   siteName: string;
   contactEmail: string;
   phoneNumber: string;
+  metaTitle: string;
+  metaDescription: string;
   defaultLocale: Locale;
   faviconMedia: Media | null;
   ogImageMedia: Media | null;
@@ -95,6 +97,8 @@ export default function SiteSettingsPage() {
       siteName: "",
       contactEmail: "",
       phoneNumber: "",
+      metaTitle: "",
+      metaDescription: "",
       defaultLocale: "en",
       faviconMedia: null,
       ogImageMedia: null,
@@ -112,6 +116,8 @@ export default function SiteSettingsPage() {
       siteName: settings.siteName,
       contactEmail: settings.contactEmail,
       phoneNumber: settings.phoneNumber,
+      metaTitle: settings.metaTitle,
+      metaDescription: settings.metaDescription,
       defaultLocale: settings.defaultLocale,
       faviconMedia: settings.faviconMedia,
       ogImageMedia: settings.ogImageMedia,
@@ -125,6 +131,8 @@ export default function SiteSettingsPage() {
         siteName: values.siteName,
         contactEmail: values.contactEmail,
         phoneNumber: values.phoneNumber,
+        metaTitle: values.metaTitle,
+        metaDescription: values.metaDescription,
         defaultLocale: values.defaultLocale,
         faviconMediaId: values.faviconMedia?.id ?? null,
         ogImageMediaId: values.ogImageMedia?.id ?? null,
@@ -134,6 +142,8 @@ export default function SiteSettingsPage() {
         siteName: updatedSettings.siteName,
         contactEmail: updatedSettings.contactEmail,
         phoneNumber: updatedSettings.phoneNumber,
+        metaTitle: updatedSettings.metaTitle,
+        metaDescription: updatedSettings.metaDescription,
         defaultLocale: updatedSettings.defaultLocale,
         faviconMedia: updatedSettings.faviconMedia,
         ogImageMedia: updatedSettings.ogImageMedia,
@@ -177,6 +187,16 @@ export default function SiteSettingsPage() {
             <div className="space-y-2">
               <Label htmlFor="phone-number">شماره تلفن</Label>
               <Input id="phone-number" type="tel" dir="ltr" placeholder="+98 912 123 4567" {...form.register("phoneNumber")} />
+            </div>
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="meta-title">Meta Title</Label>
+              <Input id="meta-title" maxLength={160} {...form.register("metaTitle", { maxLength: 160 })} />
+              <p className="text-xs text-slate-500">حداکثر ۱۶۰ کاراکتر؛ عنوان پیش‌فرض مرورگر و موتورهای جست‌وجو.</p>
+            </div>
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="meta-description">Meta Description</Label>
+              <textarea id="meta-description" maxLength={500} className="min-h-28 w-full resize-y rounded-lg border border-input bg-transparent px-3 py-2 text-sm leading-6 outline-none focus:border-primary focus:ring-3 focus:ring-primary/15" {...form.register("metaDescription", { maxLength: 500 })} />
+              <p className="text-xs text-slate-500">حداکثر ۵۰۰ کاراکتر؛ برای توضیح صفحه در نتایج جست‌وجو.</p>
             </div>
             </div>
             <div className="space-y-2">

@@ -14,11 +14,18 @@ export async function generateMetadata(): Promise<Metadata> {
     const settings = await getPublicSiteSettings();
     const faviconUrl = publicMediaUrl(settings.faviconMedia);
     const ogImageUrl = publicMediaUrl(settings.ogImageMedia);
+    const title = settings.metaTitle.trim() || settings.siteName;
+    const description = settings.metaDescription.trim() || undefined;
 
     return {
-      title: settings.siteName,
+      title,
+      description,
       icons: faviconUrl ? { icon: faviconUrl } : undefined,
-      openGraph: ogImageUrl ? { images: [{ url: ogImageUrl }] } : undefined,
+      openGraph: {
+        title,
+        description,
+        images: ogImageUrl ? [{ url: ogImageUrl }] : undefined,
+      },
     };
   } catch {
     return {

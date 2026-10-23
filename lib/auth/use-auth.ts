@@ -1,9 +1,15 @@
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { setAccessToken } from "../api/client";
-import { getMeRequest, loginRequest, logoutRequest } from "../api/auth";
+import {
+  getMeRequest,
+  loginRequest,
+  logoutRequest,
+  updateProfileRequest,
+} from "../api/auth";
 import { REFRESH_TOKEN_STORAGE_KEY } from "../constants";
 import { useAuthStore } from "./auth-store";
+import type { UpdateAdminProfileInput } from "../types/api";
 
 export function useAuth() {
   const router = useRouter();
@@ -16,8 +22,6 @@ export function useAuth() {
   const login = useCallback(
     async (email: string, password: string) => {
       const tokens = await loginRequest(email, password);
-
-      console.log({ tokens });
 
       setAccessToken(tokens.accessToken);
       localStorage.setItem(REFRESH_TOKEN_STORAGE_KEY, tokens.refreshToken);
@@ -48,5 +52,19 @@ export function useAuth() {
     }
   }, [reset, router]);
 
-  return { user, status, login, logout };
+  const updateProfile = useCallback(
+    async (input: UpdateAdminProfileInput) => {
+      const result = await updateProfileRequest(input);
+
+      setAccessToken(result.tokens.accessToken);
+      localStorage.setItem(REFRESH_TOKEN_STORAGE_KEY, result.tokens.refreshToken);
+      setUser(result.profile);
+      setStatus("authenticated");
+
+      return result.profile;
+    },
+    [setStatus, setUser],
+  );
+
+  return { user, status, login, logout, updateProfile };
 }

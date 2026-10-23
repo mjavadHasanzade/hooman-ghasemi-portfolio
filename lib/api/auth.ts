@@ -1,5 +1,10 @@
-import { apiGet, apiPost } from "./client";
-import { AdminProfile, AuthTokens } from "../types/api";
+import { apiGet, apiPatch, apiPost } from "./client";
+import {
+  AdminProfile,
+  AuthTokens,
+  UpdateAdminProfileInput,
+  UpdateAdminProfileResponse,
+} from "../types/api";
 
 export function loginRequest(email: string, password: string) {
   return apiPost<AuthTokens>("/admin/auth/login", { email, password });
@@ -15,4 +20,8 @@ export function logoutRequest(refreshToken: string) {
 
 export function getMeRequest() {
   return apiGet<AdminProfile>("/admin/auth/me");
+}
+
+export function updateProfileRequest(body: UpdateAdminProfileInput) {
+  return apiPatch<UpdateAdminProfileResponse>("/admin/auth/profile", body);
 }

@@ -26,6 +26,17 @@ export type AdminProfile = {
   role: "SUPER_ADMIN" | "EDITOR";
 };
 
+export type UpdateAdminProfileInput = {
+  currentPassword: string;
+  email?: string;
+  newPassword?: string;
+};
+
+export type UpdateAdminProfileResponse = {
+  profile: AdminProfile;
+  tokens: AuthTokens;
+};
+
 export type PaginationMeta = {
   page: number;
   limit: number;
