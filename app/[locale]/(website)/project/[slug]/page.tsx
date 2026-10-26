@@ -121,7 +121,7 @@ export default async function ProjectPage({
             </p>
 
             <div
-              className="mt-8 max-w-lg border-s-2 border-teal-400/40 ps-5 text-base leading-8 text-gray-400 [&_strong]:font-semibold [&_strong]:text-gray-200 [&_p+p]:mt-4"
+              className="project-rich-text mt-8 max-w-lg border-s-2 border-teal-400/40 ps-5 text-base leading-8 text-gray-400"
               dangerouslySetInnerHTML={{ __html: projectDescriptionHtml(project.description) }}
             />
 
