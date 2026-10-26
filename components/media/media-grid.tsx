@@ -87,9 +87,10 @@ export function MediaGrid({
             {showDelete && (
               <Button
                 type="button"
+                aria-label="حذف رسانه"
                 variant="destructive"
                 size="icon"
-                className="absolute end-2 top-2 h-7 w-7 opacity-0 transition-opacity group-hover:opacity-100"
+                className="absolute end-2 top-2 h-7 w-7 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 group-focus-within:opacity-100"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleDelete(item.id);
@@ -99,7 +100,7 @@ export function MediaGrid({
               </Button>
             )}
 
-            <div className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            <div className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-2 py-1 text-xs text-white opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 group-focus-within:opacity-100">
               {item.original}
             </div>
           </div>

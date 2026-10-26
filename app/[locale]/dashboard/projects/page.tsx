@@ -19,6 +19,7 @@ import {
 import { toast } from "sonner";
 import { ImagePicker } from "@/components/media/image-picker";
 import { LocaleTabs } from "@/components/shared/locale-tabs";
+import { ReorderControls } from "@/components/shared/reorder-controls";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -602,10 +603,11 @@ export default function ProjectsPage() {
       onError: (error) => toast.error(getErrorMessage(error)),
     });
   }
-  async function dropOn(targetId: string) {
-    if (!draggedId || draggedId === targetId) return;
-    const from = projects.findIndex((item) => item.id === draggedId);
+  async function dropOn(targetId: string, sourceId = draggedId) {
+    if (!sourceId || sourceId === targetId || reorderProjects.isPending) return;
+    const from = projects.findIndex((item) => item.id === sourceId);
     const to = projects.findIndex((item) => item.id === targetId);
+    if (from < 0 || to < 0) return;
     const next = [...projects];
     const [item] = next.splice(from, 1);
     next.splice(to, 0, item);
@@ -639,10 +641,10 @@ export default function ProjectsPage() {
       ) : projects.length ? (
         <>
           <p className="text-sm text-muted-foreground">
-            برای تغییر ترتیب، کارت‌ها را بکشید و رها کنید.
+            برای تغییر ترتیب از دکمه‌های بالا و پایین یا کشیدن کارت‌ها استفاده کنید.
           </p>
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {projects.map((project) => {
+            {projects.map((project, index) => {
               const url = mediaUrl(project.image);
               const title =
                 project.translations.find((item) => item.locale === "fa")
@@ -711,7 +713,7 @@ export default function ProjectsPage() {
                         ))}
                     </div>
                   </CardContent>
-                  <CardFooter className="justify-end gap-2">
+                  <CardFooter className="flex-wrap justify-end gap-2"><ReorderControls index={index} count={projects.length} disabled={reorderProjects.isPending} onMove={(target) => dropOn(projects[target].id, project.id)} />
                     <Button
                       variant="outline"
                       size="sm"

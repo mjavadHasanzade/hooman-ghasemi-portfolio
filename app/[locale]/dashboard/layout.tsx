@@ -45,9 +45,9 @@ export default function DashboardLayout({
     <div className="admin-shell dark flex min-h-screen flex-col">
       <div className="flex min-h-screen flex-1">
         <Sidebar />
-        <div className="flex flex-1 flex-col">
+        <div className="flex min-w-0 flex-1 flex-col">
           <Header />
-          <main className="admin-main flex-1 p-4 md:p-8">{children}</main>
+          <main className="admin-main min-w-0 flex-1 p-4 md:p-8">{children}</main>
         </div>
       </div>
       {footerTranslation ? (

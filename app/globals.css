@@ -1184,3 +1184,23 @@ section[id] {
 .project-rich-text h1 { font-size: 1.875rem; }
 .project-rich-text h2 { font-size: 1.5rem; }
 .project-rich-text h3 { font-size: 1.25rem; }
+
+/* Keep admin content and dialogs within narrow/touch viewports. */
+body:has(.admin-shell) [data-slot="dialog-content"] {
+  max-height: calc(100dvh - 2rem);
+}
+.admin-main [data-slot="card"],
+.admin-main [data-slot="card-content"],
+.admin-main [data-slot="card-header"] { min-width: 0; }
+body:has(.admin-shell) [data-slot="dialog-content"] > [data-slot="dialog-header"] {
+  padding-inline-end: 3.5rem;
+}
+@media (max-width: 767px) {
+  .admin-main { overflow-wrap: anywhere; }
+  .admin-main [data-slot="card-footer"] { flex-wrap: wrap; }
+  body:has(.admin-shell) [data-slot="dialog-content"] { border-radius: 18px; }
+}
+
+@media (max-width: 639px) {
+  .admin-header .admin-avatar { display: none; }
+}

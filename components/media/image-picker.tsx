@@ -39,8 +39,8 @@ export function ImagePicker({ value, onChange, label }: ImagePickerProps) {
     <div className="space-y-2">
       {label && <p className="text-sm font-medium">{label}</p>}
 
-      <div className="flex items-center gap-4">
-        <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-lg border bg-muted">
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg border bg-muted">
           {previewUrl ? (
             <>
               <Image
