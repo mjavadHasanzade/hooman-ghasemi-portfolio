@@ -214,12 +214,12 @@ export default function PortfolioSection({
         </Swiper>
 
         {/* Controls */}
-        <div className="mt-8 grid grid-cols-[1fr_auto_1fr] items-center px-5 sm:px-8 md:px-12 lg:px-15 xl:px-20">
-          <div />
+        <div className="mt-8 grid grid-cols-1 items-center gap-y-5 px-5 sm:grid-cols-[1fr_auto_1fr] sm:gap-y-0 sm:px-8 md:px-12 lg:px-15 xl:px-20">
+          <div className="hidden sm:block" />
 
-          <div className="portfolio-pagination flex items-center justify-center gap-1.5" />
+          <div className="portfolio-pagination flex min-w-0 flex-wrap items-center justify-center gap-1.5" />
 
-          <div className="flex items-center justify-end gap-3">
+          <div className="flex items-center justify-center gap-3 sm:justify-end">
             <button
               ref={setPrevEl}
               type="button"
