@@ -2,7 +2,7 @@
 
 FROM node:22-bookworm-slim AS deps
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY package.json ./
 RUN npm ci
 
 FROM node:22-bookworm-slim AS builder
@@ -34,7 +34,6 @@ ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
 
 COPY --from=builder --chown=node:node /app/package.json ./package.json
-COPY --from=builder --chown=node:node /app/package-lock.json ./package-lock.json
 COPY --from=builder --chown=node:node /app/.next ./.next
 COPY --from=builder --chown=node:node /app/public ./public
 COPY --from=builder --chown=node:node /app/next.config.ts ./next.config.ts
