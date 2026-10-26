@@ -16,9 +16,9 @@ interface MobileMenuProps {
 type NavKey = "portfolio" | "about" | "contact";
 
 const navItems: { key: NavKey; href: string }[] = [
-  { key: "portfolio", href: "#" },
-  { key: "about", href: "#" },
-  { key: "contact", href: "#" },
+  { key: "portfolio", href: "/#portfolio" },
+  { key: "about", href: "/#about" },
+  { key: "contact", href: "/#contact" },
 ];
 
 export default function MobileMenu({
@@ -108,8 +108,8 @@ export default function MobileMenu({
                 transition={{ duration: 0.35, delay: 0.45 }}
                 className="flex flex-col gap-4 border-t border-white/10 pt-6"
               >
-                <a
-                  href="#"
+                <Link
+                  href="/#contact"
                   onClick={onClose}
                   className="
                     flex items-center justify-center
@@ -120,7 +120,7 @@ export default function MobileMenu({
                   "
                 >
                   {t("contact")}
-                </a>
+                </Link>
                 {isAuthenticated && (
                   <Link
                     href="/dashboard"

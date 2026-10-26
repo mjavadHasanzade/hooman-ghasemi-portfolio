@@ -119,6 +119,7 @@ export default function PortfolioSection({
 
   return (
     <section
+      id="portfolio"
       ref={portfolioRef}
       className="relative w-full overflow-hidden bg-black py-16 text-white sm:py-20 md:py-24 lg:py-28"
     >
@@ -174,7 +175,7 @@ export default function PortfolioSection({
               return (
                 <SwiperSlide
                   key={project.id}
-                  className="portfolio-project-card flex h-auto"
+                  className="portfolio-project-card flex h-auto!"
                 >
                   <ProjectCard
                     image={publicMediaUrl(project.image)}

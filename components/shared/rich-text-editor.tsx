@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { Extension } from "@tiptap/core";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Placeholder from "@tiptap/extension-placeholder";
 import {
+  AlignJustify,
   Bold as BoldIcon,
   Italic as ItalicIcon,
   List,
@@ -14,6 +16,25 @@ import {
   Underline as UnderlineIcon,
   Undo2,
 } from "lucide-react";
+
+// Persist paragraph alignment in the saved HTML and restore it on edit.
+const ParagraphAlignment = Extension.create({
+  name: "paragraphAlignment",
+  addGlobalAttributes() {
+    return [{
+      types: ["paragraph"],
+      attributes: {
+        textAlign: {
+          default: null,
+          parseHTML: (element) => element.style.textAlign || null,
+          renderHTML: (attributes) => attributes.textAlign
+            ? { style: `text-align: ${attributes.textAlign}` }
+            : {},
+        },
+      },
+    }];
+  },
+});
 
 interface RichTextEditorProps {
   value: string;
@@ -42,6 +63,7 @@ export function RichTextEditor({
         heading: false,
       }),
       Underline,
+      ParagraphAlignment,
       Placeholder.configure({
         placeholder: placeholder ?? "",
       }),
@@ -66,6 +88,7 @@ export function RichTextEditor({
       onChangeRef.current(editor.getHTML());
     },
     immediatelyRender: false,
+    shouldRerenderOnTransaction: true,
   });
 
   useEffect(() => {
@@ -89,6 +112,8 @@ export function RichTextEditor({
       <button
         type="button"
         title={label}
+        aria-label={label}
+        aria-pressed={isActive}
         disabled={disabled}
         onClick={onClick}
         className={`flex h-7 w-7 items-center justify-center rounded-md transition-colors disabled:cursor-not-allowed disabled:opacity-30 ${
@@ -129,6 +154,14 @@ export function RichTextEditor({
 
         <span className="mx-1 h-4 w-px bg-slate-700" />
 
+        {toolbarButton(
+          editor.isActive("paragraph", { textAlign: "justify" }),
+          () => editor.chain().focus().updateAttributes("paragraph", {
+            textAlign: editor.isActive("paragraph", { textAlign: "justify" }) ? null : "justify",
+          }).run(),
+          <AlignJustify className="h-3.5 w-3.5" />,
+          "تراز دوطرفه",
+        )}
         {toolbarButton(
           editor.isActive("bulletList"),
           () => editor.chain().focus().toggleBulletList().run(),

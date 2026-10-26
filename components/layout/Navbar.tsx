@@ -53,24 +53,24 @@ export default function Navbar({ siteName, logoUrl }: NavbarProps) {
         </Link>
 
         <nav className="hidden items-center gap-9 text-[15px] sm:flex md:text-base">
-          <a
-            href="#"
+          <Link
+            href="/#portfolio"
             className="text-white/90 transition-colors hover:text-teal-400"
           >
             {t("portfolio")}
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            href="/#about"
             className="text-white/90 transition-colors hover:text-teal-400"
           >
             {t("about")}
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            href="/#contact"
             className="text-white/90 transition-colors hover:text-teal-400"
           >
             {t("contact")}
-          </a>
+          </Link>
           {isAuthenticated && (
             <Link
               href="/dashboard"

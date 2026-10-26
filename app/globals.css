@@ -1100,3 +1100,13 @@ body:has(.admin-shell)
     animation: none;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+section[id] {
+  scroll-margin-top: 1.5rem;
+}

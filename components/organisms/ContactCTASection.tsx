@@ -42,6 +42,7 @@ export default function ContactCTASection({
   phoneNumber?: string;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
+  const sortedSocialLinks = [...socialLinks].sort((a, b) => a.order - b.order);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -67,7 +68,7 @@ export default function ContactCTASection({
 
   const phone = phoneNumber?.trim() || null;
   const email = contactEmail ||
-    socialLinks.find((social) => social.url.startsWith("mailto:"))?.url.replace(/^mailto:/i, "");
+    sortedSocialLinks.find((social) => social.url.startsWith("mailto:"))?.url.replace(/^mailto:/i, "");
 
   return (
     <section
@@ -84,37 +85,31 @@ export default function ContactCTASection({
           {contactCta.description}
         </p>
 
-        {/* دکمه‌ی ارتباط */}
-        <div className="relative mt-10 flex items-center justify-center">
-          <button
-            type="button"
-            className="cta-item pulse-btn group relative z-10 inline-flex rounded-full border border-teal-500/40 bg-black px-6 py-3.5 ltr:font-mono text-sm font-bold text-white transition-colors hover:border-teal-400 sm:text-base"
-          >
+        <div className="cta-item relative mx-auto mt-10 w-full max-w-lg rounded-2xl border border-teal-500/40 bg-[linear-gradient(160deg,rgba(20,25,32,1)_0%,rgba(8,10,14,1)_55%,rgba(5,7,10,1)_100%)] px-5 py-7 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-md sm:px-8 sm:py-8">
+          <h3 className="ltr:font-mono text-base font-bold text-white sm:text-lg">
             {contactCta.connectLabel}
-          </button>
-
-        </div>
+          </h3>
 
         {(email || phone) && (
-          <ul className="cta-item mx-auto mt-5 flex w-fit flex-col items-start gap-2 text-sm text-teal-300">
+          <ul className="mx-auto mt-5 flex w-fit max-w-full flex-col items-start gap-3 text-sm text-teal-200 sm:text-base">
             {email && (
               <li className="flex items-center gap-2">
-                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-teal-400" />
-                <a href={`mailto:${email}`} dir="ltr" className="transition-colors hover:text-teal-100">{email}</a>
+                <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-teal-400" />
+                <a href={`mailto:${email}`} dir="ltr" className="min-w-0 break-all transition-colors hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-300">{email}</a>
               </li>
             )}
             {phone && (
               <li className="flex items-center gap-2">
-                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-teal-400" />
-                <a href={`tel:${phone.replace(/\s/g, "")}`} dir="ltr" className="transition-colors hover:text-teal-100">{phone}</a>
+                <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-teal-400" />
+                <a href={`tel:${phone.replace(/\s/g, "")}`} dir="ltr" className="min-w-0 break-all transition-colors hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-300">{phone}</a>
               </li>
             )}
           </ul>
         )}
 
         {/* آیکون‌های شبکه‌های اجتماعی */}
-        <div className="cta-item mt-10 flex items-center justify-center gap-3">
-          {socialLinks.map((social) => (
+        <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+          {sortedSocialLinks.map((social) => (
             <a
               key={social.id}
               href={social.url}
@@ -137,6 +132,8 @@ export default function ContactCTASection({
               )}
             </a>
           ))}
+        </div>
+
         </div>
 
         {/* باکس افکت تایپ‌رایتر */}

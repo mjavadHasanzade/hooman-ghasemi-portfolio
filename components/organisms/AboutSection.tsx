@@ -50,6 +50,7 @@ export default function AboutSection({ about }: { about: PublicAbout }) {
 
   return (
     <section
+      id="about"
       ref={sectionRef}
       className="relative w-full overflow-hidden bg-black py-16 text-white sm:py-20 md:py-24 lg:py-28"
     >
