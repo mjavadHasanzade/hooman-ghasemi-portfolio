@@ -1110,3 +1110,23 @@ body:has(.admin-shell)
 section[id] {
   scroll-margin-top: 1.5rem;
 }
+
+@keyframes project-tech-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.project-tech-track {
+  animation: project-tech-marquee 12s linear infinite;
+}
+
+.project-tech-viewport:hover .project-tech-track,
+.project-tech-viewport:focus-within .project-tech-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-tech-overflow { overflow-x: auto; }
+  .project-tech-track { animation: none; }
+  .project-tech-copy { display: none; }
+}

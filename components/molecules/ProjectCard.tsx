@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { ReactNode } from "react";
 import OutlinedButton from "../common/OutlinedButton";
-import TechBadge from "../atoms/TechBadge";
+import ProjectTechMarquee from "./ProjectTechMarquee";
 import { htmlToPlainTextWithBreaks } from "@/utils/html";
 
 interface ProjectCardProps {
@@ -63,7 +63,7 @@ export default function ProjectCard({
           {plainDescription}
         </p>
 
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-3">
+        <div className="mt-auto flex min-w-0 items-center justify-between gap-3">
           <OutlinedButton
             icon={viewProjectIcon}
             size="sm"
@@ -73,11 +73,7 @@ export default function ProjectCard({
             {viewProjectLabel}
           </OutlinedButton>
 
-          <div className="flex min-w-0 flex-wrap items-center gap-1.5">
-            {techIcons.map((icon, i) => {
-              return <TechBadge key={i} icon={icon} />;
-            })}
-          </div>
+          <ProjectTechMarquee icons={techIcons} />
         </div>
       </div>
     </div>
