@@ -1,3 +1,4 @@
+import { getAllPages, reorderPage } from "./reorder";
 import { techIconOrderUpdates } from "../tech-icon-order";
 import { notifyPublicContentChanged } from "../public-content-sync";
 import { apiDelete, apiGet, apiPatch, apiPost } from "./client";
@@ -6,6 +7,10 @@ import type { Project, ProjectInput, TechIcon, TechIconInput } from "../types/pr
 
 export function getTechIcons(page: number, limit: number) {
   return apiGet<Paginated<TechIcon>>("/admin/tech-icons", { page, limit });
+}
+
+export function getAllTechIcons() {
+  return getAllPages<TechIcon>("/admin/tech-icons");
 }
 
 export function createTechIcon(input: TechIconInput) {
@@ -68,5 +73,5 @@ export function deleteProject(id: string) {
 }
 
 export function reorderProjects(ids: string[]) {
-  return apiPatch<Project[]>("/admin/projects/reorder", { ids });
+  return reorderPage<Project>("/admin/projects", ids);
 }

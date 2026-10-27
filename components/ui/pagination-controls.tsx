@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -14,6 +15,10 @@ export function PaginationControls({
   totalPages,
   onPageChange,
 }: PaginationControlsProps) {
+  useEffect(() => {
+    if (page > totalPages) onPageChange(Math.max(1, totalPages));
+  }, [page, totalPages, onPageChange]);
+
   if (totalPages <= 1) return null;
 
   return (
@@ -21,6 +26,7 @@ export function PaginationControls({
       <Button
         variant="outline"
         size="icon"
+        aria-label="صفحه قبل"
         disabled={page <= 1}
         onClick={() => onPageChange(page - 1)}
       >
@@ -32,6 +38,7 @@ export function PaginationControls({
       <Button
         variant="outline"
         size="icon"
+        aria-label="صفحه بعد"
         disabled={page >= totalPages}
         onClick={() => onPageChange(page + 1)}
       >

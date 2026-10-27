@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 type MediaGridProps = {
   items: Media[];
   isLoading?: boolean;
+  isError?: boolean;
   selectable?: boolean;
   selectedId?: string;
   onSelect?: (media: Media) => void;
@@ -22,6 +23,7 @@ type MediaGridProps = {
 export function MediaGrid({
   items,
   isLoading,
+  isError,
   selectable = false,
   selectedId,
   onSelect,
@@ -37,6 +39,8 @@ export function MediaGrid({
       onError: (error) => toast.error(getErrorMessage(error)),
     });
   }
+
+  if (isError) return <p role="alert" className="py-8 text-center text-destructive">دریافت رسانه‌ها ناموفق بود؛ دوباره تلاش کنید.</p>;
 
   if (isLoading) {
     return (

@@ -27,6 +27,7 @@ function FooterTranslationForm({ locale }: { locale: Locale }) {
   });
 
   useEffect(() => {
+    if (form.formState.isDirty) return;
     const translation = footer?.translations.find(
       (item) => item.locale === locale,
     );

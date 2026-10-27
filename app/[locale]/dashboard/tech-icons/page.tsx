@@ -143,7 +143,7 @@ export default function TechIconsPage() {
             <div className="space-y-2">
               <Label htmlFor="tech-sort-order">ترتیب نمایش</Label>
               <Input id="tech-sort-order" type="number" step={1} dir="ltr"
-                {...form.register("sortOrder", { valueAsNumber: true, validate: (value) => Number.isSafeInteger(value) || "یک عدد صحیح وارد کنید." })} />
+                {...form.register("sortOrder", { valueAsNumber: true, validate: (value) => (Number.isSafeInteger(value) && value >= 0 && value <= 2147483647) || "یک عدد صحیح بین صفر و ۲۱۴۷۴۸۳۶۴۷ وارد کنید." })} />
               <p className="text-xs text-muted-foreground">عدد کمتر ابتدا نمایش داده می‌شود؛ اعداد برابر بر اساس نام مرتب می‌شوند.</p>
               {form.formState.errors.sortOrder && <p role="alert" className="text-xs text-destructive">{form.formState.errors.sortOrder.message}</p>}
             </div>

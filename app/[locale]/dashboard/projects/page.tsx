@@ -46,7 +46,7 @@ import {
   useDeleteProject,
   useProjects,
   useReorderProjects,
-  useTechIcons,
+  useAllTechIcons,
   useUpdateProject,
 } from "@/lib/hooks/use-projects";
 import type { Locale } from "@/lib/types/api";
@@ -571,7 +571,7 @@ export default function ProjectsPage() {
   const [ordered, setOrdered] = useState<Project[]>([]);
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const { data, isLoading, isError } = useProjects(page);
-  const { data: techIcons } = useTechIcons(1, 100);
+  const { data: techIcons } = useAllTechIcons();
   const deleteProject = useDeleteProject();
   const reorderProjects = useReorderProjects();
   const projects = useMemo(() => {
@@ -613,6 +613,8 @@ export default function ProjectsPage() {
       toast.success("ترتیب پروژه‌ها ذخیره شد.");
     } catch (error) {
       toast.error(getErrorMessage(error));
+      setOrdered([]);
+    } finally {
       setOrdered([]);
     }
   }
@@ -747,7 +749,7 @@ export default function ProjectsPage() {
         project={editing}
         open={open}
         onOpenChange={setOpen}
-        techIcons={sortTechIcons(techIcons?.items ?? [])}
+        techIcons={sortTechIcons(techIcons ?? [])}
       />
     </div>
   );

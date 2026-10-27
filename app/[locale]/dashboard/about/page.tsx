@@ -38,6 +38,7 @@ function AboutTranslationForm({ locale }: { locale: Locale }) {
   });
 
   useEffect(() => {
+    if (form.formState.isDirty) return;
     const translation = about?.translations.find(
       (item) => item.locale === locale,
     );
@@ -101,6 +102,7 @@ export default function AboutPage() {
   const image = useWatch({ control: form.control, name: "image" });
 
   useEffect(() => {
+    if (form.formState.isDirty) return;
     if (about) form.reset({ email: about.email, image: about.image });
   }, [about, form]);
 

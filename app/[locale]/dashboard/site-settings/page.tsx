@@ -48,6 +48,7 @@ function SectionHeadingsTranslationForm({ settings, locale }: { settings: SiteSe
   const form = useForm<SectionHeadingsForm>({ defaultValues: translation ? { ...translation, locale } : emptySectionHeadings(locale) });
 
   useEffect(() => {
+    if (form.formState.isDirty) return;
     form.reset(translation ? { ...translation, locale } : emptySectionHeadings(locale));
   }, [form, locale, translation]);
 
@@ -111,6 +112,7 @@ export default function SiteSettingsPage() {
   const footerLogoMedia = useWatch({ control: form.control, name: "footerLogoMedia" });
 
   useEffect(() => {
+    if (form.formState.isDirty) return;
     if (!settings) return;
 
     form.reset({

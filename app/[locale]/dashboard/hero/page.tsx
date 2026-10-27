@@ -41,6 +41,7 @@ export default function HeroPage() {
   const backgroundImage = useWatch({ control: form.control, name: "backgroundImage" });
 
   useEffect(() => {
+    if (form.formState.isDirty) return;
     if (!hero) return;
 
     const translations = { fa: emptyTranslation("fa"), en: emptyTranslation("en") };

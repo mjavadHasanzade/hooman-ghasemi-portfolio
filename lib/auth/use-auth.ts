@@ -1,5 +1,6 @@
 import { useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { setAccessToken } from "../api/client";
 import {
   getMeRequest,
@@ -13,6 +14,9 @@ import type { UpdateAdminProfileInput } from "../types/api";
 
 export function useAuth() {
   const router = useRouter();
+  const params = useParams();
+  const locale = typeof params.locale === "string" ? params.locale : "en";
+  const queryClient = useQueryClient();
   const user = useAuthStore((s) => s.user);
   const status = useAuthStore((s) => s.status);
   const setUser = useAuthStore((s) => s.setUser);
@@ -27,11 +31,12 @@ export function useAuth() {
       localStorage.setItem(REFRESH_TOKEN_STORAGE_KEY, tokens.refreshToken);
 
       const profile = await getMeRequest();
+      queryClient.clear();
       setUser(profile);
       setStatus("authenticated");
-      router.push("/");
+      router.push(`/${locale}/dashboard`);
     },
-    [router, setUser, setStatus],
+    [locale, queryClient, router, setUser, setStatus],
   );
 
   const logout = useCallback(async () => {
@@ -47,10 +52,11 @@ export function useAuth() {
     } finally {
       setAccessToken(null);
       localStorage.removeItem(REFRESH_TOKEN_STORAGE_KEY);
+      queryClient.clear();
       reset();
-      router.push("/login");
+      router.push(`/${locale}/login`);
     }
-  }, [reset, router]);
+  }, [locale, queryClient, reset, router]);
 
   const updateProfile = useCallback(
     async (input: UpdateAdminProfileInput) => {

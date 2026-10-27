@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createProject, createTechIcon, deleteProject, deleteTechIcon, getProjects, getTechIcons, reorderTechIcons, reorderProjects, updateProject, updateTechIcon } from "../api/projects";
+import { createProject, createTechIcon, deleteProject, deleteTechIcon, getProjects, getTechIcons, getAllTechIcons, reorderTechIcons, reorderProjects, updateProject, updateTechIcon } from "../api/projects";
 import { useIsAuthenticated } from "../auth/use-is-authenticated";
 import type { ProjectInput, TechIconInput } from "../types/projects";
 
@@ -13,6 +13,11 @@ export const projectKeys = {
 export function useTechIcons(page: number, limit = 20) {
   const isAuthenticated = useIsAuthenticated();
   return useQuery({ queryKey: projectKeys.techIconList(page, limit), queryFn: () => getTechIcons(page, limit), enabled: isAuthenticated });
+}
+
+export function useAllTechIcons() {
+  const isAuthenticated = useIsAuthenticated();
+  return useQuery({ queryKey: [...projectKeys.techIcons, "all"], queryFn: getAllTechIcons, enabled: isAuthenticated });
 }
 
 export function useCreateTechIcon() {
