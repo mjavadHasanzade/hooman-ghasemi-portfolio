@@ -47,15 +47,15 @@ export default function Footer({
       className="relative w-full overflow-hidden bg-black text-white"
     >
       <div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
-        <div className="footer-item mb-2 flex h-34 items-center justify-center overflow-hidden sm:mb-3 sm:h-40">
+        <div className="footer-item mb-3 flex items-center justify-center py-4">
           {logoUrl ? (
             <Image
               src={logoUrl}
               alt=""
-              width={160}
-              height={160}
+              width={512}
+              height={512}
               unoptimized
-              className="h-60 w-auto scale-[1.75] object-contain sm:h-64"
+              className="h-auto w-full max-w-lg object-contain"
             />
           ) : null}
         </div>

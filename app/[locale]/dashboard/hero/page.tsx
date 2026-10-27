@@ -102,6 +102,7 @@ export default function HeroPage() {
             <div key={activeLocale} className="space-y-2">
               <Label id="hero-title-label" htmlFor="hero-title">عنوان</Label>
               <RichTextField control={form.control} name={`${translationPath}.title`} id={"hero-title"} locale={activeLocale} required />
+              <p className="text-xs text-muted-foreground">برای تعیین محل شکست تیتر از Enter یا Shift+Enter استفاده کنید؛ این شکست خط در سایت حفظ می‌شود.</p>
             </div>
             <div className="space-y-2">
               <Label id="hero-subtitle-label" htmlFor="hero-subtitle">زیرعنوان</Label>

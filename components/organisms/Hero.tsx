@@ -112,10 +112,10 @@ export default function Hero({ hero, siteName, logoUrl }: HeroProps) {
       />
 
       <div className="relative z-10 flex flex-1 flex-col justify-center px-5 pb-20 pt-24 sm:px-8 sm:pb-16 md:px-12 md:pb-14 lg:justify-start lg:px-15 lg:pb-0 lg:pt-32.5 xl:px-20 xl:pt-37.5">
-        <div className="flex max-w-75 flex-col gap-6 xxs:max-w-sm sm:max-w-xl sm:gap-7 md:max-w-2xl md:gap-8 lg:max-w-180 lg:gap-0 xl:max-w-200">
+        <div className="flex w-full max-w-none flex-col gap-6 sm:max-w-xl sm:gap-7 md:max-w-2xl md:gap-8 lg:max-w-180 lg:gap-0 xl:max-w-200">
           <div role="heading" aria-level={1}
             ref={titleRef}
-            className="cms-rich-text ltr:font-mono ltr:uppercase text-[26px] font-bold leading-[1.2] tracking-wide text-teal-200 rtl:leading-[1.45] rtl:tracking-normal xxs:text-[30px] sm:text-[38px] sm:leading-[1.18] md:text-[46px] lg:text-[52px] xl:text-[58px]"
+            className="cms-rich-text hero-title text-balance ltr:font-mono ltr:uppercase text-[clamp(1.25rem,6.2vw,1.875rem)] font-bold leading-[1.2] tracking-wide text-teal-200 rtl:leading-[1.45] rtl:tracking-normal sm:text-[38px] sm:leading-[1.18] md:text-[46px] lg:text-[52px] xl:text-[58px]"
            dangerouslySetInnerHTML={{ __html: richTextHtml(hero.title) }} />
 
           <div

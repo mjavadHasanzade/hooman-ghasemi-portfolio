@@ -1210,3 +1210,5 @@ body:has(.admin-shell) [data-slot="dialog-content"] > [data-slot="dialog-header"
 .cms-rich-text strong { color: inherit; font-weight: bolder; }
 .cms-rich-text { white-space: normal; }
 .cms-rich-text img { max-width: 100%; }
+
+.hero-title p + p { margin-top: 0; }
