@@ -5,12 +5,14 @@ export type TechIcon = {
   id: string;
   key: string;
   label: string;
+  sortOrder: number;
   image: Media | null;
   createdAt: string;
   updatedAt: string;
 };
 
 export type TechIconInput = Pick<TechIcon, "key" | "label"> & {
+  sortOrder?: number;
   imageMediaId?: string | null;
 };
 

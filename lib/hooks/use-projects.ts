@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createProject, createTechIcon, deleteProject, deleteTechIcon, getProjects, getTechIcons, reorderProjects, updateProject, updateTechIcon } from "../api/projects";
+import { createProject, createTechIcon, deleteProject, deleteTechIcon, getProjects, getTechIcons, reorderTechIcons, reorderProjects, updateProject, updateTechIcon } from "../api/projects";
 import { useIsAuthenticated } from "../auth/use-is-authenticated";
 import type { ProjectInput, TechIconInput } from "../types/projects";
 
@@ -28,6 +28,14 @@ export function useUpdateTechIcon() {
 export function useDeleteTechIcon() {
   const queryClient = useQueryClient();
   return useMutation({ mutationFn: deleteTechIcon, onSuccess: () => queryClient.invalidateQueries({ queryKey: projectKeys.techIcons }) });
+}
+
+export function useReorderTechIcons() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: reorderTechIcons,
+    onSettled: () => queryClient.invalidateQueries({ queryKey: projectKeys.techIcons }),
+  });
 }
 
 export function useProjects(page: number, limit = 20) {

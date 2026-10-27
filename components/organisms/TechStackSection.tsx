@@ -1,5 +1,6 @@
 "use client";
 
+import { sortTechIcons } from "@/lib/tech-icon-order";
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -138,7 +139,7 @@ export default function TechStackSection({
             lg:gap-x-6 lg:gap-y-10
           "
         >
-          {techIcons.map((tool) => {
+          {sortTechIcons(techIcons).map((tool) => {
             const path = publicMediaUrl(tool.image);
 
             return (

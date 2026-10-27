@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { ImagePicker } from "@/components/media/image-picker";
 import { LocaleTabs } from "@/components/shared/locale-tabs";
 import { ReorderControls } from "@/components/shared/reorder-controls";
+import { sortTechIcons } from "@/lib/tech-icon-order";
 import { richTextPlainText } from "@/lib/rich-text";
 import { RichTextField } from "@/components/shared/rich-text-field";
 import { Button } from "@/components/ui/button";
@@ -746,7 +747,7 @@ export default function ProjectsPage() {
         project={editing}
         open={open}
         onOpenChange={setOpen}
-        techIcons={techIcons?.items ?? []}
+        techIcons={sortTechIcons(techIcons?.items ?? [])}
       />
     </div>
   );
