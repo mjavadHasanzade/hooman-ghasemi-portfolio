@@ -1,3 +1,4 @@
+import { richTextHtml, richTextPlainText } from "@/lib/rich-text";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, MoveUpRight } from "lucide-react";
@@ -102,7 +103,7 @@ export default async function ProjectPage({
             <div className="relative z-10 rounded-[9px] bg-black p-1.5">
               <ProjectGallery
                 images={projectImages}
-                alt={project.title}
+                alt={richTextPlainText(project.title)}
                 projectNumberLabel={labels.projectNumber}
               />
             </div>
@@ -113,16 +114,14 @@ export default async function ProjectPage({
               <span className="h-px w-8 bg-teal-400/70" />
               {labels.selectedWork}
             </p>
-            <h1 className="mt-5 max-w-2xl text-4xl font-bold leading-[1.08] tracking-tight text-gray-100 sm:text-6xl lg:text-7xl">
-              {project.title}
-            </h1>
+            <div role="heading" aria-level={1} className="cms-rich-text mt-5 max-w-2xl text-4xl font-bold leading-[1.08] tracking-tight text-gray-100 sm:text-6xl lg:text-7xl" dangerouslySetInnerHTML={{ __html: richTextHtml(project.title) }} />
             <p className="mt-5 ltr:font-mono text-xs ltr:uppercase tracking-[0.18em] text-gray-600 rtl:tracking-normal">
               {labels.project} / {project.slug}
             </p>
 
             <div
               className="project-rich-text mt-8 max-w-lg border-s-2 border-teal-400/40 ps-5 text-base leading-8 text-gray-400"
-              dangerouslySetInnerHTML={{ __html: projectDescriptionHtml(project.description) }}
+              dangerouslySetInnerHTML={{ __html: richTextHtml(projectDescriptionHtml(project.description)) }}
             />
 
             {project.liveUrl ? (

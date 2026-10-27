@@ -5,6 +5,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { ImagePicker } from "@/components/media/image-picker";
 import { LocaleTabs } from "@/components/shared/locale-tabs";
+import { RichTextField } from "@/components/shared/rich-text-field";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -71,11 +72,11 @@ function SectionHeadingsTranslationForm({ settings, locale }: { settings: SiteSe
 
   return (
     <form dir={locale === "fa" ? "rtl" : "ltr"} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-6">
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-5">
         {fields.map(([name, englishLabel, persianLabel]) => (
           <div className="space-y-2" key={name}>
-            <Label htmlFor={`section-heading-${name}-${locale}`}>{locale === "fa" ? persianLabel : englishLabel}</Label>
-            <Input id={`section-heading-${name}-${locale}`} {...form.register(name)} />
+            <Label id={`section-heading-${name}-${locale}-label`} htmlFor={`section-heading-${name}-${locale}`}>{locale === "fa" ? persianLabel : englishLabel}</Label>
+            <RichTextField control={form.control} name={name} id={`section-heading-${name}-${locale}`} locale={locale} />
           </div>
         ))}
       </div>
@@ -177,30 +178,30 @@ export default function SiteSettingsPage() {
           <CardContent className="space-y-6 pt-6">
             <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="site-name">نام سایت</Label>
+              <Label id="site-name-label" htmlFor="site-name">نام سایت</Label>
               <Input id="site-name" {...form.register("siteName", { required: true })} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="contact-email">ایمیل تماس</Label>
+              <Label id="contact-email-label" htmlFor="contact-email">ایمیل تماس</Label>
               <Input id="contact-email" type="email" dir="ltr" {...form.register("contactEmail", { required: true })} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone-number">شماره تلفن</Label>
+              <Label id="phone-number-label" htmlFor="phone-number">شماره تلفن</Label>
               <Input id="phone-number" type="tel" dir="ltr" placeholder="+98 912 123 4567" {...form.register("phoneNumber")} />
             </div>
             <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="meta-title">Meta Title</Label>
+              <Label id="meta-title-label" htmlFor="meta-title">Meta Title</Label>
               <Input id="meta-title" maxLength={160} {...form.register("metaTitle", { maxLength: 160 })} />
               <p className="text-xs text-slate-500">حداکثر ۱۶۰ کاراکتر؛ عنوان پیش‌فرض مرورگر و موتورهای جست‌وجو.</p>
             </div>
             <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="meta-description">Meta Description</Label>
+              <Label id="meta-description-label" htmlFor="meta-description">Meta Description</Label>
               <textarea id="meta-description" maxLength={500} className="min-h-28 w-full resize-y rounded-lg border border-input bg-transparent px-3 py-2 text-sm leading-6 outline-none focus:border-primary focus:ring-3 focus:ring-primary/15" {...form.register("metaDescription", { maxLength: 500 })} />
               <p className="text-xs text-slate-500">حداکثر ۵۰۰ کاراکتر؛ برای توضیح صفحه در نتایج جست‌وجو.</p>
             </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="default-locale">زبان پیش‌فرض</Label>
+              <Label id="default-locale-label" htmlFor="default-locale">زبان پیش‌فرض</Label>
               <select id="default-locale" className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm" {...form.register("defaultLocale")}>
                 <option value="fa">فارسی</option>
                 <option value="en">English</option>

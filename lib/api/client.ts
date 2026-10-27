@@ -1,3 +1,4 @@
+import { notifyPublicContentChanged } from "../public-content-sync";
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -70,7 +71,15 @@ async function refreshAccessToken(): Promise<string> {
 }
 
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const method = response.config.method?.toLowerCase();
+    const isContentWrite = ["post", "put", "patch", "delete"].includes(method ?? "") &&
+      /(?:^|\/)admin\/(?:site-settings|hero|about|footer|projects|services|social-links|contact-cta|tech-icons|media)(?:\/|\?|$)/.test(response.config.url ?? "");
+    if (isContentWrite && response.data?.success !== false) {
+      notifyPublicContentChanged();
+    }
+    return response;
+  },
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean;

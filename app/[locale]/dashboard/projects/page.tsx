@@ -20,6 +20,8 @@ import { toast } from "sonner";
 import { ImagePicker } from "@/components/media/image-picker";
 import { LocaleTabs } from "@/components/shared/locale-tabs";
 import { ReorderControls } from "@/components/shared/reorder-controls";
+import { richTextPlainText } from "@/lib/rich-text";
+import { RichTextField } from "@/components/shared/rich-text-field";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -211,7 +213,7 @@ function ProjectDialog({
 
   function generateSlugFromTitle() {
     const source =
-      translations?.en?.title?.trim() || translations?.fa?.title?.trim();
+      richTextPlainText(translations?.en?.title ?? "").trim() || richTextPlainText(translations?.fa?.title ?? "").trim();
     if (!source) {
       toast.error("ابتدا عنوان (فارسی یا انگلیسی) را وارد کنید.");
       return;
@@ -232,7 +234,7 @@ function ProjectDialog({
   async function onSubmit(values: ProjectForm) {
     const validTranslations = (
       Object.values(values.translations) as ProjectTranslationInput[]
-    ).filter((item) => item.title.trim() && item.description.trim());
+    ).filter((item) => richTextPlainText(item.title).trim() && richTextPlainText(item.description).trim());
     if (!validTranslations.length) {
       toast.error("عنوان و توضیحات حداقل یک زبان را وارد کنید.");
       return;
@@ -240,8 +242,8 @@ function ProjectDialog({
     if (
       Object.values(values.translations).some(
         (item) =>
-          (item.title.trim() || item.description.trim()) &&
-          (!item.title.trim() || !item.description.trim()),
+          (richTextPlainText(item.title).trim() || richTextPlainText(item.description).trim()) &&
+          (!richTextPlainText(item.title).trim() || !richTextPlainText(item.description).trim()),
       )
     ) {
       toast.error("برای هر ترجمه، عنوان و توضیحات را کامل کنید.");
@@ -295,7 +297,7 @@ function ProjectDialog({
           <div className="grid gap-6 rounded-xl border bg-card p-5 shadow-sm sm:grid-cols-2">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="project-slug">Slug</Label>
+                <Label id="project-slug-label" htmlFor="project-slug">Slug</Label>
                 <Button
                   type="button"
                   variant="ghost"
@@ -331,7 +333,7 @@ function ProjectDialog({
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="project-live-url">لینک پروژه</Label>
+              <Label id="project-live-url-label" htmlFor="project-live-url">لینک پروژه</Label>
               <Input
                 id="project-live-url"
                 dir="ltr"
@@ -424,21 +426,12 @@ function ProjectDialog({
             />
             <div className="space-y-5 pt-1">
               <div className="space-y-2">
-                <Label htmlFor={`title-${activeLocale}`}>عنوان پروژه</Label>
-                <Input
-                  id={`title-${activeLocale}`}
-                  className="h-10"
-                  placeholder={
-                    activeLocale === "fa"
-                      ? "عنوان فارسی پروژه"
-                      : "Project title"
-                  }
-                  {...form.register(`${translationPath}.title`)}
-                />
+                <Label id={`title-${activeLocale}-label`} htmlFor={`title-${activeLocale}`}>عنوان پروژه</Label>
+                <RichTextField control={form.control} name={`${translationPath}.title`} id={`title-${activeLocale}`} locale={activeLocale} />
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor={`description-${activeLocale}`}>
+                  <Label id={`description-${activeLocale}-label`} htmlFor={`description-${activeLocale}`}>
                     توضیحات پروژه
                   </Label>
                   <span className="text-xs text-muted-foreground">
@@ -450,6 +443,7 @@ function ProjectDialog({
                   name={`${translationPath}.description`}
                   render={({ field }) => (
                     <RichTextEditor
+                      id={`description-${activeLocale}`}
                       key={activeLocale}
                       value={field.value}
                       onChange={field.onChange}
@@ -664,7 +658,7 @@ export default function ProjectsPage() {
                     {url ? (
                       <Image
                         src={url}
-                        alt={title}
+                        alt={richTextPlainText(title)}
                         fill
                         sizes="(max-width: 768px) 100vw, 33vw"
                         className="object-cover"
@@ -685,7 +679,7 @@ export default function ProjectsPage() {
                     </span>
                   </div>
                   <CardHeader>
-                    <CardTitle className="truncate">{title}</CardTitle>
+                    <CardTitle className="truncate">{richTextPlainText(title)}</CardTitle>
                     <p className="font-mono text-xs text-muted-foreground">
                       {project.slug}
                     </p>

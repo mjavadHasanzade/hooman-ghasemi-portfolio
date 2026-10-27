@@ -1,3 +1,4 @@
+import PublicContentSync from "@/components/common/PublicContentSync";
 import Footer from "@/components/organisms/Footer";
 import { publicMediaUrl } from "@/lib/media/public-media-url";
 import {
@@ -26,6 +27,7 @@ export default async function WebsiteLayout({
 
   return (
     <div className="site-background min-h-screen">
+      <PublicContentSync />
       {/* <Navbar /> */}
       <svg
         className="site-backdrop"

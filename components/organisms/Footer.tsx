@@ -1,5 +1,7 @@
 "use client";
 
+import { richTextHtml } from "@/lib/rich-text";
+
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
@@ -66,9 +68,7 @@ export default function Footer({
           }}
         />
 
-        <p className="footer-item mt-8 pb-6 ltr:font-mono text-sm text-gray-500 sm:pb-8 sm:text-base">
-          {footer.copyrightText}
-        </p>
+        <div className="cms-rich-text footer-item mt-8 pb-6 ltr:font-mono text-sm text-gray-500 sm:pb-8 sm:text-base" dangerouslySetInnerHTML={{ __html: richTextHtml(footer.copyrightText) }} />
       </div>
     </footer>
   );

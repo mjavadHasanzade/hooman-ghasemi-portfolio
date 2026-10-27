@@ -1,5 +1,6 @@
 "use client";
 
+import RichText from "./RichText";
 import { ReactNode, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -55,7 +56,7 @@ export default function SectionHeading({
   descriptionClassName = "",
   children,
 }: SectionHeadingProps) {
-  const descriptionRef = useRef<HTMLParagraphElement>(null);
+  const descriptionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!descriptionRef.current) return;
@@ -161,35 +162,32 @@ export default function SectionHeading({
         {label}
       </h2>
 
-      <h3
+      <div role="heading" aria-level={3}
         className={`ltr:font-mono text-3xl font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-[2.4rem] lg:text-[52px] ${headingClassName}`}
       >
         {heading.map((line, lineIndex) => (
-          <span key={lineIndex} className="block">
+          <div key={lineIndex} className="block">
             {line.map((segment, segIndex) => (
-              <span
-                key={segIndex}
-                className={segment.emphasis ? "text-white" : "text-gray-400"}
-              >
-                {segment.text}
-                {segIndex < line.length - 1 ? " " : ""}
-              </span>
+              <RichText key={segIndex} value={segment.text}
+                className={`${line.length === 1 ? "block" : "inline-block"} ${segment.emphasis ? "text-white" : "text-gray-400"}`} />
             ))}
-          </span>
+          </div>
         ))}
-      </h3>
+      </div>
 
       {description && description.length > 0 && (
-        <p
+        <div
           ref={descriptionRef}
           className={`mt-3 max-w-2xl text-[22px] leading-normal font-light [word-spacing:0.5rem] ${descriptionClassName}`}
         >
           {description.map((line, i) => (
-            <span key={i} data-line={i} className="block">
-              {splitIntoWordSpans(line, i)}
-            </span>
+            <div key={i} data-line={i} className="block">
+              {/<\/?[a-z][^>]*>/i.test(line)
+                ? <RichText value={line} className="text-gray-200" />
+                : splitIntoWordSpans(line, i)}
+            </div>
           ))}
-        </p>
+        </div>
       )}
 
       {children}

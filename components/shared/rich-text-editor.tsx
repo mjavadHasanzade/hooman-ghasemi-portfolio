@@ -1,5 +1,6 @@
 "use client";
 
+import { richTextHtml, richTextPlainText, shouldReplaceEditorContent } from "@/lib/rich-text";
 import { useEffect, useRef } from "react";
 import { Extension } from "@tiptap/core";
 import { EditorContent, useEditor } from "@tiptap/react";
@@ -64,6 +65,8 @@ const ParagraphAlignment = Extension.create({
 });
 
 interface RichTextEditorProps {
+  id?: string;
+  onBlur?: () => void;
   value: string;
   onChange: (html: string) => void;
   placeholder?: string;
@@ -72,6 +75,8 @@ interface RichTextEditorProps {
 }
 
 export function RichTextEditor({
+  id,
+  onBlur,
   value,
   onChange,
   placeholder,
@@ -88,6 +93,7 @@ export function RichTextEditor({
     extensions: [
       StarterKit.configure({
         heading: false,
+        underline: false,
       }),
       Underline,
       ParagraphAlignment,
@@ -95,9 +101,13 @@ export function RichTextEditor({
         placeholder: placeholder ?? "",
       }),
     ],
-    content: value || "",
+    content: richTextHtml(value),
     editorProps: {
+      handleDOMEvents: { blur: () => { onBlur?.(); return false; } },
       attributes: {
+        ...(id ? { id, "aria-labelledby": `${id}-label` } : {}),
+        role: "textbox",
+        "aria-multiline": "true",
         dir,
         // Hardcoded colors instead of semantic tokens — guarantees
         // readable white-on-dark text regardless of theme resolution.
@@ -121,8 +131,8 @@ export function RichTextEditor({
   useEffect(() => {
     if (!editor) return;
     const current = editor.getHTML();
-    if (value !== current) {
-      editor.commands.setContent(value || "", { emitUpdate: false });
+    if (shouldReplaceEditorContent(value, current)) {
+      editor.commands.setContent(richTextHtml(value), { emitUpdate: false });
     }
   }, [value, editor]);
 
@@ -325,10 +335,5 @@ export function RichTextEditor({
 }
 
 export function stripHtml(html: string): string {
-  if (typeof window === "undefined") {
-    return html.replace(/<[^>]*>/g, "");
-  }
-  const div = document.createElement("div");
-  div.innerHTML = html;
-  return div.textContent ?? div.innerText ?? "";
+  return richTextPlainText(html);
 }

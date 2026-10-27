@@ -36,6 +36,7 @@ export function Header() {
       <div className="flex min-w-0 items-center gap-2 sm:gap-3">
         <Link
           href="/"
+          prefetch={false}
           className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-teal-500/30 px-3 py-2 text-sm text-teal-300 transition-colors hover:bg-teal-500/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-400"
         >
           <Home className="h-4 w-4" aria-hidden="true" />

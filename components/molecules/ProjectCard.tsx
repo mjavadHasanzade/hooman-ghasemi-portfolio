@@ -27,6 +27,7 @@ export default function ProjectCard({
   liveUrl,
   slug,
 }: ProjectCardProps) {
+  title = htmlToPlainTextWithBreaks(title);
   const plainDescription = htmlToPlainTextWithBreaks(description);
 
   return (

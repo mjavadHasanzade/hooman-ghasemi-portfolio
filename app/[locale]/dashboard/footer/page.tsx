@@ -5,9 +5,9 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { ContentFormSkeleton } from "@/components/content/content-form-skeleton";
 import { LocaleTabs } from "@/components/shared/locale-tabs";
+import { RichTextField } from "@/components/shared/rich-text-field";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getErrorMessage } from "@/lib/api/error";
 import { useFooter, useUpdateFooter } from "@/lib/hooks/use-content";
@@ -50,8 +50,8 @@ function FooterTranslationForm({ locale }: { locale: Locale }) {
   return (
     <form dir={locale === "fa" ? "rtl" : "ltr"} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-6">
       <div className="space-y-2">
-        <Label htmlFor={`footer-copyright-${locale}`}>متن کپی‌رایت</Label>
-        <Input id={`footer-copyright-${locale}`} {...form.register("copyrightText")} />
+        <Label id={`footer-copyright-${locale}-label`} htmlFor={`footer-copyright-${locale}`}>متن کپی‌رایت</Label>
+        <RichTextField control={form.control} name={"copyrightText"} id={`footer-copyright-${locale}`} locale={locale} />
       </div>
       <div className="flex justify-end">
         <Button type="submit" disabled={updateFooter.isPending || !form.formState.isDirty}>
