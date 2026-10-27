@@ -82,7 +82,7 @@ function SectionHeadingsTranslationForm({ settings, locale }: { settings: SiteSe
       </div>
       <div className="flex justify-end border-t border-white/10 pt-5">
         <Button type="submit" disabled={updateSettings.isPending || !form.formState.isDirty}>
-          {updateSettings.isPending ? "در حال ذخیره…" : "ذخیره ترجمه"}
+          {updateSettings.isPending ? "در حال ذخیره…" : "ذخیره تغییرات"}
         </Button>
       </div>
     </form>

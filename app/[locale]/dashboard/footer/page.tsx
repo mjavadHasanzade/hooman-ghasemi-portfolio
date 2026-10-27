@@ -55,7 +55,7 @@ function FooterTranslationForm({ locale }: { locale: Locale }) {
       </div>
       <div className="flex justify-end">
         <Button type="submit" disabled={updateFooter.isPending || !form.formState.isDirty}>
-          {updateFooter.isPending ? "در حال ذخیره…" : "ذخیره ترجمه"}
+          {updateFooter.isPending ? "در حال ذخیره…" : "ذخیره تغییرات"}
         </Button>
       </div>
     </form>

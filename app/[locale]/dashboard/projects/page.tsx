@@ -550,7 +550,7 @@ function ProjectDialog({
           </div>
           <div className="flex justify-end border-t pt-6">
             <Button type="submit" className="min-w-32" disabled={isSaving}>
-              {isSaving ? "در حال ذخیره…" : "ذخیره پروژه"}
+              {isSaving ? "در حال ذخیره…" : "ذخیره تغییرات"}
             </Button>
           </div>
         </form>

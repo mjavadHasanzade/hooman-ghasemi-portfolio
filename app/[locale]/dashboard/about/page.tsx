@@ -84,7 +84,7 @@ function AboutTranslationForm({ locale }: { locale: Locale }) {
       </div>
       <div className="flex justify-end">
         <Button type="submit" disabled={updateAbout.isPending || !form.formState.isDirty}>
-          {updateAbout.isPending ? "در حال ذخیره…" : "ذخیره ترجمه"}
+          {updateAbout.isPending ? "در حال ذخیره…" : "ذخیره تغییرات"}
         </Button>
       </div>
     </form>
@@ -141,7 +141,7 @@ export default function AboutPage() {
           </CardContent>
           <CardFooter className="justify-end">
             <Button type="submit" disabled={updateAbout.isPending || !form.formState.isDirty}>
-              {updateAbout.isPending ? "در حال ذخیره…" : "ذخیره اطلاعات مشترک"}
+              {updateAbout.isPending ? "در حال ذخیره…" : "ذخیره تغییرات"}
             </Button>
           </CardFooter>
         </Card>
