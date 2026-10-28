@@ -7,6 +7,7 @@ import { getPublicProjects } from "@/lib/api/public-content";
 import { publicMediaUrl } from "@/lib/media/public-media-url";
 import type { Locale } from "@/lib/types/api";
 import ProjectGallery from "@/components/organisms/ProjectGallery";
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
 
 const copy = {
   fa: {
@@ -89,13 +90,16 @@ export default async function ProjectPage({
       className="min-h-screen overflow-hidden bg-black text-white"
     >
       <div className="mx-auto max-w-[90rem] px-5 py-7 sm:px-8 sm:py-10 lg:px-14 lg:py-14">
-        <Link
-          href={`/${locale}`}
-          className="group inline-flex items-center gap-2 text-xs font-semibold ltr:uppercase tracking-[0.14em] text-gray-500 rtl:tracking-normal transition-colors hover:text-teal-300"
-        >
-          <BackIcon className="h-4 w-4 transition-transform group-hover:-translate-x-1 rtl:group-hover:translate-x-1" />
-          {labels.back}
-        </Link>
+        <div className="flex items-center justify-between gap-4">
+          <Link
+            href={`/${locale}`}
+            className="group inline-flex items-center gap-2 text-xs font-semibold ltr:uppercase tracking-[0.14em] text-gray-500 rtl:tracking-normal transition-colors hover:text-teal-300"
+          >
+            <BackIcon className="h-4 w-4 transition-transform group-hover:-translate-x-1 rtl:group-hover:translate-x-1" />
+            {labels.back}
+          </Link>
+          <LanguageSwitcher />
+        </div>
 
         <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.18fr)_minmax(22rem,0.82fr)] lg:items-center lg:gap-20 lg:py-10">
           <div className="group relative overflow-hidden rounded-[10px] p-px">

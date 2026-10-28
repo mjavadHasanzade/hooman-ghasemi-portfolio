@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { LayoutDashboard } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import LanguageSwitcher from "./LanguageSwitcher";
 import { useAuthStore } from "@/lib/auth/auth-store";
 
 interface MobileMenuProps {
@@ -68,6 +69,7 @@ export default function MobileMenu({
 
             <div className="relative flex h-full flex-col justify-between px-8 py-24">
               <nav className="flex flex-col gap-2">
+                <div className="mb-3 self-start"><LanguageSwitcher onNavigate={onClose} /></div>
                 {navItems.map((item, i) => (
                   <motion.div
                     key={item.key}

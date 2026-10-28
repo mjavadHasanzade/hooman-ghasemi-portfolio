@@ -8,6 +8,7 @@ import { Link } from "@/i18n/navigation";
 import { useAuthStore } from "@/lib/auth/auth-store";
 import HamburgerButton from "./HamburgerButton";
 import MobileMenu from "./MobileMenu";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 type NavbarProps = {
   siteName?: string;
@@ -23,12 +24,12 @@ export default function Navbar({ siteName, logoUrl }: NavbarProps) {
 
   return (
     <>
-      <header className="relative z-30 flex items-center justify-between px-5 py-5 sm:px-8 sm:py-6 md:px-12 lg:px-[60px] lg:py-8 xl:px-[80px]">
+      <header className="relative z-30 flex items-center justify-between gap-3 px-5 py-5 sm:px-8 sm:py-6 md:px-12 lg:px-[60px] lg:py-8 xl:px-[80px]">
         {/* Logo */}
         <Link
           href="/"
           aria-label={siteName || t("brandFallback")}
-          className="flex shrink-0 items-center"
+          className="flex min-w-0 items-center"
         >
           {logoUrl ? (
             <>
@@ -39,20 +40,21 @@ export default function Navbar({ siteName, logoUrl }: NavbarProps) {
                 height={64}
                 priority
                 unoptimized
-                className="h-12 w-12 object-contain sm:h-14 sm:w-14"
+                className="h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
               />
-              <span className="text-lg font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
+              <span className="truncate text-lg font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
                 {siteName || t("brandFallback")}
               </span>
             </>
           ) : (
-            <span className="text-lg font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
+            <span className="truncate text-lg font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
               {siteName || t("brandFallback")}
             </span>
           )}
         </Link>
 
-        <nav className="hidden items-center gap-9 text-[15px] sm:flex md:text-base">
+        <div className="flex shrink-0 items-center gap-3 sm:gap-5">
+        <nav className="hidden items-center gap-4 text-sm sm:flex lg:gap-9 lg:text-base">
           <Link
             href="/#portfolio"
             className="text-white/90 transition-colors hover:text-teal-400"
@@ -82,11 +84,13 @@ export default function Navbar({ siteName, logoUrl }: NavbarProps) {
           )}
         </nav>
 
+        <LanguageSwitcher />
         <HamburgerButton
           isOpen={isMenuOpen}
           onClick={() => setIsMenuOpen((prev) => !prev)}
           className="sm:hidden"
         />
+        </div>
       </header>
 
       <MobileMenu
