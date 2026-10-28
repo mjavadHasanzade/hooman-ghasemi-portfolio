@@ -1,7 +1,6 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { Languages } from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 
 export default function LanguageSwitcher({ onNavigate }: { onNavigate?: () => void }) {
@@ -17,7 +16,8 @@ export default function LanguageSwitcher({ onNavigate }: { onNavigate?: () => vo
       hrefLang={nextLocale}
       lang={nextLocale}
       aria-label={locale === "fa" ? "تغییر زبان به انگلیسی" : "Switch language to Persian"}
-      className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg border border-teal-500/40 px-2.5 py-2 text-xs font-medium text-teal-200 transition-colors hover:border-teal-300 hover:bg-teal-500/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-300 sm:text-sm"
+      dir="ltr"
+      className="group inline-flex h-9 shrink-0 items-center justify-center gap-2.5 rounded-[3px] border border-white/15 bg-black/20 px-2.5 font-mono text-[11px] font-normal tracking-[0.04em] transition-colors duration-300 hover:border-teal-400/40 hover:bg-teal-500/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-300 sm:text-xs"
       onClick={(event) => {
         onNavigate?.();
         const suffix = window.location.search + window.location.hash;
@@ -27,8 +27,9 @@ export default function LanguageSwitcher({ onNavigate }: { onNavigate?: () => vo
         }
       }}
     >
-      <Languages className="h-4 w-4" aria-hidden="true" />
-      {nextLocale === "fa" ? "فارسی" : "English"}
+      <span aria-hidden="true" className={locale === "fa" ? "text-teal-200" : "text-gray-400 transition-colors duration-300 group-hover:text-gray-200"}>FA</span>
+      <span aria-hidden="true" className="h-2.5 w-px rotate-[18deg] bg-white/15 transition-colors duration-300 group-hover:bg-teal-300/30" />
+      <span aria-hidden="true" className={locale === "en" ? "text-teal-200" : "text-gray-400 transition-colors duration-300 group-hover:text-gray-200"}>EN</span>
     </Link>
   );
 }
