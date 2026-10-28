@@ -102,12 +102,12 @@ export default function ContactCTASection({
         <div
           role="heading"
           aria-level={2}
-          className="cms-rich-text cta-item ltr:font-mono text-3xl font-bold text-gray-300 sm:text-4xl md:text-5xl"
+          className="cms-rich-text cta-heading cta-item ltr:font-mono text-3xl font-bold text-gray-300 sm:text-4xl md:text-5xl"
           dangerouslySetInnerHTML={{ __html: richTextHtml(contactCta.heading) }}
         />
 
         <div
-          className="cms-rich-text cta-item mx-auto mt-6 max-w-2xl text-base leading-relaxed text-gray-400 sm:text-lg"
+          className="cms-rich-text cta-description cta-item mx-auto mt-6 max-w-2xl text-base leading-relaxed text-gray-400 sm:text-lg"
           dangerouslySetInnerHTML={{
             __html: richTextHtml(contactCta.description),
           }}

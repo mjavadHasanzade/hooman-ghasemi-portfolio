@@ -120,7 +120,7 @@ export default function Hero({ hero, siteName, logoUrl }: HeroProps) {
 
           <div
             ref={subtitleRef}
-            className="cms-rich-text max-w-md text-[15px] leading-relaxed text-gray-300 sm:text-lg md:text-xl lg:mt-7 lg:max-w-lg"
+            className="cms-rich-text hero-subtitle max-w-md text-[15px] leading-relaxed text-gray-300 sm:text-lg md:text-xl lg:mt-7 lg:max-w-lg"
            dangerouslySetInnerHTML={{ __html: richTextHtml(hero.subtitle) }} />
 
           <div ref={buttonRef} className="mt-2 sm:mt-0 lg:mt-9">

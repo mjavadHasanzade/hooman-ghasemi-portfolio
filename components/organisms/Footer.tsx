@@ -44,10 +44,10 @@ export default function Footer({
   return (
     <footer
       ref={footerRef}
-      className="relative w-full overflow-hidden bg-black text-white"
+      className="site-footer relative w-full overflow-hidden bg-black text-white"
     >
       <div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
-        <div className="footer-item mb-3 flex items-center justify-center py-4">
+        <div className="footer-logo footer-item mb-3 flex items-center justify-center py-4">
           {logoUrl ? (
             <Image
               src={logoUrl}
@@ -68,7 +68,7 @@ export default function Footer({
           }}
         />
 
-        <div className="cms-rich-text footer-item mt-8 pb-6 ltr:font-mono text-sm text-gray-500 sm:pb-8 sm:text-base" dangerouslySetInnerHTML={{ __html: richTextHtml(footer.copyrightText) }} />
+        <div className="cms-rich-text footer-copyright footer-item mt-8 pb-6 ltr:font-mono text-sm text-gray-500 sm:pb-8 sm:text-base" dangerouslySetInnerHTML={{ __html: richTextHtml(footer.copyrightText) }} />
       </div>
     </footer>
   );

@@ -46,9 +46,9 @@ export default function ServiceCard({
           )}
         </div>
 
-        <div role="heading" aria-level={3} className="cms-rich-text relative z-10 mb-3 ltr:font-mono text-2xl font-bold leading-[1.15] tracking-tight text-gray-100 rtl:leading-[1.4] sm:text-3xl xl:text-2xl" dangerouslySetInnerHTML={{ __html: richTextHtml(title) }} />
+        <div role="heading" aria-level={3} className="cms-rich-text service-title relative z-10 mb-3 ltr:font-mono text-2xl font-bold leading-[1.15] tracking-tight text-gray-100 rtl:leading-[1.4] sm:text-3xl xl:text-2xl" dangerouslySetInnerHTML={{ __html: richTextHtml(title) }} />
 
-        <div className="cms-rich-text relative z-10 mt-2 max-w-xs text-base leading-7 tracking-wider text-gray-200 sm:text-lg xl:text-base" dangerouslySetInnerHTML={{ __html: richTextHtml(description) }} />
+        <div className="cms-rich-text service-description relative z-10 mt-2 max-w-xs text-base leading-7 tracking-wider text-gray-200 sm:text-lg xl:text-base" dangerouslySetInnerHTML={{ __html: richTextHtml(description) }} />
       </div>
     </div>
   );

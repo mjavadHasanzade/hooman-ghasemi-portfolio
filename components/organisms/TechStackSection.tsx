@@ -3,7 +3,7 @@
 import { sortTechIcons } from "@/lib/tech-icon-order";
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionHeading from "../common/SectionHeading";
@@ -51,6 +51,7 @@ export default function TechStackSection({
   techIcons: PublicTechIcon[];
   sectionHeadings: PublicSectionHeadings;
 }) {
+  const isPersian = useLocale() === "fa";
   const t = useTranslations("TechStack");
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -58,7 +59,14 @@ export default function TechStackSection({
     if (!gridRef.current) return;
 
     const ctx = gsap.context(() => {
-      const boxes = gsap.utils.toArray<HTMLElement>(".tech-box");
+      const boxes = isPersian
+        ? Array.from(gridRef.current!.children)
+        : gsap.utils.toArray<HTMLElement>(".tech-box");
+      if (isPersian) {
+        // The cell and its child both have tech-box; avoid animating the same icon twice.
+        gsap.set(".tech-box > .tech-box", { opacity: 1, y: 0 });
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      }
 
       // --------------------------------------------------
       // Initial state
@@ -104,12 +112,13 @@ export default function TechStackSection({
     return () => {
       ctx.revert();
     };
-  }, []);
+  }, [isPersian, techIcons.length]);
 
   return (
     <section className="relative w-full overflow-hidden bg-black py-16 text-white sm:py-20 md:py-24 lg:py-28">
       <div className="relative z-10 px-5 sm:px-8 md:px-12 lg:px-15 xl:px-20">
         <SectionHeading
+          align="center"
           label={t("label")}
           heading={[
             [

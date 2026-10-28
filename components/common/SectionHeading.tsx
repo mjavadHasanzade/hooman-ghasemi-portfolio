@@ -1,6 +1,7 @@
 "use client";
 
 import RichText from "./RichText";
+import { useLocale } from "next-intl";
 import { ReactNode, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -50,18 +51,22 @@ export default function SectionHeading({
   label,
   heading,
   description,
+  align = "left",
   className = "",
   labelClassName = "",
   headingClassName = "",
   descriptionClassName = "",
   children,
 }: SectionHeadingProps) {
+  const isPersian = useLocale() === "fa";
   const descriptionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!descriptionRef.current) return;
 
     const ctx = gsap.context(() => {
+      if (isPersian) return;
+
       const wordElements =
         descriptionRef.current!.querySelectorAll<HTMLElement>(
           ".gsap-reveal-word",
@@ -152,18 +157,18 @@ export default function SectionHeading({
     }, descriptionRef);
 
     return () => ctx.revert();
-  }, [description]);
+  }, [description, isPersian]);
 
   return (
-    <div className={`max-w-3xl ${className}`}>
+    <div className={`section-heading max-w-3xl ${isPersian && align === "center" ? "fa-heading-centered" : ""} ${className}`}>
       <h2
-        className={`block ltr:font-mono font-bold uppercase tracking-[0.7rem] leading-[1.4] text-[25px] text-teal-500 ${labelClassName}`}
+        className={`section-heading-label block ltr:font-mono font-bold uppercase tracking-[0.7rem] leading-[1.4] text-[25px] text-teal-500 ${labelClassName}`}
       >
         {label}
       </h2>
 
       <div role="heading" aria-level={3}
-        className={`ltr:font-mono text-3xl font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-[2.4rem] lg:text-[52px] ${headingClassName}`}
+        className={`section-heading-title ltr:font-mono text-3xl font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-[2.4rem] lg:text-[52px] ${headingClassName}`}
       >
         {heading.map((line, lineIndex) => (
           <div key={lineIndex} className="block">
@@ -178,11 +183,11 @@ export default function SectionHeading({
       {description && description.length > 0 && (
         <div
           ref={descriptionRef}
-          className={`mt-3 max-w-2xl text-[22px] leading-normal font-light [word-spacing:0.5rem] ${descriptionClassName}`}
+          className={`section-heading-description mt-3 max-w-2xl text-[22px] leading-normal font-light [word-spacing:0.5rem] ${descriptionClassName}`}
         >
           {description.map((line, i) => (
             <div key={i} data-line={i} className="block">
-              {/<\/?[a-z][^>]*>/i.test(line)
+              {isPersian || /<\/?[a-z][^>]*>/i.test(line)
                 ? <RichText value={line} className="text-gray-200" />
                 : splitIntoWordSpans(line, i)}
             </div>
