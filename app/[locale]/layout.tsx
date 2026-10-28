@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import "../globals.css";
 import { vazirFont } from "@/utils";
 import { Providers } from "../providers";
@@ -9,13 +9,15 @@ import {
   publicMediaUrl,
 } from "@/lib/api/public-content";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
   try {
     const settings = await getPublicSiteSettings();
     const faviconUrl = publicMediaUrl(settings.faviconMedia);
     const ogImageUrl = publicMediaUrl(settings.ogImageMedia);
-    const title = settings.metaTitle.trim() || settings.siteName;
-    const description = settings.metaDescription.trim() || undefined;
+    const persian = locale === "fa" ? await getTranslations({ locale: "fa", namespace: "SiteNavigation" }) : null;
+    const title = persian ? persian("metaTitle") : settings.metaTitle.trim() || settings.siteName;
+    const description = persian ? persian("metaDescription") : settings.metaDescription.trim() || undefined;
 
     return {
       title,
@@ -29,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   } catch {
     return {
-      title: "Frontend project | پروژه فرانت اند",
+      title: locale === "fa" ? "مهندسی نووا" : "Frontend project | پروژه فرانت اند",
       icons: { icon: "/favicon.png" },
     };
   }

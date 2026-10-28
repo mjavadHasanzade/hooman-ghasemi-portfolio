@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { LayoutDashboard } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useAuthStore } from "@/lib/auth/auth-store";
@@ -17,6 +17,7 @@ type NavbarProps = {
 
 export default function Navbar({ siteName, logoUrl }: NavbarProps) {
   const t = useTranslations("SiteNavigation");
+  const brandName = useLocale() === "fa" ? t("brandFallback") : siteName || t("brandFallback");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isAuthenticated = useAuthStore(
     (state) => state.status === "authenticated",
@@ -28,14 +29,14 @@ export default function Navbar({ siteName, logoUrl }: NavbarProps) {
         {/* Logo */}
         <Link
           href="/"
-          aria-label={siteName || t("brandFallback")}
+          aria-label={brandName}
           className="flex min-w-0 items-center"
         >
           {logoUrl ? (
             <>
               <Image
                 src={logoUrl}
-                alt={siteName || t("brandFallback")}
+                alt={brandName}
                 width={64}
                 height={64}
                 priority
@@ -43,12 +44,12 @@ export default function Navbar({ siteName, logoUrl }: NavbarProps) {
                 className="h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
               />
               <span className="truncate text-lg font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
-                {siteName || t("brandFallback")}
+                {brandName}
               </span>
             </>
           ) : (
             <span className="truncate text-lg font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
-              {siteName || t("brandFallback")}
+              {brandName}
             </span>
           )}
         </Link>

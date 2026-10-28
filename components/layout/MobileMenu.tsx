@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { LayoutDashboard } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -28,6 +28,8 @@ export default function MobileMenu({
   siteName,
 }: MobileMenuProps) {
   const t = useTranslations("SiteNavigation");
+  const locale = useLocale();
+  const brandName = locale === "fa" ? t("brandFallback") : siteName || t("brandFallback");
   const isAuthenticated = useAuthStore(
     (state) => state.status === "authenticated",
   );
@@ -134,7 +136,7 @@ export default function MobileMenu({
                   </Link>
                 )}
                 <span className="text-center text-xs text-gray-400">
-                  {siteName || t("brandFallback")} © {new Date().getFullYear()}
+                  {brandName} © {locale === "fa" ? new Date().getFullYear().toLocaleString("fa-IR", { useGrouping: false }) : new Date().getFullYear()}
                 </span>
               </motion.div>
             </div>

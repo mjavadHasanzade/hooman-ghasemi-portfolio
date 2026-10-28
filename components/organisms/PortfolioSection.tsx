@@ -223,7 +223,7 @@ export default function PortfolioSection({
             <button
               ref={setPrevEl}
               type="button"
-              aria-label="Previous project"
+              aria-label={t("previousProject")}
               className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-700 text-gray-400 transition-colors duration-200 hover:border-teal-500 hover:text-teal-400"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -232,7 +232,7 @@ export default function PortfolioSection({
             <button
               ref={setNextEl}
               type="button"
-              aria-label="Next project"
+              aria-label={t("nextProject")}
               className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-700 text-gray-400 transition-colors duration-200 hover:border-teal-500 hover:text-teal-400"
             >
               <ChevronRight className="h-4 w-4" />

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
 type ProjectGalleryProps = {
@@ -15,6 +16,11 @@ export default function ProjectGallery({
   alt,
   projectNumberLabel,
 }: ProjectGalleryProps) {
+  const t = useTranslations("ProjectGallery");
+  const isPersian = useLocale() === "fa";
+  const imageNumber = (number: number, padded = false) => isPersian
+    ? new Intl.NumberFormat("fa-IR", { useGrouping: false, minimumIntegerDigits: padded ? 2 : 1 }).format(number)
+    : padded ? String(number).padStart(2, "0") : String(number);
   const [active, setActive] = useState(0);
   const hasSlides = images.length > 1;
   const imageUrl = images[active];
@@ -43,15 +49,15 @@ export default function ProjectGallery({
         <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-5 sm:p-7">
           <span className="h-px w-16 bg-teal-300/70 sm:w-24" />
           <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/55">
-            {projectNumberLabel} {String(active + 1).padStart(2, "0")}
+            {projectNumberLabel} {imageNumber(active + 1, true)}
           </span>
         </div>
         {hasSlides && (
           <>
-            <button type="button" onClick={previous} aria-label="Previous image" className="absolute start-4 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/20 bg-black/45 p-2 text-white backdrop-blur transition hover:border-teal-300 hover:text-teal-200">
+            <button type="button" onClick={previous} aria-label={t("previousImage")} className="absolute start-4 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/20 bg-black/45 p-2 text-white backdrop-blur transition hover:border-teal-300 hover:text-teal-200">
               <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
             </button>
-            <button type="button" onClick={next} aria-label="Next image" className="absolute end-4 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/20 bg-black/45 p-2 text-white backdrop-blur transition hover:border-teal-300 hover:text-teal-200">
+            <button type="button" onClick={next} aria-label={t("nextImage")} className="absolute end-4 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/20 bg-black/45 p-2 text-white backdrop-blur transition hover:border-teal-300 hover:text-teal-200">
               <ChevronRight className="h-4 w-4 rtl:rotate-180" />
             </button>
           </>
@@ -64,7 +70,7 @@ export default function ProjectGallery({
               <button
                 key={url}
                 type="button"
-                aria-label={`Go to image ${index + 1}`}
+                aria-label={t("goToImage", { number: imageNumber(index + 1) })}
                 aria-current={index === active ? "true" : undefined}
                 onClick={() => setActive(index)}
                 className={`relative h-14 w-20 shrink-0 overflow-hidden rounded border transition sm:h-16 sm:w-24 ${
@@ -75,7 +81,7 @@ export default function ProjectGallery({
               >
                 <Image
                   src={url}
-                  alt={`${alt} — ${index + 1}`}
+                  alt={`${alt} — ${imageNumber(index + 1)}`}
                   fill
                   sizes="96px"
                   className="object-contain"

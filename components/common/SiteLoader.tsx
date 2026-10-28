@@ -1,8 +1,10 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 export default function SiteLoader() {
+  const t = useTranslations("SiteNavigation");
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
@@ -35,7 +37,7 @@ export default function SiteLoader() {
   if (!visible) return null;
 
   return (
-    <div className="site-loader" role="status" aria-label="Loading">
+    <div className="site-loader" role="status" aria-label={t("loading")}>
       <div className="site-loader-mark" aria-hidden="true">
         <span />
         <span />

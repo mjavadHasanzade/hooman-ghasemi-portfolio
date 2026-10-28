@@ -7,6 +7,7 @@ import {
 } from "@/lib/rich-text";
 
 import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
 import { memo, useEffect, useMemo, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -56,7 +57,10 @@ export default function ContactCTASection({
   contactEmail?: string;
   phoneNumber?: string;
 }) {
+  const isPersian = useLocale() === "fa";
+  const t = useTranslations("ContactCTA");
   const sectionRef = useRef<HTMLElement>(null);
+  const socialName = (platform: string) => !isPersian ? platform : platform.toLowerCase() === "telegram" ? t("telegramLabel") : platform.toLowerCase() === "linkedin" ? t("linkedinLabel") : platform;
   const sortedSocialLinks = [...socialLinks].sort((a, b) => a.order - b.order);
 
   useEffect(() => {
@@ -129,10 +133,10 @@ export default function ContactCTASection({
                   />
                   <a
                     href={`mailto:${email}`}
-                    dir="ltr"
+                    dir={isPersian ? "rtl" : "ltr"}
                     className="min-w-0 break-all transition-colors hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-300"
                   >
-                    Email: {email}
+                    <span>{t("emailLabel")}: </span><bdi dir="ltr">{email}</bdi>
                   </a>
                 </li>
               )}
@@ -144,10 +148,10 @@ export default function ContactCTASection({
                   />
                   <a
                     href={`tel:${phone.replace(/\s/g, "")}`}
-                    dir="ltr"
+                    dir={isPersian ? "rtl" : "ltr"}
                     className="min-w-0 break-all transition-colors hover:text-white focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-300"
                   >
-                    Phone: {phone}
+                    <span>{t("phoneLabel")}: </span><bdi dir="ltr">{phone}</bdi>
                   </a>
                 </li>
               )}
@@ -162,20 +166,20 @@ export default function ContactCTASection({
                 href={social.url}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={social.platform}
+                aria-label={socialName(social.platform)}
                 className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-800/80 text-sm font-bold text-gray-200 transition-colors hover:bg-gray-700"
               >
                 {publicMediaUrl(social.image) ? (
                   <Image
                     src={publicMediaUrl(social.image)!}
-                    alt={social.platform}
+                    alt={socialName(social.platform)}
                     width={24}
                     height={24}
                     className="h-6 w-6 object-contain"
                     unoptimized
                   />
                 ) : (
-                  social.iconKey.slice(0, 2).toUpperCase()
+                  isPersian ? <span className="text-[10px]">{socialName(social.platform)}</span> : social.iconKey.slice(0, 2).toUpperCase()
                 )}
               </a>
             ))}

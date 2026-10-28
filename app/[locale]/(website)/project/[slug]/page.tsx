@@ -120,7 +120,7 @@ export default async function ProjectPage({
             </p>
             <div role="heading" aria-level={1} className="cms-rich-text mt-5 max-w-2xl text-4xl font-bold leading-[1.08] tracking-tight text-gray-100 sm:text-6xl lg:text-7xl" dangerouslySetInnerHTML={{ __html: richTextHtml(project.title) }} />
             <p className="mt-5 ltr:font-mono text-xs ltr:uppercase tracking-[0.18em] text-gray-600 rtl:tracking-normal">
-              {labels.project} / {project.slug}
+              {labels.project} / {locale === "fa" ? richTextPlainText(project.title) : project.slug}
             </p>
 
             <div
