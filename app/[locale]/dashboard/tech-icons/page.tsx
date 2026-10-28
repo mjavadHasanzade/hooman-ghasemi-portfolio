@@ -1,5 +1,7 @@
 "use client";
 
+import { confirmDelete } from "@/lib/confirmations";
+
 import Image from "next/image";
 import { moveTechIcon, sortTechIcons } from "@/lib/tech-icon-order";
 import { useEffect, useRef, useState } from "react";
@@ -79,8 +81,8 @@ export default function TechIconsPage() {
     } catch (error) { toast.error(getErrorMessage(error)); }
   }
 
-  function onDelete(icon: TechIcon) {
-    if (!confirm(`«${icon.label}» حذف شود؟`)) return;
+  async function onDelete(icon: TechIcon) {
+    if (!(await confirmDelete(icon.label))) return;
     deleteIcon.mutate(icon.id, {
       onSuccess: () => toast.success("آیکون حذف شد."),
       onError: (error) => toast.error(getErrorMessage(error)),
@@ -135,7 +137,7 @@ export default function TechIconsPage() {
       ) : <div className="py-16 text-center text-muted-foreground">هنوز آیکونی ثبت نشده است.</div>}
       {data && <PaginationControls page={data.meta.page} totalPages={data.meta.totalPages} onPageChange={(nextPage) => { if (!reordering.current) setPage(nextPage); }} />}
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} isDirty={form.formState.isDirty} isSaving={createIcon.isPending || updateIcon.isPending} onOpenChange={setOpen}>
         <DialogContent><DialogHeader><DialogTitle>{editing ? "ویرایش آیکون" : "افزودن آیکون"}</DialogTitle></DialogHeader>
           <form className="space-y-5" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-2"><Label htmlFor="tech-label">نام نمایشی</Label><Input id="tech-label" {...form.register("label", { required: "نام الزامی است." })} />{form.formState.errors.label && <p className="text-xs text-destructive">{form.formState.errors.label.message}</p>}</div>

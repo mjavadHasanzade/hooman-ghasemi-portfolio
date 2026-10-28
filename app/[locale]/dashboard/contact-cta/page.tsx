@@ -1,5 +1,7 @@
 "use client";
 
+import { confirmDelete } from "@/lib/confirmations";
+
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, ChevronUp, GripVertical, Pencil, Plus, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -45,7 +47,7 @@ function PhraseDialog({ phrase, open, onOpenChange }: { phrase: TypewriterPhrase
       toast.success(phrase ? "عبارت به‌روزرسانی شد." : "عبارت اضافه شد."); onOpenChange(false);
     } catch (error) { toast.error(getErrorMessage(error)); }
   }
-  return <Dialog open={open} onOpenChange={onOpenChange}><DialogContent className="max-h-[90vh] w-[calc(100%-1rem)] max-w-2xl overflow-y-auto p-6 sm:p-8"><DialogHeader><DialogTitle>{phrase ? "ویرایش عبارت تایپ‌رایتر" : "افزودن عبارت تایپ‌رایتر"}</DialogTitle></DialogHeader><form className="space-y-6" onSubmit={form.handleSubmit(submit)}><LocaleTabs value={locale} onChange={setLocale} availableLocales={[]} /><div className="space-y-2"><Label id={`phrase-${locale}-label`} htmlFor={`phrase-${locale}`}>متن عبارت</Label><RichTextField control={form.control} name={`${path}.text`} id={`phrase-${locale}`} locale={locale} /></div><div className="flex justify-end"><Button type="submit" disabled={isSaving}>{isSaving ? "در حال ذخیره…" : "ذخیره تغییرات"}</Button></div></form></DialogContent></Dialog>;
+  return <Dialog open={open} isDirty={form.formState.isDirty} isSaving={isSaving} onOpenChange={onOpenChange}><DialogContent className="max-h-[90vh] w-[calc(100%-1rem)] max-w-2xl overflow-y-auto p-6 sm:p-8"><DialogHeader><DialogTitle>{phrase ? "ویرایش عبارت تایپ‌رایتر" : "افزودن عبارت تایپ‌رایتر"}</DialogTitle></DialogHeader><form className="space-y-6" onSubmit={form.handleSubmit(submit)}><LocaleTabs value={locale} onChange={setLocale} availableLocales={[]} /><div className="space-y-2"><Label id={`phrase-${locale}-label`} htmlFor={`phrase-${locale}`}>متن عبارت</Label><RichTextField control={form.control} name={`${path}.text`} id={`phrase-${locale}`} locale={locale} /></div><div className="flex justify-end"><Button type="submit" disabled={isSaving}>{isSaving ? "در حال ذخیره…" : "ذخیره تغییرات"}</Button></div></form></DialogContent></Dialog>;
 }
 
 function TranslationForm({ locale, contactCta }: { locale: Locale; contactCta: NonNullable<ReturnType<typeof useContactCta>["data"]> }) {
@@ -78,7 +80,7 @@ export default function ContactCtaPage() {
   const availableLocales = useMemo(() => data?.availableLocales ?? [], [data]);
   async function saveHref(values: { connectHref: string }) { try { await update.mutateAsync({ connectHref: values.connectHref }); hrefForm.reset(values); toast.success("لینک ارتباط ذخیره شد."); } catch (error) { toast.error(getErrorMessage(error)); } }
   function editPhrase(phrase: TypewriterPhrase) { setEditing(phrase); setPhraseDialog(true); }
-  function deletePhrase(phrase: TypewriterPhrase) { if (!confirm("این عبارت حذف شود؟")) return; remove.mutate(phrase.id, { onSuccess: () => toast.success("عبارت حذف شد."), onError: (error) => toast.error(getErrorMessage(error)) }); }
+  async function deletePhrase(phrase: TypewriterPhrase) { if (!(await confirmDelete("این عبارت"))) return; remove.mutate(phrase.id, { onSuccess: () => toast.success("عبارت حذف شد."), onError: (error) => toast.error(getErrorMessage(error)) }); }
   async function dropPhrase(targetId: string, sourceId = draggedId) { if (!sourceId || sourceId === targetId || reorder.isPending) return; const from = phrases.findIndex((item) => item.id === sourceId); const to = phrases.findIndex((item) => item.id === targetId); if (from < 0 || to < 0) return; const next = [...phrases]; const [item] = next.splice(from, 1); next.splice(to, 0, item); const ids = next.map((phrase) => phrase.id); setPhraseOrder(ids); setDraggedId(null); try { await reorder.mutateAsync(ids); toast.success("ترتیب عبارت‌ها ذخیره شد."); } catch (error) { setPhraseOrder(null); toast.error(getErrorMessage(error)); } finally { setPhraseOrder(null); } }
   if (isLoading) return <p className="text-muted-foreground">در حال دریافت…</p>;
   if (isError || !data) return <p className="text-destructive">دریافت بخش دعوت به اقدام ناموفق بود.</p>;

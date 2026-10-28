@@ -1,5 +1,7 @@
 "use client";
 
+import { confirmDelete } from "@/lib/confirmations";
+
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import { Controller, useForm, useWatch } from "react-hook-form";
@@ -273,7 +275,7 @@ function ProjectDialog({
   const isSaving = createProject.isPending || updateProject.isPending;
   const activeDescription = translations?.[activeLocale]?.description ?? "";
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} isDirty={form.formState.isDirty} isSaving={isSaving} onOpenChange={onOpenChange}>
       <DialogContent className="admin-project-dialog max-h-[96vh] w-[calc(100%-1rem)] max-w-6xl border-primary/20 bg-popover/95 p-4 shadow-2xl sm:p-8">
         <DialogHeader className="rounded-xl border border-primary/20 bg-primary/5 p-5">
           <div className="flex items-center gap-3">
@@ -591,8 +593,8 @@ export default function ProjectsPage() {
     setDialogKey((key) => key + 1);
     setOpen(true);
   }
-  function remove(project: Project) {
-    if (!confirm(`«${project.slug}» حذف شود؟`)) return;
+  async function remove(project: Project) {
+    if (!(await confirmDelete(project.slug))) return;
     deleteProject.mutate(project.id, {
       onSuccess: () => toast.success("پروژه حذف شد."),
       onError: (error) => toast.error(getErrorMessage(error)),

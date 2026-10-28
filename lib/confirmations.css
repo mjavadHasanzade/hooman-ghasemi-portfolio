@@ -1,0 +1,45 @@
+.swal2-container.admin-confirmation-layer {
+  z-index: 10000;
+  background: rgb(2 6 12 / 76%);
+  backdrop-filter: blur(6px);
+  padding: 1rem;
+}
+.swal2-popup.admin-confirmation {
+  width: 28rem;
+  max-width: 100%;
+  padding: 1.75rem;
+  border: 1px solid rgb(91 191 207 / 25%);
+  border-radius: 1.25rem;
+  background: linear-gradient(150deg, #19232e, #0c121b);
+  color: #ecf2f6;
+  box-shadow: 0 24px 90px rgb(0 0 0 / 45%);
+  font-family: var(--font-vazir), sans-serif;
+}
+.admin-confirmation .swal2-icon {
+  margin: 0 auto 1.25rem;
+  width: 3rem;
+  height: 3rem;
+  border-width: 2px;
+  border-color: #68b7c5;
+  color: #68b7c5;
+}
+.admin-confirmation .swal2-icon-content { font-size: 2rem; }
+.admin-confirmation--danger .swal2-icon { border-color: #f59ba9; color: #f59ba9; }
+.admin-confirmation .admin-confirmation-title { padding: 0; font-size: 1.1rem; line-height: 1.8; font-weight: 700; }
+.admin-confirmation .admin-confirmation-text { margin: .75rem 0 0; padding: 0; font-size: .9rem; line-height: 2; color: #b8c5d1; overflow-wrap: anywhere; }
+.admin-confirmation .admin-confirmation-actions { display: flex; flex-wrap: wrap; gap: .65rem; width: 100%; margin: 1.5rem 0 0; }
+.admin-confirmation-actions button { flex: 1 1 auto; min-height: 2.75rem; padding: .65rem 1rem; border: 1px solid transparent; border-radius: .65rem; cursor: pointer; font: inherit; font-size: .85rem; transition: background .15s; }
+.admin-confirmation-confirm { background: #366b78; color: white; }
+.admin-confirmation-confirm:hover { background: #427f8e; }
+.admin-confirmation--danger .admin-confirmation-confirm { background: #9e354b; }
+.admin-confirmation--danger .admin-confirmation-confirm:hover { background: #b84059; }
+.admin-confirmation-actions .admin-confirmation-cancel { background: #202d3b; color: #ecf2f6; border-color: #3c5063; }
+.admin-confirmation-cancel:hover { background: #2b3b4c; }
+.admin-confirmation-actions button:focus-visible { outline: 2px solid #7dd2e2; outline-offset: 3px; }
+@media (max-width: 420px) {
+  .swal2-popup.admin-confirmation { padding: 1.5rem 1.1rem; }
+  .admin-confirmation-actions button { flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .admin-confirmation, .admin-confirmation *, .admin-confirmation-layer { animation: none !important; transition: none !important; }
+}

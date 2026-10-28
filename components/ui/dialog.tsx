@@ -7,9 +7,37 @@ import { cn } from "cn"
 
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
+import { confirmDiscardChanges, useConfirmationState } from "@/lib/confirmations"
 
-function Dialog({ ...props }: DialogPrimitive.Root.Props) {
-  return <DialogPrimitive.Root data-slot="dialog" {...props} />
+function Dialog({ open, defaultOpen = false, onOpenChange, modal = true, isDirty = false, isSaving = false, ...props }: DialogPrimitive.Root.Props & { isDirty?: boolean; isSaving?: boolean }) {
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen)
+  const confirmationActive = useConfirmationState((state) => state.active)
+  const currentOpen = open ?? internalOpen
+  const latest = React.useRef({ currentOpen, isSaving })
+  React.useLayoutEffect(() => { latest.current = { currentOpen, isSaving } }, [currentOpen, isSaving])
+  const mounted = React.useRef(false)
+  React.useEffect(() => { mounted.current = true; return () => { mounted.current = false } }, [])
+
+  const handleOpenChange: NonNullable<DialogPrimitive.Root.Props["onOpenChange"]> = (nextOpen, details) => {
+    if (!nextOpen && (isSaving || useConfirmationState.getState().active)) {
+      details.cancel()
+      return
+    }
+    if (!nextOpen && isDirty) {
+      details.cancel()
+      void confirmDiscardChanges().then((discard) => {
+        if (!discard || !mounted.current || latest.current.isSaving || !latest.current.currentOpen) return
+        setInternalOpen(false)
+        onOpenChange?.(false, details)
+      })
+      return
+    }
+    onOpenChange?.(nextOpen, details)
+    if (!details.isCanceled) setInternalOpen(nextOpen)
+  }
+
+  // Swal owns keyboard focus while its body-level portal is visible.
+  return <DialogPrimitive.Root data-slot="dialog" {...props} open={currentOpen} modal={confirmationActive ? false : modal} onOpenChange={handleOpenChange} />
 }
 
 function DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {

@@ -1,5 +1,7 @@
 "use client";
 
+import { confirmDelete } from "@/lib/confirmations";
+
 import Image from "next/image";
 import { Trash2, ImageOff } from "lucide-react";
 import { toast } from "sonner";
@@ -31,8 +33,8 @@ export function MediaGrid({
 }: MediaGridProps) {
   const deleteMutation = useDeleteMedia();
 
-  function handleDelete(id: string) {
-    if (!confirm("این فایل حذف شود؟ این عمل قابل بازگشت نیست.")) return;
+  async function handleDelete(id: string) {
+    if (!(await confirmDelete("این فایل"))) return;
 
     deleteMutation.mutate(id, {
       onSuccess: () => toast.success("فایل حذف شد"),
