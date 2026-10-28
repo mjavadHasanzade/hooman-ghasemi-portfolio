@@ -1,5 +1,6 @@
 "use client";
 
+import { usePersianTextReveal } from "@/hooks/usePersianTextReveal";
 import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Gauge } from "lucide-react";
@@ -33,6 +34,7 @@ export default function ServicesSection({
   const sortedServices = [...services].sort((a, b) => a.order - b.order);
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
+  usePersianTextReveal(sectionRef, JSON.stringify(services), ".service-description");
 
   useEffect(() => {
     if (!cardsRef.current) return;

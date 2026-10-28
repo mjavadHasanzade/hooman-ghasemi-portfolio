@@ -1,6 +1,7 @@
 "use client";
 
 import RichText from "./RichText";
+import { usePersianWordReveal } from "@/hooks/usePersianTextReveal";
 import { useLocale } from "next-intl";
 import { ReactNode, useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -60,6 +61,7 @@ export default function SectionHeading({
 }: SectionHeadingProps) {
   const isPersian = useLocale() === "fa";
   const descriptionRef = useRef<HTMLDivElement>(null);
+  usePersianWordReveal(descriptionRef, JSON.stringify(description));
 
   useEffect(() => {
     if (!descriptionRef.current) return;
@@ -188,7 +190,7 @@ export default function SectionHeading({
           {description.map((line, i) => (
             <div key={i} data-line={i} className="block">
               {isPersian || /<\/?[a-z][^>]*>/i.test(line)
-                ? <RichText value={line} className="text-gray-200" />
+                ? <RichText value={line} className="text-gray-200" revealWords={isPersian} />
                 : splitIntoWordSpans(line, i)}
             </div>
           ))}

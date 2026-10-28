@@ -7,6 +7,7 @@ import {
 } from "@/lib/rich-text";
 
 import Image from "next/image";
+import { usePersianTextReveal } from "@/hooks/usePersianTextReveal";
 import { useLocale, useTranslations } from "next-intl";
 import { memo, useEffect, useMemo, useRef } from "react";
 import gsap from "gsap";
@@ -60,6 +61,7 @@ export default function ContactCTASection({
   const isPersian = useLocale() === "fa";
   const t = useTranslations("ContactCTA");
   const sectionRef = useRef<HTMLElement>(null);
+  usePersianTextReveal(sectionRef, contactCta.description, ".cta-description", false);
   const socialName = (platform: string) => !isPersian ? platform : platform.toLowerCase() === "telegram" ? t("telegramLabel") : platform.toLowerCase() === "linkedin" ? t("linkedinLabel") : platform;
   const sortedSocialLinks = [...socialLinks].sort((a, b) => a.order - b.order);
 

@@ -32,6 +32,19 @@ export function richTextHtml(value: string): string {
   return sanitizeHtml(html, options);
 }
 
+/** Wrap words without changing whitespace, inline formatting, or Persian joining. */
+export function richTextWordHtml(value: string): string {
+  return sanitizeHtml(richTextHtml(value), {
+    ...options,
+    textFilter: (escapedText) => decodeHTML(escapedText)
+      .split(/(\s+)/u)
+      .map((part) => part.trim()
+        ? `<span class="fa-scroll-word">${escapeHtml(part)}</span>`
+        : escapeHtml(part))
+      .join(""),
+  });
+}
+
 export function richTextPlainText(value: string, withBreaks = true): string {
   const html = richTextHtml(value);
   const separated = withBreaks ? html
