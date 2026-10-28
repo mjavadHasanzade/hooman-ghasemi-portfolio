@@ -2,7 +2,7 @@
 
 import { usePersianTextReveal } from "@/hooks/usePersianTextReveal";
 import { useEffect, useRef } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Gauge } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
@@ -30,6 +30,7 @@ export default function ServicesSection({
   services: PublicService[];
   sectionHeadings: PublicSectionHeadings;
 }) {
+  const locale = useLocale();
   const t = useTranslations("Services");
   const sortedServices = [...services].sort((a, b) => a.order - b.order);
   const sectionRef = useRef<HTMLElement>(null);
@@ -95,6 +96,8 @@ export default function ServicesSection({
         <div ref={cardsRef} className="relative mx-auto mt-12 sm:mt-14 lg:mt-16">
           <div className="sm:hidden">
             <Swiper
+          key={locale}
+          dir={locale === "fa" ? "rtl" : "ltr"}
               modules={[Pagination]}
               slidesPerView={1}
               spaceBetween={14}

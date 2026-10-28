@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { ChevronLeft, ChevronRight, Circle } from "lucide-react";
@@ -38,6 +38,7 @@ export default function PortfolioSection({
   projects: PublicProject[];
   sectionHeadings: PublicSectionHeadings;
 }) {
+  const locale = useLocale();
   const t = useTranslations("Portfolio");
 
   const portfolioRef = useRef<HTMLElement>(null);
@@ -135,6 +136,8 @@ export default function PortfolioSection({
       {/* Projects */}
       <div ref={cardsContainerRef} className="relative mt-10 sm:mt-12 lg:mt-14">
         <Swiper
+          key={locale}
+          dir={locale === "fa" ? "rtl" : "ltr"}
           modules={[Navigation, Pagination]}
           slidesPerView={1.08}
           spaceBetween={16}
@@ -226,7 +229,7 @@ export default function PortfolioSection({
               aria-label={t("previousProject")}
               className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-700 text-gray-400 transition-colors duration-200 hover:border-teal-500 hover:text-teal-400"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
             </button>
 
             <button
@@ -235,7 +238,7 @@ export default function PortfolioSection({
               aria-label={t("nextProject")}
               className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-700 text-gray-400 transition-colors duration-200 hover:border-teal-500 hover:text-teal-400"
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4 rtl:rotate-180" />
             </button>
           </div>
         </div>
