@@ -5,7 +5,6 @@ import PortfolioSection from "@/components/organisms/PortfolioSection";
 import ServicesSection from "@/components/organisms/ServicesSection";
 import TechStackSection from "@/components/organisms/TechStackSection";
 import { notFound } from "next/navigation";
-import { publicMediaUrl } from "@/lib/media/public-media-url";
 import {
   getPublicAbout,
   getPublicHero,
@@ -34,17 +33,9 @@ export default async function Home({ params }: Props) {
     getPublicHome(locale),
   ]);
 
-  console.log({ siteSettings });
-
   return (
     <>
-      <Hero
-        hero={hero}
-        siteName={siteSettings.siteName}
-        logoUrl={publicMediaUrl(
-          siteSettings.logoMedia ?? siteSettings.ogImageMedia ?? siteSettings.faviconMedia,
-        )}
-      />
+      <Hero hero={hero} />
       <ServicesSection
         services={home.services}
         sectionHeadings={home.siteSettings.sectionHeadings}

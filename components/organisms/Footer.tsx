@@ -42,18 +42,18 @@ export default function Footer({
   return (
     <footer
       ref={footerRef}
-      className="relative w-full overflow-hidden bg-black text-white"
+      className="relative w-full bg-black text-white"
     >
       <div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
-        <div className="footer-item mb-2 flex h-34 items-center justify-center overflow-hidden sm:mb-3 sm:h-40">
+        <div className="footer-item -mb-18 -mt-20 flex items-center justify-center sm:-mb-21 sm:-mt-23">
           {logoUrl ? (
             <Image
               src={logoUrl}
               alt=""
-              width={160}
-              height={160}
+              width={1254}
+              height={1254}
               unoptimized
-              className="h-60 w-auto scale-[1.75] object-contain sm:h-64"
+              className="h-80 w-auto max-w-none object-contain sm:h-92"
             />
           ) : null}
         </div>
@@ -66,7 +66,7 @@ export default function Footer({
           }}
         />
 
-        <p className="footer-item mt-8 pb-6 ltr:font-mono text-sm text-gray-500 sm:pb-8 sm:text-base">
+        <p className="footer-item mt-5 pb-3 ltr:font-mono text-sm text-gray-500 sm:mt-6 sm:pb-4 sm:text-base">
           {footer.copyrightText}
         </p>
       </div>

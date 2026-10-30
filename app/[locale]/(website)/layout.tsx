@@ -1,4 +1,5 @@
 import Footer from "@/components/organisms/Footer";
+import Navbar from "@/components/layout/Navbar";
 import { publicMediaUrl } from "@/lib/media/public-media-url";
 import {
   getPublicFooter,
@@ -22,11 +23,15 @@ export default async function WebsiteLayout({
   ]);
   const showBackgroundImage = true;
   const backgroundImageUrl = publicMediaUrl(hero.backgroundImage);
-  const logoUrl = publicMediaUrl(siteSettings.footerLogoMedia);
+  const footerLogoUrl = publicMediaUrl(siteSettings.footerLogoMedia);
+  const navbarLogoUrl = publicMediaUrl(
+    siteSettings.logoMedia ??
+      siteSettings.ogImageMedia ??
+      siteSettings.faviconMedia,
+  );
 
   return (
     <div className="site-background min-h-screen">
-      {/* <Navbar /> */}
       <svg
         className="site-backdrop"
         viewBox="0 0 1671 941"
@@ -106,8 +111,9 @@ export default async function WebsiteLayout({
         </g>
       </svg>
       <div className="site-content" style={{ position: "relative", zIndex: 2 }}>
+        <Navbar siteName={siteSettings.siteName} logoUrl={navbarLogoUrl} />
         <main className="min-h-screen">{children}</main>
-        <Footer footer={footer} logoUrl={logoUrl} />
+        <Footer footer={footer} logoUrl={footerLogoUrl} />
       </div>
     </div>
   );
