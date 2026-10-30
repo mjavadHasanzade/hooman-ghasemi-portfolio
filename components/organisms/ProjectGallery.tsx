@@ -84,7 +84,7 @@ export default function ProjectGallery({
                   alt={`${alt} — ${imageNumber(index + 1)}`}
                   fill
                   sizes="96px"
-                  className="object-cover"
+                  className="object-contain"
                   unoptimized
                 />
                 {index === active && (
