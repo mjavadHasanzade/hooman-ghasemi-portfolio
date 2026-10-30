@@ -7,7 +7,6 @@ import { getPublicProjects } from "@/lib/api/public-content";
 import { publicMediaUrl } from "@/lib/media/public-media-url";
 import type { Locale } from "@/lib/types/api";
 import ProjectGallery from "@/components/organisms/ProjectGallery";
-import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
 
 const copy = {
   fa: {
@@ -78,7 +77,9 @@ export default async function ProjectPage({
     .sort((first, second) => first.order - second.order)
     .map((item) => publicMediaUrl(item.media))
     .filter((url): url is string => Boolean(url));
-  const projectImages = imageUrl ? [imageUrl, ...galleryImageUrls] : galleryImageUrls;
+  const projectImages = imageUrl
+    ? [imageUrl, ...galleryImageUrls]
+    : galleryImageUrls;
   const techIcons = project.techIcons
     .slice()
     .sort((first, second) => first.order - second.order);
@@ -98,12 +99,14 @@ export default async function ProjectPage({
             <BackIcon className="h-4 w-4 transition-transform group-hover:-translate-x-1 rtl:group-hover:translate-x-1" />
             {labels.back}
           </Link>
-          <LanguageSwitcher />
         </div>
 
         <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.18fr)_minmax(22rem,0.82fr)] lg:items-center lg:gap-20 lg:py-10">
           <div className="group relative overflow-hidden rounded-[10px] p-px">
-            <div aria-hidden="true" className="absolute inset-[-55%] animate-[spin_11s_linear_infinite] bg-[conic-gradient(from_171deg,transparent_0deg,transparent_100deg,rgba(45,212,191,0.22)_140deg,rgba(94,234,212,0.95)_234deg,rgba(45,212,191,0.22)_290deg,transparent_360deg)]" />
+            <div
+              aria-hidden="true"
+              className="absolute inset-[-55%] animate-[spin_11s_linear_infinite] bg-[conic-gradient(from_171deg,transparent_0deg,transparent_100deg,rgba(45,212,191,0.22)_140deg,rgba(94,234,212,0.95)_234deg,rgba(45,212,191,0.22)_290deg,transparent_360deg)]"
+            />
             <div className="relative z-10 rounded-[9px] bg-black p-1.5">
               <ProjectGallery
                 images={projectImages}
@@ -118,14 +121,26 @@ export default async function ProjectPage({
               <span className="h-px w-8 bg-teal-400/70" />
               {labels.selectedWork}
             </p>
-            <div role="heading" aria-level={1} className="cms-rich-text mt-5 max-w-2xl text-4xl font-bold leading-[1.08] tracking-tight text-gray-100 sm:text-6xl lg:text-7xl" dangerouslySetInnerHTML={{ __html: richTextHtml(project.title) }} />
+            <div
+              role="heading"
+              aria-level={1}
+              className="cms-rich-text mt-5 max-w-2xl text-4xl font-bold leading-[1.08] tracking-tight text-gray-100 sm:text-6xl lg:text-7xl"
+              dangerouslySetInnerHTML={{ __html: richTextHtml(project.title) }}
+            />
             <p className="mt-5 ltr:font-mono text-xs ltr:uppercase tracking-[0.18em] text-gray-600 rtl:tracking-normal">
-              {labels.project} / {locale === "fa" ? richTextPlainText(project.title) : project.slug}
+              {labels.project} /{" "}
+              {locale === "fa"
+                ? richTextPlainText(project.title)
+                : project.slug}
             </p>
 
             <div
               className="project-rich-text mt-8 max-w-lg border-s-2 border-teal-400/40 ps-5 text-base leading-8 text-gray-400"
-              dangerouslySetInnerHTML={{ __html: richTextHtml(projectDescriptionHtml(project.description)) }}
+              dangerouslySetInnerHTML={{
+                __html: richTextHtml(
+                  projectDescriptionHtml(project.description),
+                ),
+              }}
             />
 
             {project.liveUrl ? (

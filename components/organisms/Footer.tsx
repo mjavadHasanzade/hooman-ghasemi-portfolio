@@ -45,7 +45,7 @@ export default function Footer({
       ref={footerRef}
       className="site-footer relative w-full bg-black text-white"
     >
-      <div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
+      <div className="mx-auto max-w-4xl px-5 text-center sm:px-8 flex flex-col justify-center items-center">
         <div className="footer-logo footer-item relative mx-auto h-52 w-full max-w-lg sm:h-56">
           {logoUrl ? (
             <Image
