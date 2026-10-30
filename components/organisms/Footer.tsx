@@ -43,32 +43,23 @@ export default function Footer({
   return (
     <footer
       ref={footerRef}
-      className="site-footer relative w-full overflow-hidden bg-black text-white"
+      className="site-footer relative w-full bg-black text-white"
     >
       <div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
-        <div className="footer-logo footer-item mb-3 flex items-center justify-center py-4">
+        <div className="footer-logo footer-item relative mx-auto h-52 w-full max-w-lg sm:h-56">
           {logoUrl ? (
             <Image
               src={logoUrl}
               alt=""
-              width={512}
-              height={512}
+              fill
+              sizes="(max-width: 640px) 100vw, 512px"
               unoptimized
-              className="h-auto w-full max-w-lg object-contain"
+              className="object-cover object-center"
             />
           ) : null}
         </div>
-        {/* خط جداکننده‌ی محو - روشن در وسط، شفاف در دو طرف */}
         <div
-          className="footer-item mx-auto h-px w-full max-w-xs sm:max-w-sm"
-          style={{
-            background:
-              "linear-gradient(to right, transparent, rgba(156,163,175,0.5), transparent)",
-          }}
-        />
-
-        <div
-          className="cms-rich-text footer-copyright footer-item mt-8 pb-6 ltr:font-mono text-sm text-gray-500 sm:pb-8 sm:text-base"
+          className="cms-rich-text footer-copyright footer-item mt-2 pb-4 ltr:font-mono text-sm text-gray-500 sm:mt-3 sm:pb-5 sm:text-base"
           dangerouslySetInnerHTML={{
             __html: richTextHtml(footer.copyrightText),
           }}

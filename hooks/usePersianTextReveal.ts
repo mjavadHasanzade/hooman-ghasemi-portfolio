@@ -58,28 +58,45 @@ export function usePersianWordReveal(scope: RefObject<HTMLElement | null>, conte
   useEffect(() => {
     if (!isPersian || !scope.current) return;
     const root = scope.current;
-    const media = gsap.matchMedia();
     let mounted = true;
 
-    media.add("(prefers-reduced-motion: no-preference)", () => {
-      root.querySelectorAll<HTMLElement>(".fa-word-reveal").forEach((block) => {
-        const words = Array.from(block.querySelectorAll<HTMLElement>(".fa-scroll-word"));
-        if (!words.length) return;
-        gsap.set(words, { color: "#6b7280" });
-        gsap.to(words, {
-          color: "#e5e7eb",
-          duration: 0.15,
-          stagger: 0.15,
-          ease: "none",
-          scrollTrigger: {
-            trigger: block,
-            start: "top 85%",
-            end: "top 30%",
-            scrub: 0.2,
-            invalidateOnRefresh: true,
-          },
-        });
+    const triggers = Array.from(
+      root.querySelectorAll<HTMLElement>(".fa-word-reveal"),
+    ).flatMap((block) => {
+      const words = Array.from(
+        block.querySelectorAll<HTMLElement>(".fa-scroll-word"),
+      );
+      if (!words.length) return [];
+
+      gsap.set(words, { color: "#6b7280" });
+      let revealedCount = 0;
+      const trigger = ScrollTrigger.create({
+        trigger: block,
+        start: "top 88%",
+        end: "top 34%",
+        onUpdate: (self) => {
+          const nextCount = Math.round(self.progress * words.length);
+          if (nextCount === revealedCount) return;
+
+          if (nextCount > revealedCount) {
+            gsap.set(words.slice(revealedCount, nextCount), {
+              color: "#e5e7eb",
+            });
+          } else {
+            gsap.set(words.slice(nextCount, revealedCount), {
+              color: "#6b7280",
+            });
+          }
+
+          revealedCount = nextCount;
+        },
+        onLeaveBack: () => {
+          revealedCount = 0;
+          gsap.set(words, { color: "#6b7280" });
+        },
+        invalidateOnRefresh: true,
       });
+      return [trigger];
     });
 
     document.fonts.ready.then(() => {
@@ -87,7 +104,9 @@ export function usePersianWordReveal(scope: RefObject<HTMLElement | null>, conte
     });
     return () => {
       mounted = false;
-      media.revert();
+      triggers.forEach((trigger) => {
+        trigger.kill();
+      });
     };
   }, [isPersian, scope, contentKey]);
 }

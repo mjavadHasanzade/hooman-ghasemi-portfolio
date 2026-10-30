@@ -89,7 +89,7 @@ export default async function ProjectPage({
       dir={locale === "fa" ? "rtl" : "ltr"}
       className="min-h-screen overflow-hidden bg-black text-white"
     >
-      <div className="mx-auto max-w-[90rem] px-5 py-7 sm:px-8 sm:py-10 lg:px-14 lg:py-14">
+      <div className="mx-auto max-w-[90rem] px-5 pb-7 pt-24 sm:px-8 sm:pb-10 sm:pt-28 lg:px-14 lg:pb-14 lg:pt-32">
         <div className="flex items-center justify-between gap-4">
           <Link
             href={`/${locale}`}

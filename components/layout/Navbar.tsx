@@ -34,7 +34,13 @@ export default function Navbar({ siteName, logoUrl }: NavbarProps) {
 
   return (
     <>
-      <header className="relative z-30 flex items-center justify-between gap-3 px-5 py-5 sm:px-8 sm:py-6 md:px-12 lg:px-[60px] lg:py-8 xl:px-[80px]">
+      <header
+        className={`fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-3 px-5 py-5 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 sm:px-8 sm:py-6 md:px-12 lg:px-[60px] lg:py-8 xl:px-[80px] ${
+          isScrolled
+            ? "border-b border-white/8 bg-[#05070a]/68 shadow-[0_12px_34px_rgba(0,0,0,0.2)] backdrop-blur-xl supports-backdrop-filter:bg-[#05070a]/48"
+            : "border-b border-transparent bg-transparent shadow-none backdrop-filter-none"
+        }`}
+      >
         {/* Logo */}
         <Link
           href="/"

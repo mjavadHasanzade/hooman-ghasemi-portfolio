@@ -2,6 +2,7 @@
 
 import RichText from "./RichText";
 import { usePersianWordReveal } from "@/hooks/usePersianTextReveal";
+import { richTextPlainText } from "@/lib/rich-text";
 import { useLocale } from "next-intl";
 import { ReactNode, useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -27,11 +28,6 @@ interface SectionHeadingProps {
   descriptionClassName?: string;
   children?: ReactNode;
 }
-
-const LINE_FINAL_COLORS = [
-  "rgb(229 231 235)", // gray-200
-  "rgb(107 114 128)", // gray-500
-];
 
 const DIM_COLOR = "rgba(75, 85, 99, 0.35)";
 
@@ -78,83 +74,41 @@ export default function SectionHeading({
 
       if (!words.length) return;
 
-      const orderedWords = /*isRTL ? [...words].reverse() :*/ words;
-
-      const getFinalColor = (word: HTMLElement) => {
-        const line = word.closest<HTMLElement>("[data-line]");
-        const lineIndex = Number(line?.dataset.line ?? 0);
-
-        return (
-          LINE_FINAL_COLORS[lineIndex] ??
-          LINE_FINAL_COLORS[LINE_FINAL_COLORS.length - 1]
-        );
-      };
-
       gsap.set(words, {
         color: DIM_COLOR,
       });
 
-      let lastActiveCount = 0;
+      let revealedCount = 0;
 
       const trigger = ScrollTrigger.create({
         trigger: descriptionRef.current,
-        start: "top 85%",
-        end: "top 30%",
-
+        start: "top 88%",
+        end: "top 34%",
         onUpdate: (self) => {
-          const activeCount = Math.min(
-            orderedWords.length,
-            Math.floor(self.progress * orderedWords.length),
-          );
+          const nextCount = Math.round(self.progress * words.length);
+          if (nextCount === revealedCount) return;
 
-          if (activeCount === lastActiveCount) return;
-
-          // روشن شدن
-          if (activeCount > lastActiveCount) {
-            for (let i = lastActiveCount; i < activeCount; i++) {
-              const word = orderedWords[i];
-
-              if (!word) continue;
-
-              gsap.to(word, {
-                color: getFinalColor(word),
-                duration: 0.18,
-                ease: "power1.out",
-                overwrite: true,
-              });
-            }
+          if (nextCount > revealedCount) {
+            gsap.set(words.slice(revealedCount, nextCount), {
+              color: "rgb(229 231 235)",
+            });
           } else {
-            for (let i = activeCount; i < lastActiveCount; i++) {
-              const word = orderedWords[i];
-
-              if (!word) continue;
-
-              gsap.to(word, {
-                color: DIM_COLOR,
-                duration: 0.12,
-                ease: "power1.in",
-                overwrite: true,
-              });
-            }
+            gsap.set(words.slice(nextCount, revealedCount), {
+              color: DIM_COLOR,
+            });
           }
 
-          lastActiveCount = activeCount;
+          revealedCount = nextCount;
         },
-
         onLeaveBack: () => {
-          lastActiveCount = 0;
-
-          gsap.killTweensOf(words);
-
-          gsap.set(words, {
-            color: DIM_COLOR,
-          });
+          revealedCount = 0;
+          gsap.set(words, { color: DIM_COLOR });
         },
+        invalidateOnRefresh: true,
       });
 
       return () => {
         trigger.kill();
-        gsap.killTweensOf(words);
       };
     }, descriptionRef);
 
@@ -185,13 +139,20 @@ export default function SectionHeading({
       {description && description.length > 0 && (
         <div
           ref={descriptionRef}
-          className={`section-heading-description mt-3 max-w-2xl text-[22px] leading-normal font-light [word-spacing:0.5rem] ${descriptionClassName}`}
+          className={`section-heading-description mt-5 max-w-2xl text-[22px] leading-[1.3] font-light [word-spacing:0.5rem] sm:mt-6 sm:leading-[1.34] ${descriptionClassName}`}
         >
           {description.map((line, i) => (
             <div key={i} data-line={i} className="block">
-              {isPersian || /<\/?[a-z][^>]*>/i.test(line)
-                ? <RichText value={line} className="text-gray-200" revealWords={isPersian} />
-                : splitIntoWordSpans(line, i)}
+              {isPersian ? (
+                <RichText value={line} className="text-gray-200" revealWords />
+              ) : (
+                splitIntoWordSpans(
+                  /<\/?[a-z][^>]*>/i.test(line)
+                    ? richTextPlainText(line, false)
+                    : line,
+                  i,
+                )
+              )}
             </div>
           ))}
         </div>

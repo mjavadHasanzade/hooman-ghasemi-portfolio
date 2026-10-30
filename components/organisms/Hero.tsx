@@ -106,19 +106,19 @@ export default function Hero({ hero }: HeroProps) {
         }}
       />
 
-      <div className="relative z-10 flex flex-1 flex-col justify-center px-5 pb-20 pt-24 sm:px-8 sm:pb-16 md:px-12 md:pb-14 lg:justify-start lg:px-15 lg:pb-0 lg:pt-32.5 xl:px-20 xl:pt-37.5">
-        <div className="flex w-full max-w-none flex-col gap-6 sm:max-w-xl sm:gap-7 md:max-w-2xl md:gap-8 lg:max-w-180 lg:gap-0 xl:max-w-200">
+      <div className="relative z-10 flex flex-1 flex-col justify-center px-5 pb-20 pt-24 sm:px-8 sm:pb-16 md:px-12 md:pb-14 lg:justify-start lg:px-15 lg:pb-0 lg:pt-40 xl:px-20 xl:pt-44">
+        <div className="flex w-full max-w-none flex-col gap-6 sm:max-w-xl sm:gap-7 md:max-w-2xl md:gap-8 lg:max-w-180 lg:translate-x-10 lg:translate-y-5 lg:gap-0 xl:max-w-200 xl:translate-x-12 xl:translate-y-6">
           <div
             role="heading"
             aria-level={1}
             ref={titleRef}
-            className="cms-rich-text hero-title text-balance ltr:font-mono ltr:uppercase text-[clamp(1.25rem,6.2vw,1.875rem)] font-bold leading-[1.2] tracking-wide text-teal-200 rtl:leading-[1.45] rtl:tracking-normal sm:text-[38px] sm:leading-[1.18] md:text-[46px] lg:text-[52px] xl:text-[58px]"
+            className="cms-rich-text hero-title text-balance ltr:font-mono ltr:uppercase text-[clamp(1.25rem,6.2vw,1.875rem)] font-bold leading-[1.28] tracking-wide text-teal-200 rtl:leading-[1.5] rtl:tracking-normal sm:text-[38px] sm:leading-[1.28] md:text-[46px] lg:text-[52px] lg:leading-[1.3] xl:text-[58px]"
             dangerouslySetInnerHTML={{ __html: richTextHtml(hero.title) }}
           />
 
           <div
             ref={subtitleRef}
-            className="cms-rich-text hero-subtitle max-w-md text-[15px] leading-relaxed text-gray-300 sm:text-lg md:text-xl lg:mt-7 lg:max-w-lg"
+            className="cms-rich-text hero-subtitle max-w-md text-[15px] leading-relaxed text-gray-300 sm:text-lg md:text-xl lg:mt-9 lg:max-w-lg"
             dangerouslySetInnerHTML={{ __html: richTextHtml(hero.subtitle) }}
           />
 

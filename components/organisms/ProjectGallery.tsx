@@ -42,7 +42,7 @@ export default function ProjectGallery({
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 58vw"
-          className="object-contain"
+          className="object-cover"
           unoptimized
         />
         <div className="pointer-events-none absolute inset-0 bg-linear-to-tr from-black/45 via-transparent to-teal-400/12" />
@@ -84,7 +84,7 @@ export default function ProjectGallery({
                   alt={`${alt} — ${imageNumber(index + 1)}`}
                   fill
                   sizes="96px"
-                  className="object-contain"
+                  className="object-cover"
                   unoptimized
                 />
                 {index === active && (

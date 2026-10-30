@@ -150,7 +150,7 @@
   }
 
   body {
-    @apply font-vazir antialiased bg-background text-foreground;
+    @apply font-vazir antialiased bg-black text-foreground;
   }
 
   html[lang="fa"].ss01 {
@@ -1226,8 +1226,8 @@ body:has(.admin-shell) [data-slot="dialog-content"] > [data-slot="dialog-header"
 .site-background:lang(fa) .about-description { text-align: start; }
 .site-background:lang(fa) .fa-heading-centered .section-heading-description { margin-inline: auto; }
 .site-background:lang(fa) .fa-heading-centered :is(.cms-rich-text, .cms-rich-text p) { text-align: center !important; }
-.site-background:lang(fa) .site-footer .footer-logo { margin-bottom: 0.5rem; padding-block: 0.5rem; }
-.site-background:lang(fa) .site-footer .footer-copyright { margin-top: 1rem; padding-bottom: 1rem; }
+.site-background:lang(fa) .site-footer .footer-logo { margin: 0; padding: 0; }
+.site-background:lang(fa) .site-footer .footer-copyright { margin-top: 0.75rem; padding-bottom: 1.25rem; }
 
 .site-background:lang(fa) .hero-star { animation-name: persian-star-glimmer; }
 .site-background:lang(fa) .hero-star-main { animation-duration: 20s; animation-delay: -13s; }
@@ -1271,7 +1271,8 @@ body:has(.admin-shell) [data-slot="dialog-content"] > [data-slot="dialog-header"
 }
 .site-background:lang(fa) .section-heading-description {
   font-size: clamp(1rem, 1.3vw, 1.125rem);
-  line-height: 1.95;
+  margin-top: 1.25rem;
+  line-height: 1.55;
 }
 .site-background:lang(fa) .service-title {
   font-size: clamp(1.25rem, 1.6vw, 1.375rem);
