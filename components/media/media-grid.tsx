@@ -1,5 +1,7 @@
 "use client";
 
+import { confirmDelete } from "@/lib/confirmations";
+
 import Image from "next/image";
 import { Trash2, ImageOff } from "lucide-react";
 import { toast } from "sonner";
@@ -13,6 +15,7 @@ import { cn } from "@/lib/utils";
 type MediaGridProps = {
   items: Media[];
   isLoading?: boolean;
+  isError?: boolean;
   selectable?: boolean;
   selectedId?: string;
   onSelect?: (media: Media) => void;
@@ -22,6 +25,7 @@ type MediaGridProps = {
 export function MediaGrid({
   items,
   isLoading,
+  isError,
   selectable = false,
   selectedId,
   onSelect,
@@ -29,14 +33,16 @@ export function MediaGrid({
 }: MediaGridProps) {
   const deleteMutation = useDeleteMedia();
 
-  function handleDelete(id: string) {
-    if (!confirm("این فایل حذف شود؟ این عمل قابل بازگشت نیست.")) return;
+  async function handleDelete(id: string) {
+    if (!(await confirmDelete("این فایل"))) return;
 
     deleteMutation.mutate(id, {
       onSuccess: () => toast.success("فایل حذف شد"),
       onError: (error) => toast.error(getErrorMessage(error)),
     });
   }
+
+  if (isError) return <p role="alert" className="py-8 text-center text-destructive">دریافت رسانه‌ها ناموفق بود؛ دوباره تلاش کنید.</p>;
 
   if (isLoading) {
     return (
@@ -87,9 +93,10 @@ export function MediaGrid({
             {showDelete && (
               <Button
                 type="button"
+                aria-label="حذف رسانه"
                 variant="destructive"
                 size="icon"
-                className="absolute end-2 top-2 h-7 w-7 opacity-0 transition-opacity group-hover:opacity-100"
+                className="absolute end-2 top-2 h-7 w-7 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 group-focus-within:opacity-100"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleDelete(item.id);
@@ -99,7 +106,7 @@ export function MediaGrid({
               </Button>
             )}
 
-            <div className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+            <div className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-2 py-1 text-xs text-white opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 group-focus-within:opacity-100">
               {item.original}
             </div>
           </div>

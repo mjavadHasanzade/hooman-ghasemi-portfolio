@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale } from "next-intl";
+import { useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -14,13 +16,19 @@ export function PaginationControls({
   totalPages,
   onPageChange,
 }: PaginationControlsProps) {
+  const isPersian = useLocale() === "fa";
+  useEffect(() => {
+    if (page > totalPages) onPageChange(Math.max(1, totalPages));
+  }, [page, totalPages, onPageChange]);
+
   if (totalPages <= 1) return null;
 
   return (
-    <div className="flex items-center justify-center gap-3 pt-4">
+    <div dir={isPersian ? "rtl" : undefined} className="flex items-center justify-center gap-3 pt-4">
       <Button
         variant="outline"
         size="icon"
+        aria-label="صفحه قبل"
         disabled={page <= 1}
         onClick={() => onPageChange(page - 1)}
       >
@@ -32,6 +40,7 @@ export function PaginationControls({
       <Button
         variant="outline"
         size="icon"
+        aria-label="صفحه بعد"
         disabled={page >= totalPages}
         onClick={() => onPageChange(page + 1)}
       >

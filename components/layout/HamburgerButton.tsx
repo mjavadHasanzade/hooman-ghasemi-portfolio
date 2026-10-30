@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 interface HamburgerButtonProps {
   isOpen: boolean;
   onClick: () => void;
@@ -11,10 +13,11 @@ export default function HamburgerButton({
   onClick,
   className = "",
 }: HamburgerButtonProps) {
+  const t = useTranslations("SiteNavigation");
   return (
     <button
       onClick={onClick}
-      aria-label={isOpen ? "Close menu" : "Open menu"}
+      aria-label={isOpen ? t("closeMenu") : t("openMenu")}
       aria-expanded={isOpen}
       className={`relative z-50 flex h-9 w-9 flex-col items-center justify-center gap-1.25 ${className}`}
     >

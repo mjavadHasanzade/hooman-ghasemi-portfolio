@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { ChevronLeft, ChevronRight, Circle } from "lucide-react";
@@ -38,6 +38,7 @@ export default function PortfolioSection({
   projects: PublicProject[];
   sectionHeadings: PublicSectionHeadings;
 }) {
+  const locale = useLocale();
   const t = useTranslations("Portfolio");
 
   const portfolioRef = useRef<HTMLElement>(null);
@@ -119,6 +120,7 @@ export default function PortfolioSection({
 
   return (
     <section
+      id="portfolio"
       ref={portfolioRef}
       className="relative w-full overflow-hidden bg-black py-16 text-white sm:py-20 md:py-24 lg:py-28"
     >
@@ -134,6 +136,8 @@ export default function PortfolioSection({
       {/* Projects */}
       <div ref={cardsContainerRef} className="relative mt-10 sm:mt-12 lg:mt-14">
         <Swiper
+          key={locale}
+          dir={locale === "fa" ? "rtl" : "ltr"}
           modules={[Navigation, Pagination]}
           slidesPerView={1.08}
           spaceBetween={16}
@@ -174,7 +178,7 @@ export default function PortfolioSection({
               return (
                 <SwiperSlide
                   key={project.id}
-                  className="portfolio-project-card flex h-auto"
+                  className="portfolio-project-card flex h-auto!"
                 >
                   <ProjectCard
                     image={publicMediaUrl(project.image)}
@@ -213,28 +217,28 @@ export default function PortfolioSection({
         </Swiper>
 
         {/* Controls */}
-        <div className="mt-8 grid grid-cols-[1fr_auto_1fr] items-center px-5 sm:px-8 md:px-12 lg:px-15 xl:px-20">
-          <div />
+        <div className="mt-8 grid grid-cols-1 items-center gap-y-5 px-5 sm:grid-cols-[1fr_auto_1fr] sm:gap-y-0 sm:px-8 md:px-12 lg:px-15 xl:px-20">
+          <div className="hidden sm:block" />
 
-          <div className="portfolio-pagination flex items-center justify-center gap-1.5" />
+          <div className="portfolio-pagination flex min-w-0 flex-wrap items-center justify-center gap-1.5" />
 
-          <div className="flex items-center justify-end gap-3">
+          <div className="flex items-center justify-center gap-3 sm:justify-end">
             <button
               ref={setPrevEl}
               type="button"
-              aria-label="Previous project"
+              aria-label={t("previousProject")}
               className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-700 text-gray-400 transition-colors duration-200 hover:border-teal-500 hover:text-teal-400"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
             </button>
 
             <button
               ref={setNextEl}
               type="button"
-              aria-label="Next project"
+              aria-label={t("nextProject")}
               className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-700 text-gray-400 transition-colors duration-200 hover:border-teal-500 hover:text-teal-400"
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4 rtl:rotate-180" />
             </button>
           </div>
         </div>

@@ -1,3 +1,4 @@
+import PublicContentSync from "@/components/common/PublicContentSync";
 import Footer from "@/components/organisms/Footer";
 import Navbar from "@/components/layout/Navbar";
 import { publicMediaUrl } from "@/lib/media/public-media-url";
@@ -32,6 +33,8 @@ export default async function WebsiteLayout({
 
   return (
     <div className="site-background min-h-screen">
+      <PublicContentSync />
+      {/* <Navbar /> */}
       <svg
         className="site-backdrop"
         viewBox="0 0 1671 941"
@@ -89,7 +92,7 @@ export default async function WebsiteLayout({
             opacity="1"
           />
         )}
-        <g className="hero-star hero-star-main" transform="translate(1462 340)">
+        <g className="hero-star hero-star-main" transform="translate(1462 340) scale(0.7)">
           <circle r="70" fill="url(#star-main-halo)" opacity="0.7" />
           <g filter="url(#star-glow)">
             <path d="M-50 0H50" stroke="url(#star-flare)" strokeWidth="1.5" />
@@ -101,7 +104,7 @@ export default async function WebsiteLayout({
           <ellipse rx="25" ry="7" fill="none" stroke="#77f6ff" strokeOpacity="0.58" strokeWidth="1" transform="rotate(-25)" />
           <ellipse rx="25" ry="7" fill="none" stroke="#ffd36d" strokeOpacity="0.45" strokeWidth="1" transform="rotate(55)" />
         </g>
-        <g className="hero-star hero-star-cyan" transform="translate(470 502)">
+        <g className="hero-star hero-star-cyan" transform="translate(470 502) scale(0.7)">
           <circle r="42" fill="url(#star-cyan-halo)" opacity="0.68" />
           <g filter="url(#star-glow)">
             <path d="M-28 0H28M0 -28V28" stroke="#bfffff" strokeOpacity="0.58" strokeWidth="1" />

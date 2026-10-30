@@ -2,7 +2,7 @@
 
 import { useAuthStore } from "@/lib/auth/auth-store";
 import { ArrowUpRight, Layers3, Settings, Sparkles } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 export default function DashboardPage() {
   const user = useAuthStore((s) => s.user);
@@ -18,8 +18,8 @@ export default function DashboardPage() {
         <div className="admin-welcome-orb" />
       </section>
       <div className="grid gap-4 md:grid-cols-2">
-        <Link href="./site-settings" className="admin-quick-card group"><span className="admin-quick-icon"><Settings /></span><span><strong>تنظیمات سایت</strong><small>هویت و تنظیمات پایه</small></span><ArrowUpRight className="ms-auto h-5 w-5 text-slate-600 transition group-hover:text-cyan-300" /></Link>
-        <Link href="./projects" className="admin-quick-card group"><span className="admin-quick-icon"><Layers3 /></span><span><strong>مدیریت پروژه‌ها</strong><small>نمونه‌کارهای منتخب را به‌روز کنید</small></span><ArrowUpRight className="ms-auto h-5 w-5 text-slate-600 transition group-hover:text-cyan-300" /></Link>
+        <Link href="/dashboard/site-settings" className="admin-quick-card group"><span className="admin-quick-icon"><Settings /></span><span><strong>تنظیمات سایت</strong><small>هویت و تنظیمات پایه</small></span><ArrowUpRight className="ms-auto h-5 w-5 text-slate-600 transition group-hover:text-cyan-300" /></Link>
+        <Link href="/dashboard/projects" className="admin-quick-card group"><span className="admin-quick-icon"><Layers3 /></span><span><strong>مدیریت پروژه‌ها</strong><small>نمونه‌کارهای منتخب را به‌روز کنید</small></span><ArrowUpRight className="ms-auto h-5 w-5 text-slate-600 transition group-hover:text-cyan-300" /></Link>
       </div>
     </div>
   );

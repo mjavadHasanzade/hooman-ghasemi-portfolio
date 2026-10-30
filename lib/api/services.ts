@@ -1,3 +1,4 @@
+import { reorderPage } from "./reorder";
 import { apiDelete, apiGet, apiPatch, apiPost } from "./client";
 import type { PaginatedServices, Service, ServiceInput } from "../types/services";
 
@@ -18,5 +19,5 @@ export function deleteService(id: string) {
 }
 
 export function reorderServices(ids: string[]) {
-  return apiPatch<Service[]>("/admin/services/reorder", { ids });
+  return reorderPage<Service>("/admin/services", ids);
 }

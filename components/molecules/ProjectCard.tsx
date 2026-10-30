@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { ReactNode } from "react";
 import OutlinedButton from "../common/OutlinedButton";
-import TechBadge from "../atoms/TechBadge";
+import ProjectTechMarquee from "./ProjectTechMarquee";
 import { htmlToPlainTextWithBreaks } from "@/utils/html";
 
 interface ProjectCardProps {
@@ -27,6 +27,7 @@ export default function ProjectCard({
   liveUrl,
   slug,
 }: ProjectCardProps) {
+  title = htmlToPlainTextWithBreaks(title);
   const plainDescription = htmlToPlainTextWithBreaks(description);
 
   return (
@@ -35,7 +36,7 @@ export default function ProjectCard({
       <div className="pointer-events-none absolute -top-24 left-1/2 z-0 h-48 w-48 -translate-x-1/2 rounded-full bg-teal-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
 
       {/* تصویر پروژه */}
-      <div className="relative aspect-16/10.5 w-full overflow-hidden bg-gray-900">
+      <div className="relative aspect-16/10.5 w-full shrink-0 overflow-hidden bg-gray-900">
         {image ? (
           <Image
             src={image}
@@ -63,20 +64,17 @@ export default function ProjectCard({
           {plainDescription}
         </p>
 
-        <div className="flex items-center justify-between gap-3">
+        <div className="mt-auto flex min-w-0 items-center justify-between gap-3">
           <OutlinedButton
             icon={viewProjectIcon}
             size="sm"
+            className="shrink-0 whitespace-nowrap"
             href={`/project/${slug}`}
           >
             {viewProjectLabel}
           </OutlinedButton>
 
-          <div className="flex items-center gap-1.5">
-            {techIcons.map((icon, i) => {
-              return <TechBadge key={i} icon={icon} />;
-            })}
-          </div>
+          <ProjectTechMarquee icons={techIcons} />
         </div>
       </div>
     </div>

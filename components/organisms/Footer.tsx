@@ -1,5 +1,7 @@
 "use client";
 
+import { richTextHtml } from "@/lib/rich-text";
+
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
@@ -15,7 +17,6 @@ export default function Footer({
   footer: PublicFooter;
   logoUrl?: string | null;
 }) {
-
   const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -42,18 +43,18 @@ export default function Footer({
   return (
     <footer
       ref={footerRef}
-      className="relative w-full bg-black text-white"
+      className="site-footer relative w-full overflow-hidden bg-black text-white"
     >
       <div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
-        <div className="footer-item -mb-18 -mt-20 flex items-center justify-center sm:-mb-21 sm:-mt-23">
+        <div className="footer-logo footer-item mb-3 flex items-center justify-center py-4">
           {logoUrl ? (
             <Image
               src={logoUrl}
               alt=""
-              width={1254}
-              height={1254}
+              width={512}
+              height={512}
               unoptimized
-              className="h-80 w-auto max-w-none object-contain sm:h-92"
+              className="h-auto w-full max-w-lg object-contain"
             />
           ) : null}
         </div>
@@ -66,9 +67,12 @@ export default function Footer({
           }}
         />
 
-        <p className="footer-item mt-5 pb-3 ltr:font-mono text-sm text-gray-500 sm:mt-6 sm:pb-4 sm:text-base">
-          {footer.copyrightText}
-        </p>
+        <div
+          className="cms-rich-text footer-copyright footer-item mt-8 pb-6 ltr:font-mono text-sm text-gray-500 sm:pb-8 sm:text-base"
+          dangerouslySetInnerHTML={{
+            __html: richTextHtml(footer.copyrightText),
+          }}
+        />
       </div>
     </footer>
   );

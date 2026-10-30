@@ -31,7 +31,7 @@ type ImagePickerProps = {
 export function ImagePicker({ value, onChange, label }: ImagePickerProps) {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const { data, isLoading } = useMediaList(page, 20);
+  const { data, isLoading, isError } = useMediaList(page, 20);
 
   const previewUrl = mediaUrl(value);
 
@@ -39,8 +39,8 @@ export function ImagePicker({ value, onChange, label }: ImagePickerProps) {
     <div className="space-y-2">
       {label && <p className="text-sm font-medium">{label}</p>}
 
-      <div className="flex items-center gap-4">
-        <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-lg border bg-muted">
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg border bg-muted">
           {previewUrl ? (
             <>
               <Image
@@ -80,7 +80,7 @@ export function ImagePicker({ value, onChange, label }: ImagePickerProps) {
             <div className="space-y-4">
               <MediaGrid
                 items={data?.items ?? []}
-                isLoading={isLoading}
+                isLoading={isLoading} isError={isError}
                 selectable
                 selectedId={value?.id}
                 showDelete={false}

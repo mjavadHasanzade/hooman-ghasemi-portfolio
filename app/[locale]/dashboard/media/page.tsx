@@ -8,7 +8,7 @@ import { useMediaList } from "@/lib/hooks/use-media";
 
 export default function MediaLibraryPage() {
   const [page, setPage] = useState(1);
-  const { data, isLoading } = useMediaList(page, 20);
+  const { data, isLoading, isError } = useMediaList(page, 20);
 
   return (
     <div className="space-y-6">
@@ -21,7 +21,7 @@ export default function MediaLibraryPage() {
 
       <MediaUploader />
 
-      <MediaGrid items={data?.items ?? []} isLoading={isLoading} />
+      <MediaGrid items={data?.items ?? []} isLoading={isLoading} isError={isError} />
 
       {data && (
         <PaginationControls

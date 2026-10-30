@@ -27,7 +27,7 @@ export default function LocaleError({ error, unstable_retry }: ErrorPageProps) {
         description:
           "احتمالاً سرویس بک‌اند در دسترس نیست. چند لحظه دیگر دوباره تلاش کنید.",
         retry: "تلاش مجدد",
-        details: "جزئیات خطا در development",
+        details: "جزئیات خطا در محیط توسعه",
       }
     : {
         eyebrow: "Service unavailable",

@@ -2,9 +2,10 @@
 
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { LayoutDashboard } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import LanguageSwitcher from "./LanguageSwitcher";
 import { useAuthStore } from "@/lib/auth/auth-store";
 
 interface MobileMenuProps {
@@ -16,9 +17,9 @@ interface MobileMenuProps {
 type NavKey = "portfolio" | "about" | "contact";
 
 const navItems: { key: NavKey; href: string }[] = [
-  { key: "portfolio", href: "#" },
-  { key: "about", href: "#" },
-  { key: "contact", href: "#" },
+  { key: "portfolio", href: "/#portfolio" },
+  { key: "about", href: "/#about" },
+  { key: "contact", href: "/#contact" },
 ];
 
 export default function MobileMenu({
@@ -27,6 +28,8 @@ export default function MobileMenu({
   siteName,
 }: MobileMenuProps) {
   const t = useTranslations("SiteNavigation");
+  const locale = useLocale();
+  const brandName = locale === "fa" ? t("brandFallback") : siteName || t("brandFallback");
   const isAuthenticated = useAuthStore(
     (state) => state.status === "authenticated",
   );
@@ -68,6 +71,7 @@ export default function MobileMenu({
 
             <div className="relative flex h-full flex-col justify-between px-8 py-24">
               <nav className="flex flex-col gap-2">
+                <div className="mb-3 self-start"><LanguageSwitcher onNavigate={onClose} /></div>
                 {navItems.map((item, i) => (
                   <motion.div
                     key={item.key}
@@ -108,8 +112,8 @@ export default function MobileMenu({
                 transition={{ duration: 0.35, delay: 0.45 }}
                 className="flex flex-col gap-4 border-t border-white/10 pt-6"
               >
-                <a
-                  href="#"
+                <Link
+                  href="/#contact"
                   onClick={onClose}
                   className="
                     flex items-center justify-center
@@ -120,7 +124,7 @@ export default function MobileMenu({
                   "
                 >
                   {t("contact")}
-                </a>
+                </Link>
                 {isAuthenticated && (
                   <Link
                     href="/dashboard"
@@ -132,7 +136,7 @@ export default function MobileMenu({
                   </Link>
                 )}
                 <span className="text-center text-xs text-gray-400">
-                  {siteName || t("brandFallback")} © {new Date().getFullYear()}
+                  {brandName} © {locale === "fa" ? new Date().getFullYear().toLocaleString("fa-IR", { useGrouping: false }) : new Date().getFullYear()}
                 </span>
               </motion.div>
             </div>

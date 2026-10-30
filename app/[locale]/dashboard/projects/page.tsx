@@ -1,5 +1,7 @@
 "use client";
 
+import { confirmDelete } from "@/lib/confirmations";
+
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import { Controller, useForm, useWatch } from "react-hook-form";
@@ -19,6 +21,10 @@ import {
 import { toast } from "sonner";
 import { ImagePicker } from "@/components/media/image-picker";
 import { LocaleTabs } from "@/components/shared/locale-tabs";
+import { ReorderControls } from "@/components/shared/reorder-controls";
+import { sortTechIcons } from "@/lib/tech-icon-order";
+import { richTextPlainText } from "@/lib/rich-text";
+import { RichTextField } from "@/components/shared/rich-text-field";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -42,7 +48,7 @@ import {
   useDeleteProject,
   useProjects,
   useReorderProjects,
-  useTechIcons,
+  useAllTechIcons,
   useUpdateProject,
 } from "@/lib/hooks/use-projects";
 import type { Locale } from "@/lib/types/api";
@@ -210,7 +216,7 @@ function ProjectDialog({
 
   function generateSlugFromTitle() {
     const source =
-      translations?.en?.title?.trim() || translations?.fa?.title?.trim();
+      richTextPlainText(translations?.en?.title ?? "").trim() || richTextPlainText(translations?.fa?.title ?? "").trim();
     if (!source) {
       toast.error("ابتدا عنوان (فارسی یا انگلیسی) را وارد کنید.");
       return;
@@ -231,7 +237,7 @@ function ProjectDialog({
   async function onSubmit(values: ProjectForm) {
     const validTranslations = (
       Object.values(values.translations) as ProjectTranslationInput[]
-    ).filter((item) => item.title.trim() && item.description.trim());
+    ).filter((item) => richTextPlainText(item.title).trim() && richTextPlainText(item.description).trim());
     if (!validTranslations.length) {
       toast.error("عنوان و توضیحات حداقل یک زبان را وارد کنید.");
       return;
@@ -239,8 +245,8 @@ function ProjectDialog({
     if (
       Object.values(values.translations).some(
         (item) =>
-          (item.title.trim() || item.description.trim()) &&
-          (!item.title.trim() || !item.description.trim()),
+          (richTextPlainText(item.title).trim() || richTextPlainText(item.description).trim()) &&
+          (!richTextPlainText(item.title).trim() || !richTextPlainText(item.description).trim()),
       )
     ) {
       toast.error("برای هر ترجمه، عنوان و توضیحات را کامل کنید.");
@@ -269,7 +275,7 @@ function ProjectDialog({
   const isSaving = createProject.isPending || updateProject.isPending;
   const activeDescription = translations?.[activeLocale]?.description ?? "";
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} isDirty={form.formState.isDirty} isSaving={isSaving} onOpenChange={onOpenChange}>
       <DialogContent className="admin-project-dialog max-h-[96vh] w-[calc(100%-1rem)] max-w-6xl border-primary/20 bg-popover/95 p-4 shadow-2xl sm:p-8">
         <DialogHeader className="rounded-xl border border-primary/20 bg-primary/5 p-5">
           <div className="flex items-center gap-3">
@@ -294,7 +300,7 @@ function ProjectDialog({
           <div className="grid gap-6 rounded-xl border bg-card p-5 shadow-sm sm:grid-cols-2">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="project-slug">Slug</Label>
+                <Label id="project-slug-label" htmlFor="project-slug">Slug</Label>
                 <Button
                   type="button"
                   variant="ghost"
@@ -330,7 +336,7 @@ function ProjectDialog({
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="project-live-url">لینک پروژه</Label>
+              <Label id="project-live-url-label" htmlFor="project-live-url">لینک پروژه</Label>
               <Input
                 id="project-live-url"
                 dir="ltr"
@@ -423,21 +429,12 @@ function ProjectDialog({
             />
             <div className="space-y-5 pt-1">
               <div className="space-y-2">
-                <Label htmlFor={`title-${activeLocale}`}>عنوان پروژه</Label>
-                <Input
-                  id={`title-${activeLocale}`}
-                  className="h-10"
-                  placeholder={
-                    activeLocale === "fa"
-                      ? "عنوان فارسی پروژه"
-                      : "Project title"
-                  }
-                  {...form.register(`${translationPath}.title`)}
-                />
+                <Label id={`title-${activeLocale}-label`} htmlFor={`title-${activeLocale}`}>عنوان پروژه</Label>
+                <RichTextField control={form.control} name={`${translationPath}.title`} id={`title-${activeLocale}`} locale={activeLocale} />
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor={`description-${activeLocale}`}>
+                  <Label id={`description-${activeLocale}-label`} htmlFor={`description-${activeLocale}`}>
                     توضیحات پروژه
                   </Label>
                   <span className="text-xs text-muted-foreground">
@@ -449,6 +446,7 @@ function ProjectDialog({
                   name={`${translationPath}.description`}
                   render={({ field }) => (
                     <RichTextEditor
+                      id={`description-${activeLocale}`}
                       key={activeLocale}
                       value={field.value}
                       onChange={field.onChange}
@@ -555,7 +553,7 @@ function ProjectDialog({
           </div>
           <div className="flex justify-end border-t pt-6">
             <Button type="submit" className="min-w-32" disabled={isSaving}>
-              {isSaving ? "در حال ذخیره…" : "ذخیره پروژه"}
+              {isSaving ? "در حال ذخیره…" : "ذخیره تغییرات"}
             </Button>
           </div>
         </form>
@@ -575,7 +573,7 @@ export default function ProjectsPage() {
   const [ordered, setOrdered] = useState<Project[]>([]);
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const { data, isLoading, isError } = useProjects(page);
-  const { data: techIcons } = useTechIcons(1, 100);
+  const { data: techIcons } = useAllTechIcons();
   const deleteProject = useDeleteProject();
   const reorderProjects = useReorderProjects();
   const projects = useMemo(() => {
@@ -595,17 +593,18 @@ export default function ProjectsPage() {
     setDialogKey((key) => key + 1);
     setOpen(true);
   }
-  function remove(project: Project) {
-    if (!confirm(`«${project.slug}» حذف شود؟`)) return;
+  async function remove(project: Project) {
+    if (!(await confirmDelete(project.slug))) return;
     deleteProject.mutate(project.id, {
       onSuccess: () => toast.success("پروژه حذف شد."),
       onError: (error) => toast.error(getErrorMessage(error)),
     });
   }
-  async function dropOn(targetId: string) {
-    if (!draggedId || draggedId === targetId) return;
-    const from = projects.findIndex((item) => item.id === draggedId);
+  async function dropOn(targetId: string, sourceId = draggedId) {
+    if (!sourceId || sourceId === targetId || reorderProjects.isPending) return;
+    const from = projects.findIndex((item) => item.id === sourceId);
     const to = projects.findIndex((item) => item.id === targetId);
+    if (from < 0 || to < 0) return;
     const next = [...projects];
     const [item] = next.splice(from, 1);
     next.splice(to, 0, item);
@@ -616,6 +615,8 @@ export default function ProjectsPage() {
       toast.success("ترتیب پروژه‌ها ذخیره شد.");
     } catch (error) {
       toast.error(getErrorMessage(error));
+      setOrdered([]);
+    } finally {
       setOrdered([]);
     }
   }
@@ -639,10 +640,10 @@ export default function ProjectsPage() {
       ) : projects.length ? (
         <>
           <p className="text-sm text-muted-foreground">
-            برای تغییر ترتیب، کارت‌ها را بکشید و رها کنید.
+            برای تغییر ترتیب از دکمه‌های بالا و پایین یا کشیدن کارت‌ها استفاده کنید.
           </p>
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {projects.map((project) => {
+            {projects.map((project, index) => {
               const url = mediaUrl(project.image);
               const title =
                 project.translations.find((item) => item.locale === "fa")
@@ -662,7 +663,7 @@ export default function ProjectsPage() {
                     {url ? (
                       <Image
                         src={url}
-                        alt={title}
+                        alt={richTextPlainText(title)}
                         fill
                         sizes="(max-width: 768px) 100vw, 33vw"
                         className="object-cover"
@@ -683,7 +684,7 @@ export default function ProjectsPage() {
                     </span>
                   </div>
                   <CardHeader>
-                    <CardTitle className="truncate">{title}</CardTitle>
+                    <CardTitle className="truncate">{richTextPlainText(title)}</CardTitle>
                     <p className="font-mono text-xs text-muted-foreground">
                       {project.slug}
                     </p>
@@ -711,7 +712,7 @@ export default function ProjectsPage() {
                         ))}
                     </div>
                   </CardContent>
-                  <CardFooter className="justify-end gap-2">
+                  <CardFooter className="flex-wrap justify-end gap-2"><ReorderControls index={index} count={projects.length} disabled={reorderProjects.isPending} onMove={(target) => dropOn(projects[target].id, project.id)} />
                     <Button
                       variant="outline"
                       size="sm"
@@ -750,7 +751,7 @@ export default function ProjectsPage() {
         project={editing}
         open={open}
         onOpenChange={setOpen}
-        techIcons={techIcons?.items ?? []}
+        techIcons={sortTechIcons(techIcons ?? [])}
       />
     </div>
   );

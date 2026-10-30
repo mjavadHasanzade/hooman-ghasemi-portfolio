@@ -1,3 +1,4 @@
+import { notifyPublicContentChanged } from "../public-content-sync";
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -5,6 +6,12 @@ import axios, {
 } from "axios";
 import { SuccessResponse, AuthTokens } from "../types/api";
 import { REFRESH_TOKEN_STORAGE_KEY } from "../constants";
+
+declare module "axios" {
+  interface AxiosRequestConfig {
+    notifyPublicContent?: boolean;
+  }
+}
 
 // این متغیرها بیرون از هر کامپوننت نگه‌داری می‌شوند چون باید بین
 // درخواست‌های مختلف axios به‌صورت سراسری (module-level) مشترک باشند.
@@ -70,7 +77,15 @@ async function refreshAccessToken(): Promise<string> {
 }
 
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const method = response.config.method?.toLowerCase();
+    const isContentWrite = ["post", "put", "patch", "delete"].includes(method ?? "") &&
+      /(?:^|\/)admin\/(?:site-settings|hero|about|footer|projects|services|social-links|contact-cta|tech-icons|media)(?:\/|\?|$)/.test(response.config.url ?? "");
+    if (isContentWrite && response.config.notifyPublicContent !== false && response.data?.success !== false) {
+      notifyPublicContentChanged();
+    }
+    return response;
+  },
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean;
@@ -133,8 +148,8 @@ export async function apiPostForm<T>(url: string, body: FormData): Promise<T> {
   return res.data.data;
 }
 
-export async function apiPatch<T>(url: string, body?: unknown): Promise<T> {
-  const res = await apiClient.patch<SuccessResponse<T>>(url, body);
+export async function apiPatch<T>(url: string, body?: unknown, options?: { notifyPublicContent?: boolean }): Promise<T> {
+  const res = await apiClient.patch<SuccessResponse<T>>(url, body, options);
   return res.data.data;
 }
 

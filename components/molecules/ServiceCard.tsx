@@ -1,5 +1,7 @@
 "use client";
 
+import { richTextHtml } from "@/lib/rich-text";
+
 import Image from "next/image";
 import { ReactNode } from "react";
 
@@ -17,7 +19,7 @@ export default function ServiceCard({
   description,
 }: ServiceCardProps) {
   return (
-    <div className="group relative overflow-hidden rounded p-px">
+    <div className="group relative h-full overflow-hidden rounded p-px">
       <div
         aria-hidden="true"
         className="absolute inset-[-55%] animate-[spin_11s_linear_infinite] bg-[conic-gradient(from_171deg,transparent_0deg,transparent_100deg,rgba(45,212,191,0.22)_140deg,rgba(94,234,212,0.95)_234deg,rgba(45,212,191,0.22)_290deg,transparent_360deg)]"
@@ -44,13 +46,9 @@ export default function ServiceCard({
           )}
         </div>
 
-        <h3 className="relative z-10 mb-3 ltr:font-mono text-2xl font-bold leading-[1.15] tracking-tight text-gray-100 rtl:leading-[1.4] sm:text-3xl xl:text-2xl">
-          {title}
-        </h3>
+        <div role="heading" aria-level={3} className="cms-rich-text service-title relative z-10 mb-3 ltr:font-mono text-2xl font-bold leading-[1.15] tracking-tight text-gray-100 rtl:leading-[1.4] sm:text-3xl xl:text-2xl" dangerouslySetInnerHTML={{ __html: richTextHtml(title) }} />
 
-        <p className="relative z-10 mt-2 max-w-xs text-base leading-7 tracking-wider text-gray-200 sm:text-lg xl:text-base">
-          {description}
-        </p>
+        <div className="cms-rich-text service-description relative z-10 mt-2 max-w-xs text-base leading-7 tracking-wider text-gray-200 sm:text-lg xl:text-base" dangerouslySetInnerHTML={{ __html: richTextHtml(description) }} />
       </div>
     </div>
   );

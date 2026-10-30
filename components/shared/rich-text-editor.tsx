@@ -1,11 +1,21 @@
 "use client";
 
+import { richTextHtml, richTextPlainText, shouldReplaceEditorContent } from "@/lib/rich-text";
 import { useEffect, useRef } from "react";
+import { Extension } from "@tiptap/core";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Placeholder from "@tiptap/extension-placeholder";
 import {
+  AlignJustify,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  IndentIncrease,
+  IndentDecrease,
+  PilcrowLeft,
+  PilcrowRight,
   Bold as BoldIcon,
   Italic as ItalicIcon,
   List,
@@ -15,7 +25,48 @@ import {
   Undo2,
 } from "lucide-react";
 
+// Preserve block formatting when saving HTML and opening it again.
+const ParagraphAlignment = Extension.create({
+  name: "paragraphAlignment",
+  addGlobalAttributes() {
+    return [{
+      types: ["paragraph"],
+      attributes: {
+        textAlign: {
+          default: null,
+          parseHTML: (element) => element.style.textAlign || null,
+          renderHTML: (attributes) => attributes.textAlign
+            ? { style: `text-align: ${attributes.textAlign}` }
+            : {},
+        },
+      },
+    }, {
+      types: ["paragraph", "bulletList", "orderedList"],
+      attributes: {
+        dir: {
+          default: null,
+          parseHTML: (element) => ["rtl", "ltr", "auto"].includes(element.dir) ? element.dir : null,
+          renderHTML: (attributes) => attributes.dir ? { dir: attributes.dir } : {},
+        },
+      },
+    }, {
+      types: ["bulletList", "orderedList"],
+      attributes: {
+        listStyleType: {
+          default: null,
+          parseHTML: (element) => element.style.listStyleType || null,
+          renderHTML: (attributes) => attributes.listStyleType
+            ? { style: `list-style-type: ${attributes.listStyleType}` }
+            : {},
+        },
+      },
+    }];
+  },
+});
+
 interface RichTextEditorProps {
+  id?: string;
+  onBlur?: () => void;
   value: string;
   onChange: (html: string) => void;
   placeholder?: string;
@@ -24,6 +75,8 @@ interface RichTextEditorProps {
 }
 
 export function RichTextEditor({
+  id,
+  onBlur,
   value,
   onChange,
   placeholder,
@@ -40,15 +93,21 @@ export function RichTextEditor({
     extensions: [
       StarterKit.configure({
         heading: false,
+        underline: false,
       }),
       Underline,
+      ParagraphAlignment,
       Placeholder.configure({
         placeholder: placeholder ?? "",
       }),
     ],
-    content: value || "",
+    content: richTextHtml(value),
     editorProps: {
+      handleDOMEvents: { blur: () => { onBlur?.(); return false; } },
       attributes: {
+        ...(id ? { id, "aria-labelledby": `${id}-label` } : {}),
+        role: "textbox",
+        "aria-multiline": "true",
         dir,
         // Hardcoded colors instead of semantic tokens — guarantees
         // readable white-on-dark text regardless of theme resolution.
@@ -66,17 +125,49 @@ export function RichTextEditor({
       onChangeRef.current(editor.getHTML());
     },
     immediatelyRender: false,
+    shouldRerenderOnTransaction: true,
   });
 
   useEffect(() => {
     if (!editor) return;
     const current = editor.getHTML();
-    if (value !== current) {
-      editor.commands.setContent(value || "", { emitUpdate: false });
+    if (shouldReplaceEditorContent(value, current)) {
+      editor.commands.setContent(richTextHtml(value), { emitUpdate: false });
     }
   }, [value, editor]);
 
+  useEffect(() => {
+    if (!editor) return;
+    editor.setOptions({
+      editorProps: {
+        ...editor.options.editorProps,
+        attributes: { ...editor.options.editorProps.attributes, dir },
+      },
+    });
+  }, [dir, editor]);
+
   if (!editor) return null;
+
+  function setDirection(direction: "rtl" | "ltr" | "auto") {
+    if (!editor) return;
+    editor.chain().focus()
+      .updateAttributes("paragraph", { dir: direction })
+      .updateAttributes("bulletList", { dir: direction })
+      .updateAttributes("orderedList", { dir: direction })
+      .run();
+  }
+
+  function setListStyle(type: "bulletList" | "orderedList", style: string) {
+    if (!editor || !style) return;
+    const chain = editor.chain().focus();
+    if (!editor.isActive(type)) {
+      if (type === "bulletList") chain.toggleBulletList();
+      else chain.toggleOrderedList();
+    }
+    chain.updateAttributes(type, { listStyleType: style }).run();
+  }
+
+  const selectClassName = "h-8 max-w-full rounded-md border border-slate-600 bg-slate-900 px-2 text-xs text-slate-200 outline-none focus:border-teal-400";
 
   function toolbarButton(
     isActive: boolean,
@@ -89,7 +180,10 @@ export function RichTextEditor({
       <button
         type="button"
         title={label}
+        aria-label={label}
+        aria-pressed={isActive}
         disabled={disabled}
+        onMouseDown={(event) => event.preventDefault()}
         onClick={onClick}
         className={`flex h-7 w-7 items-center justify-center rounded-md transition-colors disabled:cursor-not-allowed disabled:opacity-30 ${
           isActive
@@ -129,6 +223,41 @@ export function RichTextEditor({
 
         <span className="mx-1 h-4 w-px bg-slate-700" />
 
+        {([
+          ["left", AlignLeft, "تراز چپ"],
+          ["center", AlignCenter, "تراز وسط"],
+          ["right", AlignRight, "تراز راست"],
+          ["justify", AlignJustify, "تراز دوطرفه"],
+        ] as const).map(([alignment, Icon, label]) => (
+          <span key={alignment}>
+            {toolbarButton(
+              editor.isActive("paragraph", { textAlign: alignment }),
+              () => editor.chain().focus().updateAttributes("paragraph", { textAlign: alignment }).run(),
+              <Icon className="h-3.5 w-3.5" />,
+              label,
+            )}
+          </span>
+        ))}
+        <span className="mx-1 h-4 w-px bg-slate-700" />
+        {toolbarButton(
+          editor.isActive("paragraph", { dir: "rtl" }),
+          () => setDirection("rtl"),
+          <PilcrowRight className="h-3.5 w-3.5" />,
+          "راست به چپ (RTL)",
+        )}
+        {toolbarButton(
+          editor.isActive("paragraph", { dir: "ltr" }),
+          () => setDirection("ltr"),
+          <PilcrowLeft className="h-3.5 w-3.5" />,
+          "چپ به راست (LTR)",
+        )}
+        {toolbarButton(
+          editor.isActive("paragraph", { dir: "auto" }),
+          () => setDirection("auto"),
+          <span className="text-[10px]">Auto</span>,
+          "جهت خودکار متن",
+        )}
+        <span className="mx-1 h-4 w-px bg-slate-700" />
         {toolbarButton(
           editor.isActive("bulletList"),
           () => editor.chain().focus().toggleBulletList().run(),
@@ -142,6 +271,47 @@ export function RichTextEditor({
           "لیست شماره‌دار",
         )}
 
+        <span className="mx-1 h-4 w-px bg-slate-700" />
+
+        <select
+          aria-label="نوع لیست نقطه‌ای"
+          className={selectClassName}
+          value={editor.isActive("bulletList") ? (editor.getAttributes("bulletList").listStyleType || "disc") : ""}
+          onChange={(event) => setListStyle("bulletList", event.target.value)}
+        >
+          <option value="" disabled>نوع بولت</option>
+          <option value="disc">نقطهٔ توپر</option>
+          <option value="circle">دایرهٔ توخالی</option>
+          <option value="square">مربع</option>
+        </select>
+        <select
+          aria-label="نوع لیست شماره‌دار"
+          className={selectClassName}
+          value={editor.isActive("orderedList") ? (editor.getAttributes("orderedList").listStyleType || "decimal") : ""}
+          onChange={(event) => setListStyle("orderedList", event.target.value)}
+        >
+          <option value="" disabled>نوع شماره‌گذاری</option>
+          <option value="decimal">عددی (1, 2, 3)</option>
+          <option value="persian">فارسی (۱، ۲، ۳)</option>
+          <option value="lower-alpha">حروف کوچک (a, b, c)</option>
+          <option value="upper-alpha">حروف بزرگ (A, B, C)</option>
+          <option value="lower-roman">رومی کوچک (i, ii, iii)</option>
+          <option value="upper-roman">رومی بزرگ (I, II, III)</option>
+        </select>
+        {toolbarButton(
+          false,
+          () => editor.chain().focus().sinkListItem("listItem").run(),
+          <IndentIncrease className="h-3.5 w-3.5" />,
+          "افزایش سطح لیست",
+          !editor.can().sinkListItem("listItem"),
+        )}
+        {toolbarButton(
+          false,
+          () => editor.chain().focus().liftListItem("listItem").run(),
+          <IndentDecrease className="h-3.5 w-3.5" />,
+          "کاهش سطح لیست",
+          !editor.can().liftListItem("listItem"),
+        )}
         <span className="mx-1 h-4 w-px bg-slate-700" />
 
         {toolbarButton(
@@ -165,10 +335,5 @@ export function RichTextEditor({
 }
 
 export function stripHtml(html: string): string {
-  if (typeof window === "undefined") {
-    return html.replace(/<[^>]*>/g, "");
-  }
-  const div = document.createElement("div");
-  div.innerHTML = html;
-  return div.textContent ?? div.innerText ?? "";
+  return richTextPlainText(html);
 }

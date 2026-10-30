@@ -4,6 +4,7 @@ export type PublicTechIcon = {
   id: string;
   key: string;
   label: string;
+  sortOrder?: number;
   image: Media | null;
   createdAt: string;
   updatedAt: string;

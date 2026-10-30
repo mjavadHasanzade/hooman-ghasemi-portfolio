@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { richTextHtml } from "@/lib/rich-text";
+
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import type { PublicHero } from "@/lib/api/public-content";
 
@@ -11,19 +13,11 @@ type HeroProps = {
 export default function Hero({ hero }: HeroProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+  const subtitleRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
 
-  const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
 
@@ -89,7 +83,7 @@ export default function Hero({ hero }: HeroProps) {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [mounted]);
+  }, []);
 
   function scrollToContact() {
     document.getElementById("contact")?.scrollIntoView({
@@ -112,21 +106,21 @@ export default function Hero({ hero }: HeroProps) {
         }}
       />
 
-      <div className="relative z-10 flex flex-1 flex-col justify-center px-5 pb-20 pt-24 sm:px-8 sm:pb-16 md:px-12 md:pb-14 lg:justify-start lg:px-15 lg:pb-0 lg:pt-[15.5rem] xl:px-20 xl:pt-[16.75rem]">
-        <div className="flex max-w-75 flex-col gap-6 xxs:max-w-sm sm:max-w-xl sm:gap-7 md:max-w-2xl md:gap-8 lg:max-w-180 lg:translate-x-10 lg:translate-y-8 lg:gap-0 xl:max-w-200 xl:translate-x-12 xl:translate-y-10">
-          <h1
+      <div className="relative z-10 flex flex-1 flex-col justify-center px-5 pb-20 pt-24 sm:px-8 sm:pb-16 md:px-12 md:pb-14 lg:justify-start lg:px-15 lg:pb-0 lg:pt-32.5 xl:px-20 xl:pt-37.5">
+        <div className="flex w-full max-w-none flex-col gap-6 sm:max-w-xl sm:gap-7 md:max-w-2xl md:gap-8 lg:max-w-180 lg:gap-0 xl:max-w-200">
+          <div
+            role="heading"
+            aria-level={1}
             ref={titleRef}
-            className="ltr:font-mono ltr:uppercase text-[26px] font-bold leading-[1.28] tracking-wide text-teal-200 rtl:leading-[1.5] rtl:tracking-normal xxs:text-[30px] sm:text-[38px] sm:leading-[1.28] md:text-[46px] lg:text-[52px] lg:leading-[1.3] xl:text-[58px]"
-          >
-            {hero.title}
-          </h1>
+            className="cms-rich-text hero-title text-balance ltr:font-mono ltr:uppercase text-[clamp(1.25rem,6.2vw,1.875rem)] font-bold leading-[1.2] tracking-wide text-teal-200 rtl:leading-[1.45] rtl:tracking-normal sm:text-[38px] sm:leading-[1.18] md:text-[46px] lg:text-[52px] xl:text-[58px]"
+            dangerouslySetInnerHTML={{ __html: richTextHtml(hero.title) }}
+          />
 
-          <p
+          <div
             ref={subtitleRef}
-            className="max-w-md text-[15px] leading-relaxed text-gray-300 sm:text-lg md:text-xl lg:mt-9 lg:max-w-lg"
-          >
-            {hero.subtitle}
-          </p>
+            className="cms-rich-text hero-subtitle max-w-md text-[15px] leading-relaxed text-gray-300 sm:text-lg md:text-xl lg:mt-7 lg:max-w-lg"
+            dangerouslySetInnerHTML={{ __html: richTextHtml(hero.subtitle) }}
+          />
 
           <div ref={buttonRef} className="mt-2 sm:mt-0 lg:mt-9">
             <button
@@ -148,7 +142,12 @@ export default function Hero({ hero }: HeroProps) {
                 <span className="relative inline-flex h-3 w-3 rounded-full bg-teal-500" />
               </span>
 
-              <span>{hero.ctaLabel}</span>
+              <div
+                className="cms-rich-text"
+                dangerouslySetInnerHTML={{
+                  __html: richTextHtml(hero.ctaLabel),
+                }}
+              />
             </button>
           </div>
         </div>

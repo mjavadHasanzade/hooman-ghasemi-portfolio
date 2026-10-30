@@ -32,30 +32,23 @@ const navItems = [
   { href: "/media", label: "کتابخانه‌ی رسانه", icon: ImageIcon },
 ];
 
-export function Sidebar() {
+export function DashboardNavigation({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   const params = useParams<{ locale: string }>();
 
   return (
-    <aside className="admin-sidebar hidden w-72 shrink-0 md:block">
-      <div className="admin-brand flex h-20 items-center gap-3 px-6">
-        <span className="admin-brand-mark">E</span>
-        <div>
-          <div className="text-sm font-bold tracking-wide text-white">nova</div>
-          <div className="text-xxs uppercase tracking-[0.22em] text-slate-500">Control room</div>
-        </div>
-      </div>
-      <div className="px-6 pb-3 pt-7 text-xxs font-semibold uppercase tracking-[0.2em] text-slate-500">مدیریت محتوا</div>
-      <nav className="flex flex-col gap-1 px-3">
+      <nav aria-label="بخش‌های مدیریت" className="flex flex-col gap-1 px-3">
         {navItems.map((item) => {
-          const href = `/${params.locale}/dashboard${item.href}`;
-          const isActive = pathname === href;
+          const href = `/${params.locale}/dashboard${item.href === "/" ? "" : item.href}`;
+          const isActive = pathname.replace(/\/$/, "") === href;
           const Icon = item.icon;
 
           return (
             <Link
               key={item.href}
               href={href}
+              aria-current={isActive ? "page" : undefined}
+              onClick={onNavigate}
               className={cn(
                 "admin-nav-item flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-colors",
                 isActive
@@ -69,6 +62,21 @@ export function Sidebar() {
           );
         })}
       </nav>
+  );
+}
+
+export function Sidebar() {
+  return (
+    <aside className="admin-sidebar hidden w-72 shrink-0 md:block">
+      <div className="admin-brand flex h-20 items-center gap-3 px-6">
+        <span className="admin-brand-mark">E</span>
+        <div>
+          <div className="text-sm font-bold tracking-wide text-white">nova</div>
+          <div className="text-xxs uppercase tracking-[0.22em] text-slate-500">Control room</div>
+        </div>
+      </div>
+      <div className="px-6 pb-3 pt-7 text-xxs font-semibold uppercase tracking-[0.2em] text-slate-500">مدیریت محتوا</div>
+      <DashboardNavigation />
     </aside>
   );
 }

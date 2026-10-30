@@ -5,8 +5,8 @@ import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { ContentFormSkeleton } from "@/components/content/content-form-skeleton";
 import { ImagePicker } from "@/components/media/image-picker";
-import { RichTextEditor } from "@/components/shared/rich-text-editor";
 import { LocaleTabs } from "@/components/shared/locale-tabs";
+import { RichTextField } from "@/components/shared/rich-text-field";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -38,6 +38,7 @@ function AboutTranslationForm({ locale }: { locale: Locale }) {
   });
 
   useEffect(() => {
+    if (form.formState.isDirty) return;
     const translation = about?.translations.find(
       (item) => item.locale === locale,
     );
@@ -67,32 +68,24 @@ function AboutTranslationForm({ locale }: { locale: Locale }) {
   return (
     <form dir={locale === "fa" ? "rtl" : "ltr"} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-6">
       <div className="space-y-2">
-        <Label htmlFor={`about-label-${locale}`}>برچسب</Label>
-        <Input id={`about-label-${locale}`} {...form.register("label")} />
+        <Label id={`about-label-${locale}-label`} htmlFor={`about-label-${locale}`}>برچسب</Label>
+        <RichTextField control={form.control} name={"label"} id={`about-label-${locale}`} locale={locale} />
       </div>
       <div className="space-y-2">
-        <Label htmlFor={`about-heading-${locale}`}>عنوان</Label>
-        <Input id={`about-heading-${locale}`} {...form.register("heading")} />
+        <Label id={`about-heading-${locale}-label`} htmlFor={`about-heading-${locale}`}>عنوان</Label>
+        <RichTextField control={form.control} name={"heading"} id={`about-heading-${locale}`} locale={locale} />
       </div>
       <div className="space-y-2">
-        <Label htmlFor={`about-greeting-${locale}`}>متن خوش‌آمد</Label>
-        <Input id={`about-greeting-${locale}`} {...form.register("greeting")} />
+        <Label id={`about-greeting-${locale}-label`} htmlFor={`about-greeting-${locale}`}>متن خوش‌آمد</Label>
+        <RichTextField control={form.control} name={"greeting"} id={`about-greeting-${locale}`} locale={locale} />
       </div>
       <div className="space-y-2">
-        <Label htmlFor={`about-description-${locale}`}>توضیحات</Label>
-        <RichTextEditor
-          value={form.watch("description")}
-          onChange={(description) =>
-            form.setValue("description", description, { shouldDirty: true })
-          }
-          dir={locale === "fa" ? "rtl" : "ltr"}
-          placeholder="توضیحات را بنویسید…"
-          className="[&_.ProseMirror]:text-justify"
-        />
+        <Label id={`about-description-${locale}-label`} htmlFor={`about-description-${locale}`}>توضیحات</Label>
+        <RichTextField control={form.control} name="description" id={`about-description-${locale}`} locale={locale} />
       </div>
       <div className="flex justify-end">
         <Button type="submit" disabled={updateAbout.isPending || !form.formState.isDirty}>
-          {updateAbout.isPending ? "در حال ذخیره…" : "ذخیره ترجمه"}
+          {updateAbout.isPending ? "در حال ذخیره…" : "ذخیره تغییرات"}
         </Button>
       </div>
     </form>
@@ -109,6 +102,7 @@ export default function AboutPage() {
   const image = useWatch({ control: form.control, name: "image" });
 
   useEffect(() => {
+    if (form.formState.isDirty) return;
     if (about) form.reset({ email: about.email, image: about.image });
   }, [about, form]);
 
@@ -142,14 +136,14 @@ export default function AboutPage() {
           <CardHeader><CardTitle>اطلاعات مشترک</CardTitle></CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="about-email">ایمیل</Label>
+              <Label id="about-email-label" htmlFor="about-email">ایمیل</Label>
               <Input id="about-email" type="email" dir="ltr" {...form.register("email", { required: true })} />
             </div>
             <ImagePicker label="تصویر" value={image} onChange={(media) => form.setValue("image", media, { shouldDirty: true })} />
           </CardContent>
           <CardFooter className="justify-end">
             <Button type="submit" disabled={updateAbout.isPending || !form.formState.isDirty}>
-              {updateAbout.isPending ? "در حال ذخیره…" : "ذخیره اطلاعات مشترک"}
+              {updateAbout.isPending ? "در حال ذخیره…" : "ذخیره تغییرات"}
             </Button>
           </CardFooter>
         </Card>

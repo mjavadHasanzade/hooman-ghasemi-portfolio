@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { LayoutDashboard } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useAuthStore } from "@/lib/auth/auth-store";
 import HamburgerButton from "./HamburgerButton";
 import MobileMenu from "./MobileMenu";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 type NavbarProps = {
   siteName?: string;
@@ -16,6 +17,7 @@ type NavbarProps = {
 
 export default function Navbar({ siteName, logoUrl }: NavbarProps) {
   const t = useTranslations("SiteNavigation");
+  const brandName = useLocale() === "fa" ? t("brandFallback") : siteName || t("brandFallback");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const isAuthenticated = useAuthStore(
@@ -32,60 +34,55 @@ export default function Navbar({ siteName, logoUrl }: NavbarProps) {
 
   return (
     <>
-      <header
-        className={`fixed inset-x-0 top-0 z-50 flex items-center justify-between px-5 py-5 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 sm:px-8 sm:py-6 md:px-12 lg:px-[60px] lg:py-8 xl:px-[80px] ${
-          isScrolled
-            ? "border-b border-white/8 bg-[#05070a]/68 shadow-[0_12px_34px_rgba(0,0,0,0.2)] backdrop-blur-xl supports-backdrop-filter:bg-[#05070a]/48"
-            : "border-b border-transparent bg-transparent shadow-none backdrop-filter-none"
-        }`}
-      >
+      <header className="relative z-30 flex items-center justify-between gap-3 px-5 py-5 sm:px-8 sm:py-6 md:px-12 lg:px-[60px] lg:py-8 xl:px-[80px]">
         {/* Logo */}
         <Link
           href="/"
-          aria-label={siteName || t("brandFallback")}
-          className="flex shrink-0 items-center"
+          aria-label={brandName}
+          className="flex min-w-0 items-center"
         >
           {logoUrl ? (
             <>
               <Image
                 src={logoUrl}
-                alt={siteName || t("brandFallback")}
+                alt={brandName}
                 width={64}
                 height={64}
                 priority
                 unoptimized
-                className="h-12 w-12 object-contain sm:h-14 sm:w-14"
+                className="h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
               />
-              <span className="text-lg font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
-                {siteName || t("brandFallback")}
+              <span className="truncate text-lg font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
+                {brandName}
               </span>
             </>
           ) : (
-            <span className="text-lg font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
-              {siteName || t("brandFallback")}
+            <span className="truncate text-lg font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
+              {brandName}
             </span>
           )}
         </Link>
 
-        <nav className="hidden items-center gap-9 text-[15px] sm:flex md:text-base">
-          <a
-            href="#"
+        <div className="flex shrink-0 items-center gap-3 sm:gap-5">
+        <nav className="hidden items-center gap-4 text-sm sm:flex lg:gap-9 lg:text-base">
+          <Link
+            href="/#portfolio"
             className="text-white/90 transition-colors hover:text-teal-400"
           >
             {t("portfolio")}
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            href="/#about"
             className="text-white/90 transition-colors hover:text-teal-400"
           >
             {t("about")}
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            href="/#contact"
             className="text-white/90 transition-colors hover:text-teal-400"
           >
             {t("contact")}
-          </a>
+          </Link>
           {isAuthenticated && (
             <Link
               href="/dashboard"
@@ -97,11 +94,13 @@ export default function Navbar({ siteName, logoUrl }: NavbarProps) {
           )}
         </nav>
 
+        <LanguageSwitcher />
         <HamburgerButton
           isOpen={isMenuOpen}
           onClick={() => setIsMenuOpen((prev) => !prev)}
           className="sm:hidden"
         />
+        </div>
       </header>
 
       <MobileMenu

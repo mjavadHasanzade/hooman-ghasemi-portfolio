@@ -1,5 +1,8 @@
 "use client";
 
+import RichText from "./RichText";
+import { usePersianWordReveal } from "@/hooks/usePersianTextReveal";
+import { useLocale } from "next-intl";
 import { ReactNode, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -49,18 +52,23 @@ export default function SectionHeading({
   label,
   heading,
   description,
+  align = "left",
   className = "",
   labelClassName = "",
   headingClassName = "",
   descriptionClassName = "",
   children,
 }: SectionHeadingProps) {
-  const descriptionRef = useRef<HTMLParagraphElement>(null);
+  const isPersian = useLocale() === "fa";
+  const descriptionRef = useRef<HTMLDivElement>(null);
+  usePersianWordReveal(descriptionRef, JSON.stringify(description));
 
   useEffect(() => {
     if (!descriptionRef.current) return;
 
     const ctx = gsap.context(() => {
+      if (isPersian) return;
+
       const wordElements =
         descriptionRef.current!.querySelectorAll<HTMLElement>(
           ".gsap-reveal-word",
@@ -151,45 +159,42 @@ export default function SectionHeading({
     }, descriptionRef);
 
     return () => ctx.revert();
-  }, [description]);
+  }, [description, isPersian]);
 
   return (
-    <div className={`max-w-3xl ${className}`}>
+    <div className={`section-heading max-w-3xl ${isPersian && align === "center" ? "fa-heading-centered" : ""} ${className}`}>
       <h2
-        className={`block ltr:font-mono font-bold uppercase tracking-[0.7rem] leading-[1.4] text-[25px] text-teal-500 ${labelClassName}`}
+        className={`section-heading-label block ltr:font-mono font-bold uppercase tracking-[0.7rem] leading-[1.4] text-[25px] text-teal-500 ${labelClassName}`}
       >
         {label}
       </h2>
 
-      <h3
-        className={`ltr:font-mono text-3xl font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-[2.4rem] lg:text-[52px] ${headingClassName}`}
+      <div role="heading" aria-level={3}
+        className={`section-heading-title ltr:font-mono text-3xl font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-[2.4rem] lg:text-[52px] ${headingClassName}`}
       >
         {heading.map((line, lineIndex) => (
-          <span key={lineIndex} className="block">
+          <div key={lineIndex} className="block">
             {line.map((segment, segIndex) => (
-              <span
-                key={segIndex}
-                className={segment.emphasis ? "text-white" : "text-gray-400"}
-              >
-                {segment.text}
-                {segIndex < line.length - 1 ? " " : ""}
-              </span>
+              <RichText key={segIndex} value={segment.text}
+                className={`${line.length === 1 ? "block" : "inline-block"} ${segment.emphasis ? "text-white" : "text-gray-400"}`} />
             ))}
-          </span>
+          </div>
         ))}
-      </h3>
+      </div>
 
       {description && description.length > 0 && (
-        <p
+        <div
           ref={descriptionRef}
-          className={`mt-5 max-w-2xl text-[22px] leading-[1.3] font-light [word-spacing:0.5rem] sm:mt-6 sm:leading-[1.34] ${descriptionClassName}`}
+          className={`section-heading-description mt-3 max-w-2xl text-[22px] leading-normal font-light [word-spacing:0.5rem] ${descriptionClassName}`}
         >
           {description.map((line, i) => (
-            <span key={i} data-line={i} className="block">
-              {splitIntoWordSpans(line, i)}
-            </span>
+            <div key={i} data-line={i} className="block">
+              {isPersian || /<\/?[a-z][^>]*>/i.test(line)
+                ? <RichText value={line} className="text-gray-200" revealWords={isPersian} />
+                : splitIntoWordSpans(line, i)}
+            </div>
           ))}
-        </p>
+        </div>
       )}
 
       {children}

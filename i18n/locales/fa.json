@@ -20,7 +20,12 @@
     "panel": "پنل مدیریت"
   },
   "SiteNavigation": {
-    "brandFallback": "BilloDesign",
+    "metaDescription": "تحقیق و توسعه، طراحی مکانیکی، تحلیل و بهینه‌سازی، ساخت و بازرسی؛ خدمات و نمونه‌کارهای مهندسی هومن در مهندسی نووا.",
+    "metaTitle": "مهندسی نووا | طراحی، تحلیل و ساخت",
+    "loading": "در حال بارگذاری",
+    "closeMenu": "بستن منو",
+    "openMenu": "باز کردن منو",
+    "brandFallback": "مهندسی نووا",
     "portfolio": "نمونه‌کارها",
     "about": "درباره من",
     "contact": "تماس با من",
@@ -28,7 +33,7 @@
   },
   "Services": {
     "label": "خدمات",
-    "watermark": "SERVICES",
+    "watermark": "خدمات",
     "headingLight": "چیزی که",
     "headingBold": "می‌سازم",
     "description1": "از ایده تا کد تمیز وب‌فلو — طراحی و توسعه‌ی تجربه‌های دیجیتال آینده‌نگر.",
@@ -59,7 +64,14 @@
       "code": "کد سفارشی"
     }
   },
+  "ProjectGallery": {
+    "previousImage": "تصویر قبلی",
+    "nextImage": "تصویر بعدی",
+    "goToImage": "نمایش تصویر {number}"
+},
   "Portfolio": {
+    "nextProject": "پروژهٔ بعدی",
+    "previousProject": "پروژهٔ قبلی",
     "label": "پروژه‌ها",
     "heading": "نمونه‌کارهای منتخب",
     "description": "هنر با نتیجه ترکیب می‌شه. چند تا از پروژه‌های اخیرم که مرزها رو جابجا کردن.",
@@ -82,6 +94,10 @@
   },
 
   "ContactCTA": {
+    "linkedinLabel": "لینکدین",
+    "telegramLabel": "تلگرام",
+    "emailLabel": "ایمیل",
+    "phoneLabel": "تلفن تماس",
     "heading": "بیایید ایده‌ی شما را زنده کنیم",
     "description": "یک پروژه، یک ایده دارید یا فقط کنجکاوید بدانید مناسب هم هستیم؟ بیایید چیزی هوشمند، زیبا و آینده‌نگر بسازیم.",
     "connectLabel": "بیایید در ارتباط باشیم",

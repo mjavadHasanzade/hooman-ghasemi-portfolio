@@ -1,7 +1,8 @@
 "use client";
 
+import { usePersianTextReveal } from "@/hooks/usePersianTextReveal";
 import { useEffect, useRef } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Gauge } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
@@ -29,9 +30,12 @@ export default function ServicesSection({
   services: PublicService[];
   sectionHeadings: PublicSectionHeadings;
 }) {
+  const locale = useLocale();
   const t = useTranslations("Services");
+  const sortedServices = [...services].sort((a, b) => a.order - b.order);
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
+  usePersianTextReveal(sectionRef, JSON.stringify(services), ".service-description");
 
   useEffect(() => {
     if (!cardsRef.current) return;
@@ -92,14 +96,16 @@ export default function ServicesSection({
         <div ref={cardsRef} className="relative mx-auto mt-12 sm:mt-14 lg:mt-16">
           <div className="sm:hidden">
             <Swiper
+          key={locale}
+          dir={locale === "fa" ? "rtl" : "ltr"}
               modules={[Pagination]}
-              slidesPerView={1.08}
+              slidesPerView={1}
               spaceBetween={14}
               pagination={{ clickable: true, el: ".services-pagination" }}
               className="overflow-visible! pb-9!"
             >
-              {services.map((service) => (
-                <SwiperSlide key={service.id} className="service-card-item h-auto">
+              {sortedServices.map((service) => (
+                <SwiperSlide key={service.id} className="service-card-item h-auto!">
                   <ServiceCard
                     icon={iconFor(service.iconKey)}
                     image={publicMediaUrl(service.image)}
@@ -114,11 +120,11 @@ export default function ServicesSection({
             )}
           </div>
 
-          <div className="hidden max-w-6xl flex-wrap items-center justify-center gap-5 sm:flex xl:gap-4">
-            {services.map((service) => (
+          <div className="hidden mx-auto max-w-6xl flex-wrap items-stretch justify-center gap-5 sm:flex xl:gap-4">
+            {sortedServices.map((service) => (
               <div
                 key={service.id}
-                className="service-card-item w-[calc(50%-0.625rem)] lg:w-[calc(33.333333%-0.667rem)]"
+                className="service-card-item w-[calc(50%-0.625rem)] lg:w-[calc((100%-2.5rem)/3)] xl:w-[calc((100%-2rem)/3)]"
               >
                 <ServiceCard
                   icon={iconFor(service.iconKey)}

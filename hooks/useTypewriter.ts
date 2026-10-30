@@ -53,5 +53,5 @@ export function useTypewriter(
     pauseDuration,
   ]);
 
-  return text;
+  return { text, wordIndex };
 }

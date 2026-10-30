@@ -6,9 +6,9 @@ import { toast } from "sonner";
 import { ContentFormSkeleton } from "@/components/content/content-form-skeleton";
 import { LocaleTabs } from "@/components/shared/locale-tabs";
 import { ImagePicker } from "@/components/media/image-picker";
+import { RichTextField } from "@/components/shared/rich-text-field";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getErrorMessage } from "@/lib/api/error";
 import { useHero, useUpdateHero } from "@/lib/hooks/use-content";
@@ -41,6 +41,7 @@ export default function HeroPage() {
   const backgroundImage = useWatch({ control: form.control, name: "backgroundImage" });
 
   useEffect(() => {
+    if (form.formState.isDirty) return;
     if (!hero) return;
 
     const translations = { fa: emptyTranslation("fa"), en: emptyTranslation("en") };
@@ -100,16 +101,17 @@ export default function HeroPage() {
             <ImagePicker label="تصویر پس‌زمینه" value={backgroundImage} onChange={(media) => form.setValue("backgroundImage", media, { shouldDirty: true })} />
             <LocaleTabs value={activeLocale} onChange={setActiveLocale} availableLocales={availableLocales} />
             <div key={activeLocale} className="space-y-2">
-              <Label htmlFor="hero-title">عنوان</Label>
-              <Input id="hero-title" {...form.register(`${translationPath}.title`, { required: true })} />
+              <Label id="hero-title-label" htmlFor="hero-title">عنوان</Label>
+              <RichTextField control={form.control} name={`${translationPath}.title`} id={"hero-title"} locale={activeLocale} required />
+              <p className="text-xs text-muted-foreground">برای تعیین محل شکست تیتر از Enter یا Shift+Enter استفاده کنید؛ این شکست خط در سایت حفظ می‌شود.</p>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="hero-subtitle">زیرعنوان</Label>
-              <textarea id="hero-subtitle" className="min-h-24 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50" {...form.register(`${translationPath}.subtitle`, { required: true })} />
+              <Label id="hero-subtitle-label" htmlFor="hero-subtitle">زیرعنوان</Label>
+              <RichTextField control={form.control} name={`${translationPath}.subtitle`} id={"hero-subtitle"} locale={activeLocale} required />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="hero-cta">متن دکمه</Label>
-              <Input id="hero-cta" {...form.register(`${translationPath}.ctaLabel`, { required: true })} />
+              <Label id="hero-cta-label" htmlFor="hero-cta">متن دکمه</Label>
+              <RichTextField control={form.control} name={`${translationPath}.ctaLabel`} id={"hero-cta"} locale={activeLocale} required />
             </div>
           </CardContent>
           <CardFooter className="justify-end">

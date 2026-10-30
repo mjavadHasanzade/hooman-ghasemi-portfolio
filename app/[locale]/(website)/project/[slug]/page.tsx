@@ -1,3 +1,4 @@
+import { richTextHtml, richTextPlainText } from "@/lib/rich-text";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, MoveUpRight } from "lucide-react";
@@ -6,6 +7,7 @@ import { getPublicProjects } from "@/lib/api/public-content";
 import { publicMediaUrl } from "@/lib/media/public-media-url";
 import type { Locale } from "@/lib/types/api";
 import ProjectGallery from "@/components/organisms/ProjectGallery";
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
 
 const copy = {
   fa: {
@@ -88,13 +90,16 @@ export default async function ProjectPage({
       className="min-h-screen overflow-hidden bg-black text-white"
     >
       <div className="mx-auto max-w-[90rem] px-5 py-7 sm:px-8 sm:py-10 lg:px-14 lg:py-14">
-        <Link
-          href={`/${locale}`}
-          className="group inline-flex items-center gap-2 text-xs font-semibold ltr:uppercase tracking-[0.14em] text-gray-500 rtl:tracking-normal transition-colors hover:text-teal-300"
-        >
-          <BackIcon className="h-4 w-4 transition-transform group-hover:-translate-x-1 rtl:group-hover:translate-x-1" />
-          {labels.back}
-        </Link>
+        <div className="flex items-center justify-between gap-4">
+          <Link
+            href={`/${locale}`}
+            className="group inline-flex items-center gap-2 text-xs font-semibold ltr:uppercase tracking-[0.14em] text-gray-500 rtl:tracking-normal transition-colors hover:text-teal-300"
+          >
+            <BackIcon className="h-4 w-4 transition-transform group-hover:-translate-x-1 rtl:group-hover:translate-x-1" />
+            {labels.back}
+          </Link>
+          <LanguageSwitcher />
+        </div>
 
         <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.18fr)_minmax(22rem,0.82fr)] lg:items-center lg:gap-20 lg:py-10">
           <div className="group relative overflow-hidden rounded-[10px] p-px">
@@ -102,7 +107,7 @@ export default async function ProjectPage({
             <div className="relative z-10 rounded-[9px] bg-black p-1.5">
               <ProjectGallery
                 images={projectImages}
-                alt={project.title}
+                alt={richTextPlainText(project.title)}
                 projectNumberLabel={labels.projectNumber}
               />
             </div>
@@ -113,16 +118,14 @@ export default async function ProjectPage({
               <span className="h-px w-8 bg-teal-400/70" />
               {labels.selectedWork}
             </p>
-            <h1 className="mt-5 max-w-2xl text-4xl font-bold leading-[1.08] tracking-tight text-gray-100 sm:text-6xl lg:text-7xl">
-              {project.title}
-            </h1>
+            <div role="heading" aria-level={1} className="cms-rich-text mt-5 max-w-2xl text-4xl font-bold leading-[1.08] tracking-tight text-gray-100 sm:text-6xl lg:text-7xl" dangerouslySetInnerHTML={{ __html: richTextHtml(project.title) }} />
             <p className="mt-5 ltr:font-mono text-xs ltr:uppercase tracking-[0.18em] text-gray-600 rtl:tracking-normal">
-              {labels.project} / {project.slug}
+              {labels.project} / {locale === "fa" ? richTextPlainText(project.title) : project.slug}
             </p>
 
             <div
-              className="mt-8 max-w-lg border-s-2 border-teal-400/40 ps-5 text-base leading-8 text-gray-400 [&_strong]:font-semibold [&_strong]:text-gray-200 [&_p+p]:mt-4"
-              dangerouslySetInnerHTML={{ __html: projectDescriptionHtml(project.description) }}
+              className="project-rich-text mt-8 max-w-lg border-s-2 border-teal-400/40 ps-5 text-base leading-8 text-gray-400"
+              dangerouslySetInnerHTML={{ __html: richTextHtml(projectDescriptionHtml(project.description)) }}
             />
 
             {project.liveUrl ? (

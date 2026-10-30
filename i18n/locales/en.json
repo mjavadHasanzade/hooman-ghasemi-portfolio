@@ -20,6 +20,9 @@
     "panel": "Admin Panel"
   },
   "SiteNavigation": {
+    "loading": "Loading",
+    "closeMenu": "Close menu",
+    "openMenu": "Open menu",
     "brandFallback": "BilloDesign",
     "portfolio": "Portfolio",
     "about": "About me",
@@ -60,7 +63,14 @@
       "code": "Custom Code"
     }
   },
+  "ProjectGallery": {
+    "previousImage": "Previous image",
+    "nextImage": "Next image",
+    "goToImage": "Go to image {number}"
+},
   "Portfolio": {
+    "nextProject": "Next project",
+    "previousProject": "Previous project",
     "label": "PROJECTS",
     "heading": "Selected Work",
     "description": "Craft meets conversion. Here are a few recent projects that pushed boundaries.",
@@ -82,6 +92,10 @@
     }
   },
   "ContactCTA": {
+    "linkedinLabel": "linkedin",
+    "telegramLabel": "telegram",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
     "heading": "Let's Bring Your Vision to Life",
     "description": "Have a project, an idea, or just curious if we're a good fit? Let's build something smart, beautiful, and future-ready.",
     "connectLabel": "Let's connect",

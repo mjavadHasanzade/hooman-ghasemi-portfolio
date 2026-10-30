@@ -1,14 +1,43 @@
 "use client"
 
 import * as React from "react"
+import { useLocale } from "next-intl"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 import { cn } from "cn"
 
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
+import { confirmDiscardChanges, useConfirmationState } from "@/lib/confirmations"
 
-function Dialog({ ...props }: DialogPrimitive.Root.Props) {
-  return <DialogPrimitive.Root data-slot="dialog" {...props} />
+function Dialog({ open, defaultOpen = false, onOpenChange, modal = true, isDirty = false, isSaving = false, ...props }: DialogPrimitive.Root.Props & { isDirty?: boolean; isSaving?: boolean }) {
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen)
+  const confirmationActive = useConfirmationState((state) => state.active)
+  const currentOpen = open ?? internalOpen
+  const latest = React.useRef({ currentOpen, isSaving })
+  React.useLayoutEffect(() => { latest.current = { currentOpen, isSaving } }, [currentOpen, isSaving])
+  const mounted = React.useRef(false)
+  React.useEffect(() => { mounted.current = true; return () => { mounted.current = false } }, [])
+
+  const handleOpenChange: NonNullable<DialogPrimitive.Root.Props["onOpenChange"]> = (nextOpen, details) => {
+    if (!nextOpen && (isSaving || useConfirmationState.getState().active)) {
+      details.cancel()
+      return
+    }
+    if (!nextOpen && isDirty) {
+      details.cancel()
+      void confirmDiscardChanges().then((discard) => {
+        if (!discard || !mounted.current || latest.current.isSaving || !latest.current.currentOpen) return
+        setInternalOpen(false)
+        onOpenChange?.(false, details)
+      })
+      return
+    }
+    onOpenChange?.(nextOpen, details)
+    if (!details.isCanceled) setInternalOpen(nextOpen)
+  }
+
+  // Swal owns keyboard focus while its body-level portal is visible.
+  return <DialogPrimitive.Root data-slot="dialog" {...props} open={currentOpen} modal={confirmationActive ? false : modal} onOpenChange={handleOpenChange} />
 }
 
 function DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {
@@ -47,10 +76,12 @@ function DialogContent({
 }: DialogPrimitive.Popup.Props & {
   showCloseButton?: boolean
 }) {
+  const isPersian = useLocale() === "fa"
   return (
     <DialogPortal>
       <DialogOverlay />
       <DialogPrimitive.Popup
+        dir={isPersian ? "rtl" : undefined}
         data-slot="dialog-content"
         className={cn(
           "fixed top-1/2 left-1/2 z-[60] grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-lg data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
@@ -65,14 +96,14 @@ function DialogContent({
             render={
               <Button
                 variant="ghost"
-                className="absolute top-2 right-2"
+                className="absolute top-2 end-2"
                 size="icon-sm"
               />
             }
           >
             <XIcon
             />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{isPersian ? "بستن" : "Close"}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>

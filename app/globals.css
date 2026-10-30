@@ -348,13 +348,18 @@
 
 @keyframes background-star-glimmer {
   0%,
+  80%,
   100% {
-    opacity: 0.48;
-    filter: brightness(0.82);
+    opacity: 0.28;
+    filter: brightness(0.75);
   }
-  50% {
+  88% {
     opacity: 1;
-    filter: brightness(1.35);
+    filter: brightness(1.5);
+  }
+  94% {
+    opacity: 0.5;
+    filter: brightness(1);
   }
 }
 
@@ -1044,16 +1049,16 @@ body:has(.admin-shell)
 }
 
 .hero-star {
-  animation: background-star-glimmer 3.6s ease-in-out infinite;
+  animation: background-star-glimmer 18s ease-in-out infinite;
 }
 
 .hero-star-main {
-  animation-delay: -0.8s;
+  animation-delay: -15s;
 }
 
 .hero-star-cyan {
-  animation-duration: 4.2s;
-  animation-delay: -2.1s;
+  animation-duration: 25s;
+  animation-delay: -7s;
 }
 
 /* Technology marks stay alive even when the user is not hovering them. Each
@@ -1100,3 +1105,189 @@ body:has(.admin-shell)
     animation: none;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+section[id] {
+  scroll-margin-top: 1.5rem;
+}
+
+@keyframes project-tech-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.project-tech-track {
+  animation: project-tech-marquee 12s linear infinite;
+}
+
+.project-tech-viewport:hover .project-tech-track,
+.project-tech-viewport:focus-within .project-tech-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-tech-overflow { overflow-x: auto; }
+  .project-tech-track { animation: none; }
+  .project-tech-copy { display: none; }
+}
+
+/* Render editor HTML with its lists and block formatting intact. */
+:is(.project-rich-text, .cms-rich-text) {
+  overflow-wrap: anywhere;
+}
+:is(.project-rich-text, .cms-rich-text) p + p { margin-top: 1rem; }
+:is(.project-rich-text, .cms-rich-text) ul,
+:is(.project-rich-text, .cms-rich-text) ol {
+  margin-block: 1rem;
+  padding-inline-start: 1.5rem;
+  list-style-position: outside;
+}
+:is(.project-rich-text, .cms-rich-text) ul { list-style-type: disc; }
+:is(.project-rich-text, .cms-rich-text) ol { list-style-type: decimal; }
+:is(.project-rich-text, .cms-rich-text) li { margin-block: 0.375rem; }
+:is(.project-rich-text, .cms-rich-text) li > p { margin-block: 0; }
+:is(.project-rich-text, .cms-rich-text) li > ul,
+:is(.project-rich-text, .cms-rich-text) li > ol { margin-block: 0.5rem; }
+:is(.project-rich-text, .cms-rich-text) strong { font-weight: 600; color: #e5e7eb; }
+:is(.project-rich-text, .cms-rich-text) em { font-style: italic; }
+:is(.project-rich-text, .cms-rich-text) u { text-decoration: underline; }
+:is(.project-rich-text, .cms-rich-text) s { text-decoration: line-through; }
+:is(.project-rich-text, .cms-rich-text) blockquote {
+  margin-block: 1rem;
+  border-inline-start: 2px solid rgb(45 212 191 / 0.4);
+  padding-inline-start: 1rem;
+}
+:is(.project-rich-text, .cms-rich-text) pre {
+  margin-block: 1rem;
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  background: #111820;
+  padding: 1rem;
+  white-space: pre;
+  overflow-wrap: normal;
+}
+:is(.project-rich-text, .cms-rich-text) code {
+  border-radius: 0.25rem;
+  background: #111820;
+  padding: 0.125rem 0.25rem;
+  font-family: monospace;
+}
+:is(.project-rich-text, .cms-rich-text) pre code { padding: 0; }
+:is(.project-rich-text, .cms-rich-text) a { color: #5eead4; text-decoration: underline; }
+:is(.project-rich-text, .cms-rich-text) hr { margin-block: 1.5rem; border-color: rgb(255 255 255 / 0.15); }
+:is(.project-rich-text, .cms-rich-text) h1,
+:is(.project-rich-text, .cms-rich-text) h2,
+:is(.project-rich-text, .cms-rich-text) h3,
+:is(.project-rich-text, .cms-rich-text) h4,
+:is(.project-rich-text, .cms-rich-text) h5,
+:is(.project-rich-text, .cms-rich-text) h6 { margin-block: 1.25rem 0.75rem; font-weight: 700; color: #f3f4f6; }
+:is(.project-rich-text, .cms-rich-text) h1 { font-size: 1.875rem; }
+:is(.project-rich-text, .cms-rich-text) h2 { font-size: 1.5rem; }
+:is(.project-rich-text, .cms-rich-text) h3 { font-size: 1.25rem; }
+
+/* Keep admin content and dialogs within narrow/touch viewports. */
+body:has(.admin-shell) [data-slot="dialog-content"] {
+  max-height: calc(100dvh - 2rem);
+}
+.admin-main [data-slot="card"],
+.admin-main [data-slot="card-content"],
+.admin-main [data-slot="card-header"] { min-width: 0; }
+body:has(.admin-shell) [data-slot="dialog-content"] > [data-slot="dialog-header"] {
+  padding-inline-end: 3.5rem;
+}
+@media (max-width: 767px) {
+  .admin-main { overflow-wrap: anywhere; }
+  .admin-main [data-slot="card-footer"] { flex-wrap: wrap; }
+  body:has(.admin-shell) [data-slot="dialog-content"] { border-radius: 18px; }
+}
+
+@media (max-width: 639px) {
+  .admin-header .admin-avatar { display: none; }
+}
+
+.cms-rich-text > :first-child { margin-top: 0; }
+.cms-rich-text > :last-child { margin-bottom: 0; }
+.cms-rich-text strong { color: inherit; font-weight: bolder; }
+.cms-rich-text { white-space: normal; }
+.cms-rich-text img { max-width: 100%; }
+
+.hero-title p + p { margin-top: 0; }
+
+/* Persian website corrections are scoped away from English and the dashboard. */
+.site-background:lang(fa) :is(.section-heading-description, .cms-rich-text p, .cms-rich-text li, .service-description) {
+  word-spacing: normal;
+  letter-spacing: normal;
+}
+.site-background:lang(fa) .about-description { text-align: start; }
+.site-background:lang(fa) .fa-heading-centered .section-heading-description { margin-inline: auto; }
+.site-background:lang(fa) .fa-heading-centered :is(.cms-rich-text, .cms-rich-text p) { text-align: center !important; }
+.site-background:lang(fa) .site-footer .footer-logo { margin-bottom: 0.5rem; padding-block: 0.5rem; }
+.site-background:lang(fa) .site-footer .footer-copyright { margin-top: 1rem; padding-bottom: 1rem; }
+
+.site-background:lang(fa) .hero-star { animation-name: persian-star-glimmer; }
+.site-background:lang(fa) .hero-star-main { animation-duration: 20s; animation-delay: -13s; }
+.site-background:lang(fa) .hero-star-cyan { animation-duration: 26s; animation-delay: -5s; }
+@keyframes persian-star-glimmer {
+  0%, 65%, 100% { opacity: 0.12; filter: brightness(0.8); }
+  77% { opacity: 1; filter: brightness(1.7); }
+  86% { opacity: 0.3; filter: brightness(1); }
+  92% { opacity: 0.8; filter: brightness(1.3); }
+}
+@media (max-width: 1023px) {
+  /* The original star coordinates fall outside the portrait SVG crop. */
+  .site-background:lang(fa) .hero-star-main { transform: translate(980px, 280px) scale(0.7); }
+  .site-background:lang(fa) .hero-star-cyan { transform: translate(730px, 620px) scale(0.7); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-background:lang(fa) .hero-star { animation: none; }
+}
+
+/* Refined Persian type scale; these selectors never match English or admin UI. */
+.site-background:lang(fa) .hero-title {
+  font-size: clamp(1.375rem, 4.5vw, 3.125rem);
+  line-height: 1.65;
+  letter-spacing: normal;
+}
+.site-background:lang(fa) .hero-subtitle {
+  font-size: clamp(0.875rem, 1.3vw, 1.125rem);
+  line-height: 2;
+}
+.site-background:lang(fa) .section-heading-label {
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.8;
+  letter-spacing: normal;
+  font-weight: 500;
+}
+.site-background:lang(fa) .section-heading-title {
+  margin-top: 0.5rem;
+  font-size: clamp(1.625rem, 2.8vw, 2.5rem);
+  line-height: 1.65;
+  letter-spacing: normal;
+}
+.site-background:lang(fa) .section-heading-description {
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.95;
+}
+.site-background:lang(fa) .service-title {
+  font-size: clamp(1.25rem, 1.6vw, 1.375rem);
+  line-height: 1.65;
+  letter-spacing: normal;
+}
+.site-background:lang(fa) .service-description {
+  font-size: clamp(0.9375rem, 1.2vw, 1rem);
+  line-height: 2;
+}
+.site-background:lang(fa) :is(#about [aria-level="2"], .cta-heading) {
+  font-size: clamp(1.625rem, 2.7vw, 2.375rem);
+  line-height: 1.65;
+}
+.site-background:lang(fa) .about-label { font-size: 0.875rem; line-height: 1.8; }
+.site-background:lang(fa) .about-greeting { font-size: clamp(1.25rem, 1.7vw, 1.5rem); line-height: 1.8; }
+.site-background:lang(fa) .about-description { font-size: clamp(1.0625rem, 1.3vw, 1.125rem); line-height: 2.05; }
+.site-background:lang(fa) .cta-description { font-size: clamp(0.9375rem, 1.2vw, 1.0625rem); line-height: 2; }
+.site-background:lang(fa) article [aria-level="1"] { font-size: clamp(1.875rem, 4vw, 3.75rem); line-height: 1.6; }
