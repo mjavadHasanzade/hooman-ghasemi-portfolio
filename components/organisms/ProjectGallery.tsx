@@ -63,8 +63,8 @@ export default function ProjectGallery({
         )}
       </div>
       {hasSlides && (
-        <div className="absolute inset-x-0 bottom-0 z-10 border-t border-white/20 bg-black/30 p-2 backdrop-blur-sm sm:p-3">
-          <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:thin]">
+        <div className="absolute inset-x-0 bottom-0 z-10 overflow-hidden rounded-b-[6px] border-t border-white/20 bg-black/30 px-2 py-1.5 backdrop-blur-sm sm:px-3 sm:py-2">
+          <div className="flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:thin]">
             {images.map((url, index) => (
               <button
                 key={url}
@@ -72,7 +72,7 @@ export default function ProjectGallery({
                 aria-label={t("goToImage", { number: imageNumber(index + 1) })}
                 aria-current={index === active ? "true" : undefined}
                 onClick={() => setActive(index)}
-                className={`relative h-10 w-14 shrink-0 overflow-hidden rounded border transition sm:h-16 sm:w-24 ${
+                className={`relative h-8 w-12 shrink-0 overflow-hidden rounded border transition sm:h-10 sm:w-16 ${
                   index === active
                     ? "border-teal-300 ring-1 ring-teal-300/70"
                     : "border-white/15 opacity-55 hover:border-white/45 hover:opacity-100"
@@ -82,7 +82,7 @@ export default function ProjectGallery({
                   src={url}
                   alt={`${alt} — ${imageNumber(index + 1)}`}
                   fill
-                  sizes="96px"
+                  sizes="64px"
                   className="object-contain"
                   unoptimized
                 />
