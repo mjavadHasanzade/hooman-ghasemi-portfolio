@@ -2,7 +2,6 @@
 
 import { richTextHtml, richTextPlainText } from "@/lib/rich-text";
 
-import { usePersianTextReveal } from "@/hooks/usePersianTextReveal";
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { Mail } from "lucide-react";
@@ -17,7 +16,6 @@ export default function AboutSection({ about }: { about: PublicAbout }) {
   const sectionRef = useRef<HTMLElement>(null);
   const imageWrapRef = useRef<HTMLDivElement>(null);
   const imageUrl = publicMediaUrl(about.image);
-  usePersianTextReveal(sectionRef, about.description, ".about-description", false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
