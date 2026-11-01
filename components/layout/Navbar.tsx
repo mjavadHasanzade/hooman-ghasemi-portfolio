@@ -9,6 +9,7 @@ import { useAuthStore } from "@/lib/auth/auth-store";
 import HamburgerButton from "./HamburgerButton";
 import MobileMenu from "./MobileMenu";
 import LanguageSwitcher from "./LanguageSwitcher";
+import SectionLink from "@/components/common/SectionLink";
 
 type NavbarProps = {
   siteName?: string;
@@ -71,24 +72,24 @@ export default function Navbar({ siteName, logoUrl }: NavbarProps) {
 
         <div className="flex shrink-0 items-center gap-3 sm:gap-5">
         <nav className="hidden items-center gap-4 text-sm sm:flex lg:gap-9 lg:text-base">
-          <Link
+          <SectionLink
             href="/#portfolio"
             className="text-white/90 transition-colors hover:text-teal-400"
           >
             {t("portfolio")}
-          </Link>
-          <Link
+          </SectionLink>
+          <SectionLink
             href="/#about"
             className="text-white/90 transition-colors hover:text-teal-400"
           >
             {t("about")}
-          </Link>
-          <Link
+          </SectionLink>
+          <SectionLink
             href="/#contact"
             className="text-white/90 transition-colors hover:text-teal-400"
           >
             {t("contact")}
-          </Link>
+          </SectionLink>
           {isAuthenticated && (
             <Link
               href="/dashboard"

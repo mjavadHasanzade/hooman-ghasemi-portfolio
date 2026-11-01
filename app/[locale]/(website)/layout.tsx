@@ -1,3 +1,4 @@
+import HomeSectionNavigation from "@/components/common/HomeSectionNavigation";
 import HomeBackdrop from "@/components/common/HomeBackdrop";
 import PublicContentSync from "@/components/common/PublicContentSync";
 import Footer from "@/components/organisms/Footer";
@@ -35,6 +36,7 @@ export default async function WebsiteLayout({
   return (
     <div className="site-background min-h-screen">
       <PublicContentSync />
+      <HomeSectionNavigation />
       {/* <Navbar /> */}
       <HomeBackdrop>
       <svg

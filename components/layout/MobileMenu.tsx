@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { LayoutDashboard } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import SectionLink from "@/components/common/SectionLink";
 import { useAuthStore } from "@/lib/auth/auth-store";
 
 interface MobileMenuProps {
@@ -82,7 +83,7 @@ export default function MobileMenu({
                       ease: "easeOut",
                     }}
                   >
-                    <Link
+                    <SectionLink
                       href={item.href}
                       onClick={onClose}
                       className="
@@ -98,7 +99,7 @@ export default function MobileMenu({
                         {t(item.key)}
                         <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-teal-500 transition-all duration-300 group-hover:w-full" />
                       </span>
-                    </Link>
+                    </SectionLink>
                   </motion.div>
                 ))}
               </nav>
@@ -110,7 +111,7 @@ export default function MobileMenu({
                 transition={{ duration: 0.35, delay: 0.45 }}
                 className="flex flex-col gap-4 border-t border-white/10 pt-6"
               >
-                <Link
+                <SectionLink
                   href="/#contact"
                   onClick={onClose}
                   className="
@@ -122,7 +123,7 @@ export default function MobileMenu({
                   "
                 >
                   {t("contact")}
-                </Link>
+                </SectionLink>
                 {isAuthenticated && (
                   <Link
                     href="/dashboard"
