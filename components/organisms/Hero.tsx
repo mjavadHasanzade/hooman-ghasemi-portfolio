@@ -109,12 +109,14 @@ export default function Hero({ hero }: HeroProps) {
       <div className="relative z-10 flex flex-1 flex-col justify-center px-5 pb-32 pt-16 sm:px-8 sm:pb-28 md:px-12 md:pb-24 lg:justify-start lg:px-15 lg:pb-0 lg:pt-32 xl:px-20 xl:pt-36">
         <div
           className="
-    mx-auto flex w-full max-w-none flex-col
+    flex w-full max-w-none flex-col
     gap-6
     sm:max-w-xl sm:gap-7
     md:max-w-2xl md:gap-8
     lg:max-w-180 lg:gap-0
     xl:max-w-200
+    lg:ltr:ml-[10vw]
+    lg:rtl:mx-auto
   "
         >
           {" "}
