@@ -33,8 +33,9 @@ export default function ProjectGallery({
   const next = () => setActive((index) => (index + 1) % images.length);
 
   return (
-    <div className="group relative overflow-hidden rounded-[6px] border border-white/10 bg-gray-950 shadow-[0_28px_100px_rgba(0,0,0,0.52)]">
-      <div className="relative aspect-16/10 overflow-hidden bg-gray-950">
+    <div className="group relative rounded-[6px] border border-white/10 bg-gray-950 shadow-[0_28px_100px_rgba(0,0,0,0.52)]">
+      <div className="relative aspect-16/10 overflow-hidden rounded-[6px] bg-gray-950">
+        <div className={`absolute inset-0 ${hasSlides ? "bottom-8 sm:bottom-10" : ""}`}>
         <Image
           key={imageUrl}
           src={imageUrl}
@@ -42,13 +43,13 @@ export default function ProjectGallery({
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 58vw"
-          className="object-cover"
+          className="object-contain"
           unoptimized
         />
-        <div className="pointer-events-none absolute inset-0 bg-linear-to-tr from-black/45 via-transparent to-teal-400/12" />
-        <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-5 sm:p-7">
+        </div>
+        <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between p-3 sm:p-4">
           <span className="h-px w-16 bg-teal-300/70 sm:w-24" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/55">
+          <span className="font-mono text-[10px] uppercase tracking-[0.24em] rounded bg-black/65 px-2 py-1 text-white/80">
             {projectNumberLabel} {imageNumber(active + 1, true)}
           </span>
         </div>
@@ -64,7 +65,7 @@ export default function ProjectGallery({
         )}
       </div>
       {hasSlides && (
-        <div className="relative border-t border-white/10 bg-black/85 p-3 sm:p-4">
+        <div className="relative z-10 mx-3 -mt-8 mb-3 rounded-lg border border-white/15 bg-black/85 p-3 shadow-xl backdrop-blur-md sm:mx-5 sm:-mt-10 sm:mb-5 sm:p-4">
           <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:thin]">
             {images.map((url, index) => (
               <button

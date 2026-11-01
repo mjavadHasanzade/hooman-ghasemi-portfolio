@@ -1,3 +1,4 @@
+import HomeBackdrop from "@/components/common/HomeBackdrop";
 import PublicContentSync from "@/components/common/PublicContentSync";
 import Footer from "@/components/organisms/Footer";
 import Navbar from "@/components/layout/Navbar";
@@ -35,6 +36,7 @@ export default async function WebsiteLayout({
     <div className="site-background min-h-screen">
       <PublicContentSync />
       {/* <Navbar /> */}
+      <HomeBackdrop>
       <svg
         className="site-backdrop"
         viewBox="0 0 1671 941"
@@ -113,6 +115,7 @@ export default async function WebsiteLayout({
           </g>
         </g>
       </svg>
+      </HomeBackdrop>
       <div className="site-content" style={{ position: "relative", zIndex: 2 }}>
         <Navbar siteName={siteSettings.siteName} logoUrl={navbarLogoUrl} />
         <main className="min-h-screen">{children}</main>
