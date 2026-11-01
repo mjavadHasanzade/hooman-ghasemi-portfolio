@@ -95,7 +95,7 @@ export default function Hero({ hero }: HeroProps) {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-screen w-full flex-col overflow-hidden bg-transparent text-white"
+      className="relative flex min-h-svh w-full flex-col overflow-hidden bg-transparent text-white"
     >
       <div
         ref={glowRef}
@@ -106,7 +106,7 @@ export default function Hero({ hero }: HeroProps) {
         }}
       />
 
-      <div className="relative z-10 flex flex-1 flex-col justify-center px-5 pb-32 pt-16 sm:px-8 sm:pb-28 md:px-12 md:pb-24 lg:justify-start lg:px-15 lg:pb-0 lg:pt-32 xl:px-20 xl:pt-36">
+      <div className="relative z-10 flex flex-1 flex-col justify-center px-5 pt-24 pb-[calc(6rem+6svh)] sm:px-8 sm:pt-28 sm:pb-[calc(7rem+6svh)] md:px-12 lg:px-15 xl:px-20">
         <div
           className="
     flex w-full max-w-none flex-col
