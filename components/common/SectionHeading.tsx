@@ -1,8 +1,6 @@
 "use client";
 
 import RichText from "./RichText";
-import { usePersianWordReveal } from "@/hooks/usePersianTextReveal";
-import { richTextPlainText } from "@/lib/rich-text";
 import { useLocale } from "next-intl";
 import { ReactNode, useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -29,21 +27,6 @@ interface SectionHeadingProps {
   children?: ReactNode;
 }
 
-const DIM_COLOR = "rgba(75, 85, 99, 0.35)";
-
-function splitIntoWordSpans(text: string, lineIndex: number) {
-  return text.split(" ").map((word, i) => (
-    <span
-      key={`${lineIndex}-${i}`}
-      className="gsap-reveal-word inline-block will-change-[color]"
-      style={{ color: DIM_COLOR }}
-    >
-      {word}
-      {i < text.split(" ").length - 1 ? "\u00A0" : ""}
-    </span>
-  ));
-}
-
 export default function SectionHeading({
   label,
   heading,
@@ -57,63 +40,29 @@ export default function SectionHeading({
 }: SectionHeadingProps) {
   const isPersian = useLocale() === "fa";
   const descriptionRef = useRef<HTMLDivElement>(null);
-  usePersianWordReveal(descriptionRef, JSON.stringify(description));
+  const descriptionKey = JSON.stringify(description);
 
   useEffect(() => {
     if (!descriptionRef.current) return;
-
-    const ctx = gsap.context(() => {
-      if (isPersian) return;
-
-      const wordElements =
-        descriptionRef.current!.querySelectorAll<HTMLElement>(
-          ".gsap-reveal-word",
-        );
-
-      const words = Array.from(wordElements);
-
-      if (!words.length) return;
-
-      gsap.set(words, {
-        color: DIM_COLOR,
-      });
-
-      let revealedCount = 0;
-
-      const trigger = ScrollTrigger.create({
-        trigger: descriptionRef.current,
-        start: "top 88%",
-        end: "top 34%",
-        onUpdate: (self) => {
-          const nextCount = Math.round(self.progress * words.length);
-          if (nextCount === revealedCount) return;
-
-          if (nextCount > revealedCount) {
-            gsap.set(words.slice(revealedCount, nextCount), {
-              color: "rgb(229 231 235)",
-            });
-          } else {
-            gsap.set(words.slice(nextCount, revealedCount), {
-              color: DIM_COLOR,
-            });
-          }
-
-          revealedCount = nextCount;
+    const media = gsap.matchMedia();
+    let mounted = true;
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.fromTo(descriptionRef.current, { opacity: 0, y: 28 }, {
+        opacity: 1,
+        y: 0,
+        duration: 0.75,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: descriptionRef.current,
+          start: "top 90%",
+          toggleActions: "play none none reverse",
+          invalidateOnRefresh: true,
         },
-        onLeaveBack: () => {
-          revealedCount = 0;
-          gsap.set(words, { color: DIM_COLOR });
-        },
-        invalidateOnRefresh: true,
       });
-
-      return () => {
-        trigger.kill();
-      };
-    }, descriptionRef);
-
-    return () => ctx.revert();
-  }, [description, isPersian]);
+    });
+    document.fonts.ready.then(() => { if (mounted) ScrollTrigger.refresh(); });
+    return () => { mounted = false; media.revert(); };
+  }, [descriptionKey]);
 
   return (
     <div className={`section-heading max-w-3xl ${isPersian && align === "center" ? "fa-heading-centered" : ""} ${className}`}>
@@ -143,16 +92,7 @@ export default function SectionHeading({
         >
           {description.map((line, i) => (
             <div key={i} data-line={i} className="block">
-              {isPersian ? (
-                <RichText value={line} className="text-gray-200" revealWords />
-              ) : (
-                splitIntoWordSpans(
-                  /<\/?[a-z][^>]*>/i.test(line)
-                    ? richTextPlainText(line, false)
-                    : line,
-                  i,
-                )
-              )}
+              <RichText value={line} className="text-gray-200" />
             </div>
           ))}
         </div>

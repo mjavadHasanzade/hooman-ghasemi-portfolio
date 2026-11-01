@@ -1061,41 +1061,6 @@ body:has(.admin-shell)
   animation-delay: -7s;
 }
 
-/* Technology marks stay alive even when the user is not hovering them. Each
-   card gets a different phase so the grid feels organic rather than synced. */
-.tech-box-blink {
-  animation: tech-icon-blink 3.8s ease-in-out infinite;
-}
-
-.tech-box:nth-child(2n) .tech-box-blink {
-  animation-delay: -1.15s;
-}
-
-.tech-box:nth-child(3n) .tech-box-blink {
-  animation-delay: -2.35s;
-}
-
-@keyframes tech-icon-blink {
-  0%,
-  82%,
-  100% {
-    border-color: rgb(31 41 55);
-    box-shadow: 0 0 0 rgba(45, 212, 191, 0);
-  }
-  87% {
-    border-color: rgba(94, 234, 212, 0.85);
-    box-shadow: 0 0 16px rgba(45, 212, 191, 0.3);
-  }
-  91% {
-    border-color: rgba(45, 212, 191, 0.34);
-    box-shadow: 0 0 5px rgba(45, 212, 191, 0.12);
-  }
-  95% {
-    border-color: rgba(94, 234, 212, 0.95);
-    box-shadow: 0 0 20px rgba(45, 212, 191, 0.38);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .hero-star {
     animation: none;

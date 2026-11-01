@@ -3,7 +3,7 @@
 import { sortTechIcons } from "@/lib/tech-icon-order";
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionHeading from "../common/SectionHeading";
@@ -51,68 +51,61 @@ export default function TechStackSection({
   techIcons: PublicTechIcon[];
   sectionHeadings: PublicSectionHeadings;
 }) {
-  const isPersian = useLocale() === "fa";
   const t = useTranslations("TechStack");
   const gridRef = useRef<HTMLDivElement>(null);
+
+  const iconOrderKey = sortTechIcons(techIcons).map((icon) => icon.key).join("|");
 
   useEffect(() => {
     if (!gridRef.current) return;
 
-    const ctx = gsap.context(() => {
-      const boxes = isPersian
-        ? Array.from(gridRef.current!.children)
-        : gsap.utils.toArray<HTMLElement>(".tech-box");
-      if (isPersian) {
-        // The cell and its child both have tech-box; avoid animating the same icon twice.
-        gsap.set(".tech-box > .tech-box", { opacity: 1, y: 0 });
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      }
-
-      // --------------------------------------------------
-      // Initial state
-      // --------------------------------------------------
-
-      gsap.set(boxes, {
-        opacity: 0,
-        y: 24,
+    const grid = gridRef.current;
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const cells = Array.from(grid.children);
+      const marks = Array.from(grid.querySelectorAll<HTMLElement>(".tech-box-blink"));
+      gsap.fromTo(cells, { opacity: 0, y: 24 }, {
+        opacity: 1, y: 0, stagger: 0.06, duration: 0.6, ease: "power2.out",
+        scrollTrigger: { trigger: grid, start: "top 85%", toggleActions: "play none none reverse" },
       });
 
-      // --------------------------------------------------
-      // Entrance animation
-      // --------------------------------------------------
-
-      gsap.fromTo(
-        boxes,
-        {
-          opacity: 0,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          stagger: {
-            amount: 0.1,
-            from: "start",
-          },
-          duration: 0.6,
-          ease: "power2.out",
-
-          scrollTrigger: {
-            trigger: gridRef.current,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-          },
-        },
-      );
-
-      // --------------------------------------------------
-      // Random blinking
-      // --------------------------------------------------
-    }, gridRef);
-
-    return () => {
-      ctx.revert();
-    };
-  }, [isPersian, techIcons.length]);
+      let animations: Animation[] = [];
+      let timer: ReturnType<typeof setInterval> | undefined;
+      const blink = () => {
+        if (document.hidden) return;
+        animations.forEach((animation) => animation.cancel());
+        const pool = [...marks];
+        const selected: HTMLElement[] = [];
+        while (pool.length && selected.length < 3) {
+          selected.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+        }
+        animations = selected.map((mark) => mark.animate([
+          { borderColor: "#1f2937", boxShadow: "0 0 0 rgb(45 212 191 / 0)" },
+          { borderColor: "#5eead4", boxShadow: "0 0 20px rgb(45 212 191 / .38)", offset: 0.35 },
+          { borderColor: "#2a746d", boxShadow: "0 0 5px rgb(45 212 191 / .12)", offset: 0.6 },
+          { borderColor: "#5eead4", boxShadow: "0 0 16px rgb(45 212 191 / .3)", offset: 0.75 },
+          { borderColor: "#1f2937", boxShadow: "0 0 0 rgb(45 212 191 / 0)" },
+        ], { duration: 2400, easing: "ease-in-out" }));
+      };
+      const observer = new IntersectionObserver(([entry]) => {
+        if (timer) clearInterval(timer);
+        timer = undefined;
+        if (entry.isIntersecting) {
+          blink();
+          timer = setInterval(blink, 3800);
+        } else {
+          animations.forEach((animation) => animation.cancel());
+        }
+      });
+      observer.observe(grid);
+      return () => {
+        observer.disconnect();
+        if (timer) clearInterval(timer);
+        animations.forEach((animation) => animation.cancel());
+      };
+    });
+    return () => media.revert();
+  }, [iconOrderKey]);
 
   return (
     <section className="relative w-full overflow-hidden bg-black py-16 text-white sm:py-20 md:py-24 lg:py-28">
@@ -155,7 +148,7 @@ export default function TechStackSection({
               <div
                 key={tool.key}
                 className="
-                  tech-box
+                  tech-cell
                   flex w-[calc((100%-2rem)/3)]
                   justify-center
 
