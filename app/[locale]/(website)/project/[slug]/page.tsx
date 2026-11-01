@@ -11,14 +11,14 @@ import ProjectGallery from "@/components/organisms/ProjectGallery";
 const copy = {
   fa: {
     back: "بازگشت به صفحه اصلی",
-    technologies: "تکنولوژی‌های استفاده‌شده",
+    technologies: "Softwares used",
     selectedWork: "نمونه‌کار منتخب",
     visit: "مشاهده پروژه",
     project: "پروژه",
   },
   en: {
     back: "Back to home",
-    technologies: "Technologies used",
+    technologies: "Softwares used",
     selectedWork: "Selected work",
     visit: "Visit project",
     project: "Project",
