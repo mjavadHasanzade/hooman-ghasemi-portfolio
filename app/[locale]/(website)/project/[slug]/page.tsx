@@ -13,7 +13,6 @@ const copy = {
     back: "بازگشت به صفحه اصلی",
     technologies: "تکنولوژی‌های استفاده‌شده",
     selectedWork: "نمونه‌کار منتخب",
-    projectNumber: "پروژه",
     visit: "مشاهده پروژه",
     project: "پروژه",
   },
@@ -21,7 +20,6 @@ const copy = {
     back: "Back to home",
     technologies: "Technologies used",
     selectedWork: "Selected work",
-    projectNumber: "Project",
     visit: "Visit project",
     project: "Project",
   },
@@ -111,7 +109,6 @@ export default async function ProjectPage({
               <ProjectGallery
                 images={projectImages}
                 alt={richTextPlainText(project.title)}
-                projectNumberLabel={labels.projectNumber}
               />
             </div>
           </div>
