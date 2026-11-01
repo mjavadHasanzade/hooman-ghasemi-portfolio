@@ -58,12 +58,12 @@ export default function Navbar({ siteName, logoUrl }: NavbarProps) {
                 unoptimized
                 className="h-10 w-10 shrink-0 object-contain sm:h-11 sm:w-11"
               />
-              <span className="truncate text-lg font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
+              <span className="min-w-0 truncate py-1 pe-1 text-lg leading-normal font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
                 {brandName}
               </span>
             </>
           ) : (
-            <span className="truncate text-lg font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
+            <span className="min-w-0 truncate py-1 pe-1 text-lg leading-normal font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
               {brandName}
             </span>
           )}
