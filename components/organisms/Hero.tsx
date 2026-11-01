@@ -115,8 +115,7 @@ export default function Hero({ hero }: HeroProps) {
     md:max-w-2xl md:gap-8
     lg:max-w-180 lg:gap-0
     xl:max-w-200
-    lg:ltr:ml-[10vw]
-    lg:rtl:mx-auto
+    lg:ms-[10vw]
   "
         >
           {" "}
