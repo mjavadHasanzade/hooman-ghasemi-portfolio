@@ -45,7 +45,7 @@ export default function ProjectGallery({
           unoptimized
         />
         </div>
-        <div dir="ltr" className="pointer-events-none absolute end-3 top-3 z-10 flex min-w-20 flex-col gap-2 rounded-md border border-white/30 bg-black/75 px-3 py-2 text-white shadow-[0_2px_12px_rgba(0,0,0,0.5)] backdrop-blur-md sm:end-4 sm:top-4">
+        <div dir="ltr" className="pointer-events-none absolute end-3 top-3 z-10 flex min-w-20 flex-col gap-2 rounded-md border border-white/30 bg-black/40 px-3 py-2 text-white shadow-[0_2px_12px_rgba(0,0,0,0.5)] backdrop-blur-md sm:end-4 sm:top-4">
           <span className="font-mono text-[10px] leading-none tracking-[0.18em]" aria-live="polite" aria-atomic="true">
             IMG {String(active + 1).padStart(2, "0")}
           </span>
@@ -63,7 +63,7 @@ export default function ProjectGallery({
         )}
       </div>
       {hasSlides && (
-        <div className="absolute inset-x-2 bottom-2 z-10 rounded-lg border border-white/25 bg-black/70 p-2 shadow-xl backdrop-blur-md sm:inset-x-4 sm:bottom-4 sm:p-3">
+        <div className="absolute inset-x-0 bottom-0 z-10 border-t border-white/20 bg-black/30 p-2 backdrop-blur-sm sm:p-3">
           <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:thin]">
             {images.map((url, index) => (
               <button
