@@ -11,7 +11,7 @@ import ProjectGallery from "@/components/organisms/ProjectGallery";
 const copy = {
   fa: {
     back: "بازگشت به صفحه اصلی",
-    technologies: "Softwares used",
+    technologies: "نرم افزارهای به کار گرفته شده",
     selectedWork: "نمونه‌کار منتخب",
     visit: "مشاهده پروژه",
     project: "پروژه",
