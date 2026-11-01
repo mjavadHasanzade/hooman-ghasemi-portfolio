@@ -35,7 +35,7 @@ export default function Navbar({ siteName, logoUrl }: NavbarProps) {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-3 px-5 py-5 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 sm:px-8 sm:py-6 md:px-12 lg:px-[60px] lg:py-8 xl:px-[80px] ${
+        className={`fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-3 px-5 py-1.5 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 sm:px-8 sm:py-2 md:px-12 lg:px-15 xl:px-20 ${
           isScrolled
             ? "border-b border-white/8 bg-[#05070a]/68 shadow-[0_12px_34px_rgba(0,0,0,0.2)] backdrop-blur-xl supports-backdrop-filter:bg-[#05070a]/48"
             : "border-b border-transparent bg-transparent shadow-none backdrop-filter-none"
@@ -56,7 +56,7 @@ export default function Navbar({ siteName, logoUrl }: NavbarProps) {
                 height={64}
                 priority
                 unoptimized
-                className="h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
+                className="h-10 w-10 shrink-0 object-contain sm:h-11 sm:w-11"
               />
               <span className="truncate text-lg font-semibold italic text-teal-500 sm:text-xl md:text-2xl">
                 {brandName}
