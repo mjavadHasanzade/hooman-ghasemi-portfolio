@@ -60,8 +60,7 @@ export default function TechStackSection({
     if (!gridRef.current) return;
 
     const grid = gridRef.current;
-    const media = gsap.matchMedia();
-    media.add("(prefers-reduced-motion: no-preference)", () => {
+    const ctx = gsap.context(() => {
       const cells = Array.from(grid.children);
       const marks = Array.from(grid.querySelectorAll<HTMLElement>(".tech-box-blink"));
       gsap.fromTo(cells, { opacity: 0, y: 24 }, {
@@ -103,8 +102,8 @@ export default function TechStackSection({
         if (timer) clearInterval(timer);
         animations.forEach((animation) => animation.cancel());
       };
-    });
-    return () => media.revert();
+    }, grid);
+    return () => ctx.revert();
   }, [iconOrderKey]);
 
   return (

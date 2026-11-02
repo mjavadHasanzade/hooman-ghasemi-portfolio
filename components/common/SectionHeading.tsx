@@ -44,9 +44,8 @@ export default function SectionHeading({
 
   useEffect(() => {
     if (!descriptionRef.current) return;
-    const media = gsap.matchMedia();
     let mounted = true;
-    media.add("(prefers-reduced-motion: no-preference)", () => {
+    const ctx = gsap.context(() => {
       gsap.fromTo(descriptionRef.current, { opacity: 0, y: 28 }, {
         opacity: 1,
         y: 0,
@@ -59,9 +58,9 @@ export default function SectionHeading({
           invalidateOnRefresh: true,
         },
       });
-    });
+    }, descriptionRef);
     document.fonts.ready.then(() => { if (mounted) ScrollTrigger.refresh(); });
-    return () => { mounted = false; media.revert(); };
+    return () => { mounted = false; ctx.revert(); };
   }, [descriptionKey]);
 
   return (

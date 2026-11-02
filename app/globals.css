@@ -1061,16 +1061,6 @@ body:has(.admin-shell)
   animation-delay: -7s;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .hero-star {
-    animation: none;
-  }
-
-  .tech-box-blink {
-    animation: none;
-  }
-}
-
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
@@ -1208,10 +1198,6 @@ body:has(.admin-shell) [data-slot="dialog-content"] > [data-slot="dialog-header"
   .site-background:lang(fa) .hero-star-main { transform: translate(980px, 280px) scale(0.7); }
   .site-background:lang(fa) .hero-star-cyan { transform: translate(730px, 620px) scale(0.7); }
 }
-@media (prefers-reduced-motion: reduce) {
-  .site-background:lang(fa) .hero-star { animation: none; }
-}
-
 /* Refined Persian type scale; these selectors never match English or admin UI. */
 .site-background:lang(fa) .hero-title {
   font-size: clamp(1.375rem, 4.5vw, 3.125rem);
