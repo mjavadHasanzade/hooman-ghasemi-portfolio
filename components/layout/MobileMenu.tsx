@@ -111,19 +111,6 @@ export default function MobileMenu({
                 transition={{ duration: 0.35, delay: 0.45 }}
                 className="flex flex-col gap-4 border-t border-white/10 pt-6"
               >
-                <SectionLink
-                  href="/#contact"
-                  onClick={onClose}
-                  className="
-                    flex items-center justify-center
-                    rounded-[3px] border border-teal-500
-                    bg-teal-500/10 py-3
-                    text-sm font-semibold text-white
-                    transition-colors hover:bg-teal-500/20
-                  "
-                >
-                  {t("contact")}
-                </SectionLink>
                 {isAuthenticated && (
                   <Link
                     href="/dashboard"
