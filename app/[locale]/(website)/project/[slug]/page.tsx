@@ -1,4 +1,5 @@
-import { richTextHtml, richTextPlainText } from "@/lib/rich-text";
+import { RichTextContent } from "@/lib/rich-text-react";
+import { richTextPlainText } from "@/lib/rich-text";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, MoveUpRight } from "lucide-react";
@@ -121,9 +122,10 @@ export default async function ProjectPage({
             <div
               role="heading"
               aria-level={1}
-              className="cms-rich-text mt-5 max-w-2xl text-4xl font-bold leading-[1.08] tracking-tight text-gray-100 sm:text-6xl lg:text-7xl"
-              dangerouslySetInnerHTML={{ __html: richTextHtml(project.title) }}
-            />
+              className="cms-rich-text project-heading mt-5 max-w-2xl font-bold tracking-tight rtl:tracking-normal"
+            >
+              <RichTextContent value={project.title} />
+            </div>
             <p className="mt-5 ltr:font-mono text-xs ltr:uppercase tracking-[0.18em] text-gray-600 rtl:tracking-normal">
               {labels.project} /{" "}
               {locale === "fa"
@@ -132,13 +134,10 @@ export default async function ProjectPage({
             </p>
 
             <div
-              className="project-rich-text mt-8 max-w-lg border-s-2 border-teal-400/40 ps-5 text-base leading-8 text-gray-400"
-              dangerouslySetInnerHTML={{
-                __html: richTextHtml(
-                  projectDescriptionHtml(project.description),
-                ),
-              }}
-            />
+              className="project-rich-text mt-8 max-w-lg border-s-2 border-teal-400/40 ps-5"
+            >
+              <RichTextContent value={projectDescriptionHtml(project.description)} />
+            </div>
 
             {project.liveUrl ? (
               <a

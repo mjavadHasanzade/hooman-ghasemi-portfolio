@@ -1,6 +1,7 @@
 "use client";
 
-import { richTextHtml, richTextPlainText } from "@/lib/rich-text";
+import { RichTextContent } from "@/lib/rich-text-react";
+import { richTextPlainText } from "@/lib/rich-text";
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
@@ -95,16 +96,17 @@ export default function AboutSection({ about }: { about: PublicAbout }) {
         </div>
 
         <div className="relative w-full lg:w-2/3 lg:pt-1">
-          <div className="cms-rich-text about-label about-item ltr:font-mono text-base tracking-[0.5em] text-teal-400 rtl:tracking-normal sm:text-lg" dangerouslySetInnerHTML={{ __html: richTextHtml(about.label) }} />
+          <div className="cms-rich-text about-label about-item ltr:font-mono tracking-[0.7rem] rtl:tracking-normal"><RichTextContent value={about.label} /></div>
 
-          <div role="heading" aria-level={2} className="cms-rich-text about-item mt-3 ltr:font-mono text-4xl font-bold text-gray-400 sm:text-5xl" dangerouslySetInnerHTML={{ __html: richTextHtml(about.heading) }} />
+          <div role="heading" aria-level={2} className="cms-rich-text about-heading about-item ltr:font-mono font-bold"><RichTextContent value={about.heading} /></div>
 
-          <div className="cms-rich-text about-greeting about-item relative z-10 mt-10 ltr:font-mono text-2xl text-gray-100 sm:mt-12 sm:text-3xl" dangerouslySetInnerHTML={{ __html: richTextHtml(about.greeting) }} />
+          <div className="cms-rich-text about-greeting about-item relative z-10 ltr:font-mono text-2xl text-gray-100 sm:text-3xl"><RichTextContent value={about.greeting} /></div>
 
           <div
-            className="cms-rich-text about-description about-item mt-5 max-w-2xl text-justify text-lg leading-relaxed text-gray-200 sm:text-xl [&_p+p]:mt-4 [&_strong]:font-semibold [&_ul]:my-4 [&_ul]:list-disc [&_ul]:ps-6 [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:ps-6"
-            dangerouslySetInnerHTML={{ __html: richTextHtml(about.description) }}
-          />
+            className="cms-rich-text about-description about-item max-w-2xl text-justify [&_strong]:font-semibold [&_ul]:my-4 [&_ul]:list-disc [&_ul]:ps-6 [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:ps-6"
+          >
+            <RichTextContent value={about.description} />
+          </div>
 
           <a
             href={`mailto:${about.email}`}

@@ -1,10 +1,7 @@
 "use client";
 
-import {
-  richTextHtml,
-  richTextPlainText,
-  revealRichText,
-} from "@/lib/rich-text";
+import { RichTextContent } from "@/lib/rich-text-react";
+import { richTextPlainText } from "@/lib/rich-text";
 
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
@@ -37,10 +34,9 @@ const TypewriterText = memo(function TypewriterText({
       <div className="h-[90px] w-full max-w-lg rounded-2xl border border-teal-500/40 bg-[linear-gradient(160deg,rgba(20,25,32,1)_0%,rgba(8,10,14,1)_55%,rgba(5,7,10,1)_100%)] px-6 py-4 text-center ltr:font-mono text-sm leading-7 text-gray-200 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-md sm:text-base sm:leading-7">
         <div
           className="cms-rich-text cms-typewriter-text h-14 overflow-hidden break-words [&_p]:m-0 [&_div]:m-0"
-          dangerouslySetInnerHTML={{
-            __html: revealRichText(phrase, typedText.length, true),
-          }}
-        />
+        >
+          <RichTextContent value={phrase} revealCount={typedText.length} />
+        </div>
       </div>
     </div>
   );
@@ -102,28 +98,25 @@ export default function ContactCTASection({
         <div
           role="heading"
           aria-level={2}
-          className={`cms-rich-text cta-heading cta-item ltr:font-mono font-bold text-gray-300 ${isPersian ? "text-3xl sm:text-4xl md:text-5xl" : "text-3xl leading-tight sm:text-4xl md:whitespace-nowrap md:text-[clamp(1.5rem,3.3vw,2.625rem)] [&_*]:inline [&_*]:m-0"}`}
-          dangerouslySetInnerHTML={{ __html: isPersian
-            ? richTextHtml(contactCta.heading)
-            : richTextHtml(contactCta.heading).replace(/<br\s*\/?>/gi, " ").replace(/<\/(p|div|h[1-6])>/gi, "</$1> ") }}
-        />
+          className={`cms-rich-text cta-heading cta-item ltr:font-mono font-bold ${isPersian ? "" : "md:whitespace-nowrap [&_:is(p,div):not([style])]:inline [&_*]:m-0"}`}
+        >
+          <RichTextContent value={contactCta.heading} inline={!isPersian} />
+        </div>
 
         <div
-          className="cms-rich-text cta-description cta-item mx-auto mt-6 max-w-2xl text-base leading-relaxed text-gray-400 sm:text-lg"
-          dangerouslySetInnerHTML={{
-            __html: richTextHtml(contactCta.description),
-          }}
-        />
+          className="cms-rich-text cta-description cta-item mx-auto max-w-2xl"
+        >
+          <RichTextContent value={contactCta.description} />
+        </div>
 
         <div className="cta-item relative mx-auto mt-10 w-full max-w-lg rounded-2xl border border-teal-500/40 bg-[linear-gradient(160deg,rgba(20,25,32,1)_0%,rgba(8,10,14,1)_55%,rgba(5,7,10,1)_100%)] px-5 py-7 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-md sm:px-8 sm:py-8">
           <div
             role="heading"
             aria-level={3}
             className="cms-rich-text ltr:font-mono text-base font-bold text-white sm:text-lg"
-            dangerouslySetInnerHTML={{
-              __html: richTextHtml(contactCta.connectLabel),
-            }}
-          />
+          >
+            <RichTextContent value={contactCta.connectLabel} />
+          </div>
 
           {(email || phone) && (
             <ul className="mx-auto mt-5 flex w-fit max-w-full flex-col items-start gap-3 text-sm text-teal-200 sm:text-base">

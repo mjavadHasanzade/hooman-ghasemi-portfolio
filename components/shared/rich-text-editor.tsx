@@ -1,8 +1,15 @@
 "use client";
 
-import { richTextHtml, richTextPlainText, shouldReplaceEditorContent } from "@/lib/rich-text";
+import {
+  editorFontSize,
+  editorLineHeight,
+  editorParagraphMargin,
+  richTextHtml,
+  richTextPlainText,
+  shouldReplaceEditorContent,
+} from "@/lib/rich-text";
 import { useEffect, useRef } from "react";
-import { Extension } from "@tiptap/core";
+import { Extension, Mark } from "@tiptap/core";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -21,9 +28,89 @@ import {
   List,
   ListOrdered,
   Redo2,
+  Strikethrough,
   Underline as UnderlineIcon,
   Undo2,
 } from "lucide-react";
+
+const fontSizes = [10, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 40, 48, 56, 64, 72].map((size) => size + "px");
+
+function normalizeColor(value: string) {
+  if (/^#[0-9a-f]{6}$/i.test(value)) return value;
+  const rgb = /^rgb\(\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\s*\)$/.exec(value);
+  if (!rgb || rgb.slice(1).some((part) => Number(part) > 255)) return null;
+  return "#" + rgb.slice(1).map((part) => Number(part).toString(16).padStart(2, "0")).join("");
+}
+
+function typographyMark(name: string, property: string, parse: (value: string) => string | null) {
+  return Mark.create({
+    name,
+    addAttributes() {
+      return { value: { default: null, rendered: false } };
+    },
+    parseHTML() {
+      return [{
+        style: property,
+        getAttrs: (value) => {
+          const parsed = parse(value);
+          return parsed ? { value: parsed } : false;
+        },
+      }];
+    },
+    renderHTML({ mark }) {
+      return ["span", { style: property + ": " + mark.attrs.value }, 0];
+    },
+  });
+}
+
+const TextColor = typographyMark("textColor", "color", normalizeColor);
+const TextHighlight = typographyMark("textHighlight", "background-color", normalizeColor);
+const TextSize = typographyMark("textSize", "font-size", (value) => editorFontSize.test(value) ? value : null);
+
+const paragraphMargins = ["0px", "4px", "8px", "12px", "16px", "20px", "24px", "32px", "40px", "48px"];
+
+const paragraphSpacing = [
+  {
+    attribute: "lineHeight",
+    property: "line-height",
+    label: "فاصله خطوط",
+    values: ["14px", "16px", "18px", "20px", "22px", "24px", "28px", "32px", "36px", "40px", "48px", "56px", "64px", "80px"],
+    pattern: editorLineHeight,
+  },
+  { attribute: "spaceBefore", property: "margin-top", label: "فاصله قبل از پاراگراف", values: paragraphMargins, pattern: editorParagraphMargin },
+  { attribute: "spaceAfter", property: "margin-bottom", label: "فاصله بعد از پاراگراف", values: paragraphMargins, pattern: editorParagraphMargin },
+] as const;
+
+function pixelOptions(values: readonly string[], current?: string) {
+  const options = current && !values.includes(current) ? [current, ...values] : values;
+  return options.map((value) => (
+    <option key={value} value={value}>
+      {value.endsWith("px") ? value : "مقدار ذخیره‌شدهٔ قبلی"}
+    </option>
+  ));
+}
+
+const ParagraphSpacing = Extension.create({
+  name: "paragraphSpacing",
+  addGlobalAttributes() {
+    return [{
+      types: ["paragraph"],
+      attributes: Object.fromEntries(paragraphSpacing.map(({ attribute, property, pattern }) => [
+        attribute,
+        {
+          default: null,
+          parseHTML: (element: HTMLElement) => {
+            const value = element.style.getPropertyValue(property);
+            return pattern.test(value) ? value : null;
+          },
+          renderHTML: (attributes: Record<string, string | null>) => attributes[attribute]
+            ? { style: property + ": " + attributes[attribute] }
+            : {},
+        },
+      ])),
+    }];
+  },
+});
 
 // Preserve block formatting when saving HTML and opening it again.
 const ParagraphAlignment = Extension.create({
@@ -96,6 +183,10 @@ export function RichTextEditor({
         underline: false,
       }),
       Underline,
+      TextColor,
+      TextHighlight,
+      ParagraphSpacing,
+      TextSize,
       ParagraphAlignment,
       Placeholder.configure({
         placeholder: placeholder ?? "",
@@ -220,6 +311,67 @@ export function RichTextEditor({
           <UnderlineIcon className="h-3.5 w-3.5" />,
           "زیرخط",
         )}
+
+        {toolbarButton(
+          editor.isActive("strike"),
+          () => editor.chain().focus().toggleStrike().run(),
+          <Strikethrough className="h-3.5 w-3.5" />,
+          "خط‌خورده",
+        )}
+        {([
+          { mark: "textColor", label: "رنگ متن", fallback: "#e5e7eb" },
+          { mark: "textHighlight", label: "رنگ هایلایت", fallback: "#fde047" },
+        ] as const).map(({ mark, label, fallback }) => (
+          <div key={mark} className="flex items-center gap-1">
+            <label className="flex items-center gap-1 px-1 text-xs text-slate-200">
+              {label}
+              <input
+                type="color"
+                aria-label={label}
+                className="h-8 w-8 cursor-pointer rounded border border-slate-600 bg-slate-900 p-1"
+                value={editor.getAttributes(mark).value ?? fallback}
+                onChange={(event) => editor.chain().setMark(mark, { value: event.target.value }).run()}
+              />
+            </label>
+            <button
+              type="button"
+              aria-label={label + " پیش‌فرض"}
+              className={selectClassName}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => editor.chain().focus().unsetMark(mark).run()}
+            >
+              پیش‌فرض
+            </button>
+          </div>
+        ))}
+        <select
+          aria-label="اندازه متن"
+          className={selectClassName}
+          value={editor.getAttributes("textSize").value ?? ""}
+          onChange={(event) => {
+            const chain = editor.chain().focus();
+            const value = event.target.value;
+            if (value) chain.setMark("textSize", { value }).run();
+            else chain.unsetMark("textSize").run();
+          }}
+        >
+          <option value="">اندازه پیش‌فرض</option>
+          {pixelOptions(fontSizes, editor.getAttributes("textSize").value)}
+        </select>
+
+        {paragraphSpacing.map(({ attribute, label, values }) => (
+          <select
+            key={attribute}
+            aria-label={label}
+            className={selectClassName}
+            value={editor.getAttributes("paragraph")[attribute] ?? ""}
+            onChange={(event) => editor.chain().focus()
+              .updateAttributes("paragraph", { [attribute]: event.target.value || null }).run()}
+          >
+            <option value="">{label} (پیش‌فرض)</option>
+            {pixelOptions(values, editor.getAttributes("paragraph")[attribute])}
+          </select>
+        ))}
 
         <span className="mx-1 h-4 w-px bg-slate-700" />
 

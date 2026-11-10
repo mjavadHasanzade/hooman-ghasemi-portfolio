@@ -1,7 +1,7 @@
 "use client";
 
-import { richTextHtml } from "@/lib/rich-text";
 
+import { RichTextContent } from "@/lib/rich-text-react";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import type { PublicHero } from "@/lib/api/public-content";
@@ -124,13 +124,15 @@ export default function Hero({ hero }: HeroProps) {
             aria-level={1}
             ref={titleRef}
             className="cms-rich-text hero-title text-balance ltr:font-mono ltr:uppercase text-[clamp(1.25rem,6.2vw,1.875rem)] font-bold leading-[1.28] tracking-wide text-teal-200 rtl:leading-[1.5] rtl:tracking-normal sm:text-[38px] sm:leading-[1.28] md:text-[46px] lg:text-[52px] lg:leading-[1.3] xl:text-[58px]"
-            dangerouslySetInnerHTML={{ __html: richTextHtml(hero.title) }}
-          />
+          >
+            <RichTextContent value={hero.title} />
+          </div>
           <div
             ref={subtitleRef}
             className="cms-rich-text hero-subtitle max-w-md text-[15px] leading-relaxed text-gray-300 sm:text-lg md:text-xl lg:mt-9 lg:max-w-lg"
-            dangerouslySetInnerHTML={{ __html: richTextHtml(hero.subtitle) }}
-          />
+          >
+            <RichTextContent value={hero.subtitle} />
+          </div>
           <div ref={buttonRef} className="mt-2 sm:mt-0 lg:mt-9">
             <button
               type="button"
@@ -153,10 +155,9 @@ export default function Hero({ hero }: HeroProps) {
 
               <div
                 className="cms-rich-text"
-                dangerouslySetInnerHTML={{
-                  __html: richTextHtml(hero.ctaLabel),
-                }}
-              />
+              >
+                <RichTextContent value={hero.ctaLabel} />
+              </div>
             </button>
           </div>
         </div>

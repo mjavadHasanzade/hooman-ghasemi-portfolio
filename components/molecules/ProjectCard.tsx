@@ -1,8 +1,9 @@
+import { RichTextContent } from "@/lib/rich-text-react";
 import Image from "next/image";
 import { ReactNode } from "react";
 import OutlinedButton from "../common/OutlinedButton";
 import ProjectTechMarquee from "./ProjectTechMarquee";
-import { htmlToPlainTextWithBreaks } from "@/utils/html";
+import { richTextPlainText } from "@/lib/rich-text";
 
 interface ProjectCardProps {
   image: string | null;
@@ -27,8 +28,7 @@ export default function ProjectCard({
   liveUrl,
   slug,
 }: ProjectCardProps) {
-  title = htmlToPlainTextWithBreaks(title);
-  const plainDescription = htmlToPlainTextWithBreaks(description);
+  const plainTitle = richTextPlainText(title);
 
   return (
     <div className="group relative flex h-full flex-col z-10 overflow-hidden rounded-[6px] border border-white/10 bg-[linear-gradient(160deg,rgba(20,25,32,1)_0%,rgba(8,10,14,1)_55%,rgba(5,7,10,1)_100%)] shadow-[0_1px_0_0_rgba(255,255,255,0.04)_inset] backdrop-blur-sm transition-colors duration-300 hover:border-teal-500/50">
@@ -40,7 +40,7 @@ export default function ProjectCard({
         {image ? (
           <Image
             src={image}
-            alt={title}
+            alt={plainTitle}
             fill
             className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 90vw, (max-width: 1280px) 45vw, 30vw"
@@ -48,7 +48,7 @@ export default function ProjectCard({
           />
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-gray-500">
-            {title}
+            {plainTitle}
           </div>
         )}
 
@@ -56,13 +56,19 @@ export default function ProjectCard({
       </div>
 
       <div className="relative z-10 flex flex-1 flex-col px-5 pb-5 pt-4 sm:px-6 sm:pb-6 sm:pt-5">
-        <h3 className="mb-2 ltr:font-mono text-lg font-bold leading-snug text-gray-100 sm:text-xl">
-          {title}
-        </h3>
+        <div
+          role="heading"
+          aria-level={3}
+          className="cms-rich-text project-card-title mb-2 ltr:font-mono font-bold"
+        >
+          <RichTextContent value={title} />
+        </div>
 
-        <p className="mb-5 line-clamp-3 flex-1 whitespace-pre-line text-base leading-wider text-gray-400 sm:text-lg">
-          {plainDescription}
-        </p>
+        <div
+          className="cms-rich-text project-card-description mb-5 line-clamp-3 flex-1"
+        >
+          <RichTextContent value={description} />
+        </div>
 
         <div className="mt-auto flex min-w-0 items-center justify-between gap-3">
           <OutlinedButton

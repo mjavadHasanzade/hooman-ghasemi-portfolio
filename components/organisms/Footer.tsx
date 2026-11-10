@@ -1,7 +1,7 @@
 "use client";
 
-import { richTextHtml } from "@/lib/rich-text";
 
+import { RichTextContent } from "@/lib/rich-text-react";
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import type { PublicFooter } from "@/lib/types/public-content";
@@ -75,10 +75,9 @@ export default function Footer({
         </div>
         <div
           className="cms-rich-text footer-copyright footer-item mt-2 pb-4 ltr:font-mono text-sm text-gray-500 sm:mt-3 sm:pb-5 sm:text-base"
-          dangerouslySetInnerHTML={{
-            __html: richTextHtml(footer.copyrightText),
-          }}
-        />
+        >
+          <RichTextContent value={footer.copyrightText} />
+        </div>
       </div>
     </footer>
   );
