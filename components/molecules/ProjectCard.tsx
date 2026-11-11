@@ -65,9 +65,9 @@ export default function ProjectCard({
         </div>
 
         <div
-          className="cms-rich-text project-card-description mb-5 line-clamp-3 flex-1"
+          className="project-card-description mb-5 line-clamp-3 flex-1"
         >
-          <RichTextContent value={description} />
+          {richTextPlainText(description).replace(/\s+/g, " ")}
         </div>
 
         <div className="mt-auto flex min-w-0 items-center justify-between gap-3">
