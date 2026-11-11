@@ -32,7 +32,9 @@ export default function Footer({
       animations = Array.from(element.querySelectorAll<HTMLElement>(".footer-item"))
         .filter((item) => typeof item.animate === "function")
         .map((item, index) => item.animate([
-          { opacity: 0, transform: "translateY(16px)" },
+          // The logo is already visible when the observer fires. Never hide it
+          // at that point; keep its gentle entrance without a visible-to-hidden flash.
+          { opacity: item.classList.contains("footer-logo") ? 1 : 0, transform: "translateY(16px)" },
           { opacity: 1, transform: "translateY(0)" },
         ], {
           duration: 700,
