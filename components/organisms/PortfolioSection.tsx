@@ -69,7 +69,7 @@ export default function PortfolioSection({
       );
       // Set every slide before constructing staggered tweens: future stagger
       // targets must not remain visible while the first card waits to animate.
-      gsap.set(cards, { autoAlpha: 0, y: -64, scale: 0.97 });
+      gsap.set(cards, { autoAlpha: 0, y: 64, scale: 0.97 });
       let headingComplete = false;
       let cardsInView = false;
       const cardsAnimation = gsap.to(cards, {
