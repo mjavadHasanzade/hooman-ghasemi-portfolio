@@ -38,27 +38,52 @@ export default function ServicesSection({
   useEffect(() => {
     if (!cardsRef.current) return;
 
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        cardsRef.current!.querySelectorAll(".service-card-item"),
-        { opacity: 0, y: 32 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.65,
-          stagger: 0.12,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 75%",
-            once: true,
-          },
-        },
-      );
-    }, sectionRef);
+    const media = gsap.matchMedia();
+    media.add(
+      { mobile: "(max-width: 639px)", desktop: "(min-width: 640px)" },
+      (context) => {
+        const mobile = context.conditions?.mobile;
+        const targets = cardsRef.current!.querySelectorAll<HTMLElement>(
+          mobile
+            ? '[data-service-layout="mobile"]'
+            : '[data-service-layout="desktop"] .service-card-item',
+        );
 
-    return () => ctx.revert();
-  }, [services.length]);
+        // Stagger each visible row in DOM/reading order, in either language.
+        const rows = new Map<number, HTMLElement[]>();
+        targets.forEach((card) => {
+          const row = rows.get(card.offsetTop) ?? [];
+          row.push(card);
+          rows.set(card.offsetTop, row);
+        });
+        rows.forEach((cards) => {
+          gsap.set(cards, { opacity: 0, y: 70, scale: 0.97 });
+          gsap.fromTo(
+            cards,
+            { opacity: 0, y: 70, scale: 0.97 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.75,
+              stagger: 0.12,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: cards[0],
+                start: "top 88%",
+                end: "bottom top",
+                toggleActions: "play reset play reset",
+                invalidateOnRefresh: true,
+              },
+            },
+          );
+        });
+      },
+      sectionRef,
+    );
+
+    return () => media.revert();
+  }, [services.length, locale]);
 
   function iconFor(key: string) {
     if (key === "web-design" || key === "design") {
@@ -92,10 +117,10 @@ export default function ServicesSection({
         />
 
         <div ref={cardsRef} className="relative mx-auto mt-12 sm:mt-14 lg:mt-16">
-          <div className="sm:hidden">
+          <div data-service-layout="mobile" className="sm:hidden">
             <Swiper
-          key={locale}
-          dir={locale === "fa" ? "rtl" : "ltr"}
+              key={locale}
+              dir={locale === "fa" ? "rtl" : "ltr"}
               modules={[Pagination]}
               slidesPerView={1}
               spaceBetween={14}
@@ -118,7 +143,7 @@ export default function ServicesSection({
             )}
           </div>
 
-          <div className="hidden mx-auto max-w-6xl flex-wrap items-stretch justify-center gap-5 sm:flex xl:gap-4">
+          <div data-service-layout="desktop" className="hidden mx-auto max-w-6xl flex-wrap items-stretch justify-center gap-5 sm:flex xl:gap-4">
             {sortedServices.map((service) => (
               <div
                 key={service.id}

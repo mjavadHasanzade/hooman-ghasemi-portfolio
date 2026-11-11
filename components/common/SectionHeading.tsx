@@ -2,7 +2,7 @@
 
 import RichText from "./RichText";
 import { useLocale } from "next-intl";
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -25,6 +25,7 @@ interface SectionHeadingProps {
   headingClassName?: string;
   descriptionClassName?: string;
   children?: ReactNode;
+  animate?: boolean;
 }
 
 export default function SectionHeading({
@@ -37,41 +38,51 @@ export default function SectionHeading({
   headingClassName = "",
   descriptionClassName = "",
   children,
+  animate = true,
 }: SectionHeadingProps) {
   const isPersian = useLocale() === "fa";
-  const descriptionRef = useRef<HTMLDivElement>(null);
-  const descriptionKey = JSON.stringify(description);
+  const headingRef = useRef<HTMLDivElement>(null);
+  const contentKey = JSON.stringify([label, heading, description]);
 
-  useEffect(() => {
-    if (!descriptionRef.current) return;
+  useLayoutEffect(() => {
+    const element = headingRef.current;
+    if (!element || !animate) return;
     let mounted = true;
     const ctx = gsap.context(() => {
-      gsap.fromTo(descriptionRef.current, { opacity: 0, y: 28 }, {
-        opacity: 1,
+      const parts = element.querySelectorAll(
+        ":scope > .section-heading-label, :scope > .section-heading-title, :scope > .section-heading-description",
+      );
+      gsap.set(parts, { autoAlpha: 0, y: 48 });
+      gsap.fromTo(parts, { autoAlpha: 0, y: 48 }, {
+        autoAlpha: 1,
         y: 0,
-        duration: 0.75,
+        duration: 0.65,
+        stagger: 0.08,
         ease: "power2.out",
         scrollTrigger: {
-          trigger: descriptionRef.current,
-          start: "top 90%",
-          toggleActions: "play none none reverse",
+          trigger: element,
+          start: "top 88%",
+          end: "bottom top",
+          toggleActions: "play reset play reset",
           invalidateOnRefresh: true,
         },
       });
-    }, descriptionRef);
+    }, element);
     document.fonts.ready.then(() => { if (mounted) ScrollTrigger.refresh(); });
     return () => { mounted = false; ctx.revert(); };
-  }, [descriptionKey]);
+  }, [contentKey, animate]);
 
   return (
-    <div className={`section-heading max-w-3xl ${isPersian && align === "center" ? "fa-heading-centered" : ""} ${className}`}>
+    <div ref={headingRef} className={`section-heading max-w-3xl ${isPersian && align === "center" ? "fa-heading-centered" : ""} ${className}`}>
       <h2
+        style={{ opacity: 0, visibility: "hidden" }}
         className={`section-heading-label block ltr:font-mono font-bold uppercase tracking-[0.7rem] leading-[1.4] text-[25px] text-teal-500 ${labelClassName}`}
       >
         {label}
       </h2>
 
       <div role="heading" aria-level={3}
+        style={{ opacity: 0, visibility: "hidden" }}
         className={`section-heading-title ltr:font-mono font-bold tracking-tight rtl:tracking-normal ${headingClassName}`}
       >
         {heading.map((line, lineIndex) => (
@@ -86,7 +97,7 @@ export default function SectionHeading({
 
       {description && description.length > 0 && (
         <div
-          ref={descriptionRef}
+          style={{ opacity: 0, visibility: "hidden" }}
           className={`section-heading-description max-w-2xl ${descriptionClassName}`}
         >
           {description.map((line, i) => (

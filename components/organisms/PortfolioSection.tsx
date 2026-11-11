@@ -44,6 +44,8 @@ export default function PortfolioSection({
   const portfolioRef = useRef<HTMLElement>(null);
   const cardsContainerRef = useRef<HTMLDivElement>(null);
 
+  const animationKey = JSON.stringify([locale, sectionHeadings.projectsTitle, sectionHeadings.projectsSubtitle, projects.map((project) => [project.id, project.order])]);
+
   const [prevEl, setPrevEl] = useState<HTMLButtonElement | null>(null);
   const [nextEl, setNextEl] = useState<HTMLButtonElement | null>(null);
 
@@ -60,63 +62,72 @@ export default function PortfolioSection({
     if (!cards.length) return;
 
     const ctx = gsap.context(() => {
-      let hasScrolled = false;
-
-      const animation = gsap.timeline({
+      const heading = section.querySelector(".section-heading");
+      const headingParts = section.querySelectorAll(
+        ".section-heading-label, .section-heading-title, .section-heading-description",
+      );
+      // Set every slide before constructing staggered tweens: future stagger
+      // targets must not remain visible while the first card waits to animate.
+      gsap.set(cards, { autoAlpha: 0, y: -64, scale: 0.97 });
+      let headingComplete = false;
+      let cardsInView = false;
+      const cardsAnimation = gsap.to(cards, {
         paused: true,
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.7,
+        stagger: (index: number) => Math.min(index, 3) * 0.12,
+        ease: "power2.out",
       });
-
-      animation.fromTo(
-        cards,
+      const revealCards = () => {
+        if (headingComplete && cardsInView) cardsAnimation.play();
+      };
+      const resetCards = () => {
+        headingComplete = false;
+        cardsAnimation.pause(0);
+      };
+      gsap.set(headingParts, { autoAlpha: 0, y: 48 });
+      const headingAnimation = gsap.fromTo(
+        headingParts,
+        { autoAlpha: 0, y: 48 },
         {
-          opacity: 0,
-          y: 50,
-          scale: 0.97,
-        },
-        {
-          opacity: 1,
+          paused: true,
+          autoAlpha: 1,
           y: 0,
-          scale: 1,
           duration: 0.65,
-          stagger: 0.1,
-          ease: "power3.out",
+          stagger: 0.08,
+          ease: "power2.out",
+          onComplete: () => { headingComplete = true; revealCards(); },
         },
       );
-
-      const trigger = ScrollTrigger.create({
+      ScrollTrigger.create({
+        trigger: heading ?? section,
+        start: "top 88%",
+        endTrigger: section,
+        end: "bottom top",
+        animation: headingAnimation,
+        toggleActions: "restart reset restart reset",
+        onLeave: resetCards,
+        onLeaveBack: resetCards,
+        invalidateOnRefresh: true,
+      });
+      ScrollTrigger.create({
         trigger: container,
-
-        start: "top 80%",
-        end: "bottom 20%",
-
-        onEnter: () => {
-          hasScrolled = true;
-          animation.play();
-        },
-
-        onLeaveBack: () => {
-          if (!hasScrolled) return;
-
-          animation.reverse();
+        start: "top 92%",
+        endTrigger: section,
+        end: "bottom top",
+        onToggle: (trigger) => {
+          cardsInView = trigger.isActive;
+          revealCards();
         },
       });
-
-      if (window.scrollY === 0) {
-        animation.progress(1);
-      }
-
-      requestAnimationFrame(() => {
-        ScrollTrigger.refresh();
-      });
-
-      return () => {
-        trigger.kill();
-        animation.kill();
-      };
     }, section);
 
-    return () => ctx.revert();
-  }, []);
+    let mounted = true;
+    document.fonts.ready.then(() => { if (mounted) ScrollTrigger.refresh(); });
+    return () => { mounted = false; ctx.revert(); };
+  }, [animationKey]);
 
   return (
     <section
@@ -127,6 +138,7 @@ export default function PortfolioSection({
       {/* Heading */}
       <div className="px-5 sm:px-8 md:px-12 lg:px-15 xl:px-20">
         <SectionHeading
+          animate={projects.length === 0}
           label={t("label")}
           heading={[[{ text: sectionHeadings.projectsTitle, emphasis: true }]]}
           description={[sectionHeadings.projectsSubtitle]}
@@ -179,6 +191,7 @@ export default function PortfolioSection({
                 <SwiperSlide
                   key={project.id}
                   className="portfolio-project-card flex h-auto!"
+                  style={{ opacity: 0, visibility: "hidden" }}
                 >
                   <ProjectCard
                     image={publicMediaUrl(project.image)}
