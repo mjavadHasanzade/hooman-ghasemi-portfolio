@@ -1,6 +1,7 @@
 "use client";
 
 
+import PulsingDot from "../common/PulsingDot";
 import { RichTextContent } from "@/lib/rich-text-react";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -148,10 +149,7 @@ export default function Hero({ hero }: HeroProps) {
                 sm:px-6 sm:py-3.5 sm:text-[15px]
               "
             >
-              <span className="relative flex h-3 w-3 shrink-0">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-75" />
-                <span className="relative inline-flex h-3 w-3 rounded-full bg-teal-500" />
-              </span>
+              <PulsingDot />
 
               <div
                 className="cms-rich-text"

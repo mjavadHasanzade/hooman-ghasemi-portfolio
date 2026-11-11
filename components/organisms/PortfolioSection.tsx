@@ -11,7 +11,7 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
-import { ChevronLeft, ChevronRight, Circle } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -20,6 +20,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import SectionHeading from "../common/SectionHeading";
+import PulsingDot from "../common/PulsingDot";
 import ProjectCard from "../molecules/ProjectCard";
 import type {
   PublicProject,
@@ -200,7 +201,7 @@ export default function PortfolioSection({
                     visitSiteLabel={t("visitSite")}
                     viewProjectLabel={t("viewProject")}
                     viewProjectIcon={
-                      <Circle className="h-3.5 w-3.5 fill-teal-500 text-teal-500" />
+                      <PulsingDot />
                     }
                     liveUrl={project.liveUrl}
                     slug={project.slug}
