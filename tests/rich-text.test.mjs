@@ -110,7 +110,7 @@ const { RichTextContent } = rendererModule.exports;
 test("React output keeps approved editor formatting and rejects unsupported attributes", () => {
   const value = '<p dir="rtl" style="text-align:right;line-height:32px" onclick="invalid"><span class="untrusted" style="color:rgb(52, 211, 153);background-color:#111827;font-size:24px"><strong>A &amp; B</strong></span><br><a href="https://example.com" target="_blank">Link</a></p><ol start="3" style="list-style-type:upper-roman"><li>Item</li></ol>';
   const rendered = renderToStaticMarkup(createElement(RichTextContent, { value }));
-  for (const fragment of ['dir="rtl"', 'text-align:right', 'line-height:32px', 'color:rgb(52, 211, 153)', 'background-color:#111827', 'font-size:24px', '<strong>A &amp; B</strong>', '<br/>', 'href="https://example.com"', 'rel="noopener noreferrer"', 'start="3"', 'list-style-type:upper-roman']) {
+  for (const fragment of ['dir="rtl"', 'text-align:right', 'line-height:clamp(24px, calc(16.941176px + 1.960784vw), 32px)', 'color:rgb(52, 211, 153)', 'background-color:#111827', 'font-size:clamp(18px, calc(12.705882px + 1.470588vw), 24px)', '<strong>A &amp; B</strong>', '<br/>', 'href="https://example.com"', 'rel="noopener noreferrer"', 'start="3"', 'list-style-type:upper-roman']) {
     assert.ok(rendered.includes(fragment), fragment);
   }
   assert.ok(!/onclick|untrusted/.test(rendered));

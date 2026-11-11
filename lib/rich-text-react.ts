@@ -16,6 +16,19 @@ const styleProps = new Map([
   ["list-style-type", "listStyleType"],
 ]);
 
+// Preserve the saved desktop size and smoothly reduce explicit pixel typography
+// between 768px and 360px. Small fonts stay readable; relative sizes inherit normally.
+function responsivePixelSize(value: string, minimum: number): string {
+  if (!/^\d+(?:\.\d+)?px$/.test(value)) return value;
+  const desktop = Number.parseFloat(value);
+  const mobile = Math.min(desktop, Math.max(minimum, desktop * 0.75));
+  if (mobile === desktop) return value;
+  const slope = (desktop - mobile) / (768 - 360);
+  const intercept = Number((mobile - slope * 360).toFixed(6));
+  const viewport = Number((slope * 100).toFixed(6));
+  return `clamp(${mobile}px, calc(${intercept}px + ${viewport}vw), ${desktop}px)`;
+}
+
 // The sanitizer validates values. Translate only the supported CSS properties.
 function toReactStyle(css: string): CSSProperties {
   const style: Record<string, string> = {};
@@ -23,7 +36,14 @@ function toReactStyle(css: string): CSSProperties {
     const colon = declaration.indexOf(":");
     if (colon < 0) continue;
     const property = styleProps.get(declaration.slice(0, colon).trim());
-    if (property) style[property] = declaration.slice(colon + 1).trim();
+    if (property) {
+      const value = declaration.slice(colon + 1).trim();
+      style[property] = property === "fontSize"
+        ? responsivePixelSize(value, 12)
+        : property === "lineHeight"
+          ? responsivePixelSize(value, 0)
+          : value;
+    }
   }
   return style;
 }
