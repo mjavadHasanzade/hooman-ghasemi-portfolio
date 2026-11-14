@@ -97,3 +97,32 @@ export function RichTextContent({
     : sanitized;
   return parseDocument(html).children.map(renderNode);
 }
+
+function findParagraph(nodes: ChildNode[]): ChildNode | undefined {
+  for (const node of nodes) {
+    if (node.type !== "tag") continue;
+    if (node.name === "p") return node;
+    const paragraph = findParagraph(node.children);
+    if (paragraph) return paragraph;
+  }
+}
+
+// Card excerpts retain text colors only; all sizing, weight, spacing, links,
+// and highlighting come from the card rather than the full project document.
+function renderExcerptNode(node: ChildNode, key: number): ReactNode {
+  if (node.type === "text") return node.data;
+  if (node.type !== "tag") return null;
+  if (node.name === "br") return " ";
+  const children = node.children.map(renderExcerptNode);
+  const color = toReactStyle(node.attribs.style ?? "").color;
+  return color ? createElement("span", { key, style: { color } }, children) : children;
+}
+
+export function ProjectCardExcerpt({ value }: { value: string }) {
+  const source = /<\/?[a-z][^>]*>/i.test(value)
+    ? value
+    : value.split(/\r?\n\s*\r?\n/, 1)[0];
+  const nodes = parseDocument(richTextHtml(source)).children;
+  const paragraph = findParagraph(nodes);
+  return (paragraph?.type === "tag" ? paragraph.children : nodes).map(renderExcerptNode);
+}

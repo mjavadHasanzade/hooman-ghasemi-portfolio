@@ -1,4 +1,4 @@
-import { RichTextContent } from "@/lib/rich-text-react";
+import { ProjectCardExcerpt, RichTextContent } from "@/lib/rich-text-react";
 import Image from "next/image";
 import { ReactNode } from "react";
 import OutlinedButton from "../common/OutlinedButton";
@@ -67,7 +67,7 @@ export default function ProjectCard({
         <div
           className="project-card-description mb-5 line-clamp-3 flex-1"
         >
-          {richTextPlainText(description).replace(/\s+/g, " ")}
+          <ProjectCardExcerpt value={description} />
         </div>
 
         <div className="mt-auto flex min-w-0 items-center justify-between gap-3">
