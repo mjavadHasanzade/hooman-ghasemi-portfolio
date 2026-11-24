@@ -199,6 +199,7 @@ export function RichTextEditor({
         ...(id ? { id, "aria-labelledby": `${id}-label` } : {}),
         role: "textbox",
         "aria-multiline": "true",
+        lang: dir === "rtl" ? "fa" : "en",
         dir,
         // Hardcoded colors instead of semantic tokens — guarantees
         // readable white-on-dark text regardless of theme resolution.
@@ -232,12 +233,10 @@ export function RichTextEditor({
     editor.setOptions({
       editorProps: {
         ...editor.options.editorProps,
-        attributes: { ...editor.options.editorProps.attributes, dir },
+        attributes: { ...editor.options.editorProps.attributes, dir, lang: dir === "rtl" ? "fa" : "en" },
       },
     });
   }, [dir, editor]);
-
-  if (!editor) return null;
 
   function setDirection(direction: "rtl" | "ltr" | "auto") {
     if (!editor) return;
@@ -260,6 +259,11 @@ export function RichTextEditor({
 
   const selectClassName = "h-8 max-w-full rounded-md border border-slate-600 bg-slate-900 px-2 text-xs text-slate-200 outline-none focus:border-teal-400";
 
+  // Keep the full toolbar and writing surface mounted while a locale-specific
+  // editor initializes. Each locale still gets its own isolated undo history.
+  const isActive = (name: string, attributes?: Record<string, unknown>) => editor?.isActive(name, attributes) ?? false;
+  const getAttributes = (name: string) => editor?.getAttributes(name) ?? {};
+
   function toolbarButton(
     isActive: boolean,
     onClick: () => void,
@@ -273,7 +277,7 @@ export function RichTextEditor({
         title={label}
         aria-label={label}
         aria-pressed={isActive}
-        disabled={disabled}
+        disabled={disabled || !editor}
         onMouseDown={(event) => event.preventDefault()}
         onClick={onClick}
         className={`flex h-7 w-7 items-center justify-center rounded-md transition-colors disabled:cursor-not-allowed disabled:opacity-30 ${
@@ -290,31 +294,33 @@ export function RichTextEditor({
   return (
     <div
       dir="rtl"
+      lang="fa"
+      aria-busy={!editor}
       className={`overflow-hidden rounded-xl border border-slate-700 bg-slate-800/80 transition-colors focus-within:border-teal-500 focus-within:ring-3 focus-within:ring-teal-500/15 ${className}`}
     >
       <div className="flex flex-wrap items-center gap-1 border-b border-slate-700 bg-slate-900/60 px-2 py-1.5">
         {toolbarButton(
-          editor.isActive("bold"),
-          () => editor.chain().focus().toggleBold().run(),
+          isActive("bold"),
+          () => editor?.chain().focus().toggleBold().run(),
           <BoldIcon className="h-3.5 w-3.5" />,
           "درشت",
         )}
         {toolbarButton(
-          editor.isActive("italic"),
-          () => editor.chain().focus().toggleItalic().run(),
+          isActive("italic"),
+          () => editor?.chain().focus().toggleItalic().run(),
           <ItalicIcon className="h-3.5 w-3.5" />,
           "مورب",
         )}
         {toolbarButton(
-          editor.isActive("underline"),
-          () => editor.chain().focus().toggleUnderline().run(),
+          isActive("underline"),
+          () => editor?.chain().focus().toggleUnderline().run(),
           <UnderlineIcon className="h-3.5 w-3.5" />,
           "زیرخط",
         )}
 
         {toolbarButton(
-          editor.isActive("strike"),
-          () => editor.chain().focus().toggleStrike().run(),
+          isActive("strike"),
+          () => editor?.chain().focus().toggleStrike().run(),
           <Strikethrough className="h-3.5 w-3.5" />,
           "خط‌خورده",
         )}
@@ -326,49 +332,54 @@ export function RichTextEditor({
               {label}
               <input
                 type="color"
+                disabled={!editor}
                 aria-label={label}
                 className="h-8 w-8 cursor-pointer rounded border border-slate-600 bg-slate-900 p-1"
-                value={editor.getAttributes(mark).value ?? fallback}
-                onChange={(event) => editor.chain().setMark(mark, { value: event.target.value }).run()}
+                value={getAttributes(mark).value ?? fallback}
+                onChange={(event) => editor?.chain().setMark(mark, { value: event.target.value }).run()}
               />
             </label>
             <button
               type="button"
               aria-label={label + " پیش‌فرض"}
+              disabled={!editor}
               className={selectClassName}
               onMouseDown={(event) => event.preventDefault()}
-              onClick={() => editor.chain().focus().unsetMark(mark).run()}
+              onClick={() => editor?.chain().focus().unsetMark(mark).run()}
             >
               پیش‌فرض
             </button>
           </div>
         ))}
         <select
+          disabled={!editor}
           aria-label="اندازه متن"
           className={selectClassName}
-          value={editor.getAttributes("textSize").value ?? ""}
+          value={getAttributes("textSize").value ?? ""}
           onChange={(event) => {
-            const chain = editor.chain().focus();
+            const chain = editor?.chain().focus();
+            if (!chain) return;
             const value = event.target.value;
             if (value) chain.setMark("textSize", { value }).run();
             else chain.unsetMark("textSize").run();
           }}
         >
           <option value="">اندازه پیش‌فرض</option>
-          {pixelOptions(fontSizes, editor.getAttributes("textSize").value)}
+          {pixelOptions(fontSizes, getAttributes("textSize").value)}
         </select>
 
         {paragraphSpacing.filter(({ attribute }) => attribute === "lineHeight").map(({ attribute, label, values }) => (
           <select
+          disabled={!editor}
             key={attribute}
             aria-label={label}
             className={selectClassName}
-            value={editor.getAttributes("paragraph")[attribute] ?? ""}
-            onChange={(event) => editor.chain().focus()
+            value={getAttributes("paragraph")[attribute] ?? ""}
+            onChange={(event) => editor?.chain().focus()
               .updateAttributes("paragraph", { [attribute]: event.target.value || null }).run()}
           >
             <option value="">{label} (پیش‌فرض)</option>
-            {pixelOptions(values, editor.getAttributes("paragraph")[attribute])}
+            {pixelOptions(values, getAttributes("paragraph")[attribute])}
           </select>
         ))}
 
@@ -382,8 +393,8 @@ export function RichTextEditor({
         ] as const).map(([alignment, Icon, label]) => (
           <span key={alignment}>
             {toolbarButton(
-              editor.isActive("paragraph", { textAlign: alignment }),
-              () => editor.chain().focus().updateAttributes("paragraph", { textAlign: alignment }).run(),
+              isActive("paragraph", { textAlign: alignment }),
+              () => editor?.chain().focus().updateAttributes("paragraph", { textAlign: alignment }).run(),
               <Icon className="h-3.5 w-3.5" />,
               label,
             )}
@@ -391,33 +402,33 @@ export function RichTextEditor({
         ))}
         <span className="mx-1 h-4 w-px bg-slate-700" />
         {toolbarButton(
-          editor.isActive("paragraph", { dir: "rtl" }),
+          isActive("paragraph", { dir: "rtl" }),
           () => setDirection("rtl"),
           <PilcrowRight className="h-3.5 w-3.5" />,
           "راست به چپ (RTL)",
         )}
         {toolbarButton(
-          editor.isActive("paragraph", { dir: "ltr" }),
+          isActive("paragraph", { dir: "ltr" }),
           () => setDirection("ltr"),
           <PilcrowLeft className="h-3.5 w-3.5" />,
           "چپ به راست (LTR)",
         )}
         {toolbarButton(
-          editor.isActive("paragraph", { dir: "auto" }),
+          isActive("paragraph", { dir: "auto" }),
           () => setDirection("auto"),
           <span className="text-[10px]">Auto</span>,
           "جهت خودکار متن",
         )}
         <span className="mx-1 h-4 w-px bg-slate-700" />
         {toolbarButton(
-          editor.isActive("bulletList"),
-          () => editor.chain().focus().toggleBulletList().run(),
+          isActive("bulletList"),
+          () => editor?.chain().focus().toggleBulletList().run(),
           <List className="h-3.5 w-3.5" />,
           "لیست نقطه‌ای",
         )}
         {toolbarButton(
-          editor.isActive("orderedList"),
-          () => editor.chain().focus().toggleOrderedList().run(),
+          isActive("orderedList"),
+          () => editor?.chain().focus().toggleOrderedList().run(),
           <ListOrdered className="h-3.5 w-3.5" />,
           "لیست شماره‌دار",
         )}
@@ -425,9 +436,10 @@ export function RichTextEditor({
         <span className="mx-1 h-4 w-px bg-slate-700" />
 
         <select
+          disabled={!editor}
           aria-label="نوع لیست نقطه‌ای"
           className={selectClassName}
-          value={editor.isActive("bulletList") ? (editor.getAttributes("bulletList").listStyleType || "disc") : ""}
+          value={isActive("bulletList") ? (getAttributes("bulletList").listStyleType || "disc") : ""}
           onChange={(event) => setListStyle("bulletList", event.target.value)}
         >
           <option value="" disabled>نوع بولت</option>
@@ -436,9 +448,10 @@ export function RichTextEditor({
           <option value="square">مربع</option>
         </select>
         <select
+          disabled={!editor}
           aria-label="نوع لیست شماره‌دار"
           className={selectClassName}
-          value={editor.isActive("orderedList") ? (editor.getAttributes("orderedList").listStyleType || "decimal") : ""}
+          value={isActive("orderedList") ? (getAttributes("orderedList").listStyleType || "decimal") : ""}
           onChange={(event) => setListStyle("orderedList", event.target.value)}
         >
           <option value="" disabled>نوع شماره‌گذاری</option>
@@ -451,36 +464,36 @@ export function RichTextEditor({
         </select>
         {toolbarButton(
           false,
-          () => editor.chain().focus().sinkListItem("listItem").run(),
+          () => editor?.chain().focus().sinkListItem("listItem").run(),
           <IndentIncrease className="h-3.5 w-3.5" />,
           "افزایش سطح لیست",
-          !editor.can().sinkListItem("listItem"),
+          !editor?.can().sinkListItem("listItem"),
         )}
         {toolbarButton(
           false,
-          () => editor.chain().focus().liftListItem("listItem").run(),
+          () => editor?.chain().focus().liftListItem("listItem").run(),
           <IndentDecrease className="h-3.5 w-3.5" />,
           "کاهش سطح لیست",
-          !editor.can().liftListItem("listItem"),
+          !editor?.can().liftListItem("listItem"),
         )}
         <span className="mx-1 h-4 w-px bg-slate-700" />
 
         {toolbarButton(
           false,
-          () => editor.chain().focus().undo().run(),
+          () => editor?.chain().focus().undo().run(),
           <Undo2 className="h-3.5 w-3.5" />,
           "واگرد",
-          !editor.can().undo(),
+          !editor?.can().undo(),
         )}
         {toolbarButton(
           false,
-          () => editor.chain().focus().redo().run(),
+          () => editor?.chain().focus().redo().run(),
           <Redo2 className="h-3.5 w-3.5" />,
           "ازنو",
-          !editor.can().redo(),
+          !editor?.can().redo(),
         )}
       </div>
-      <EditorContent editor={editor} dir={dir} />
+      <EditorContent editor={editor} dir={dir} lang={dir === "rtl" ? "fa" : "en"} className="h-40 overflow-y-auto overscroll-contain" />
     </div>
   );
 }

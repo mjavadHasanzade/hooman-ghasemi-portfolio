@@ -563,15 +563,24 @@
   box-shadow: 0 0 22px rgba(98, 230, 209, 0.14);
 }
 .admin-nav-active {
+  position: relative;
   background: linear-gradient(
     260deg,
     rgba(98, 230, 209, 0.18),
     rgba(98, 230, 209, 0.04)
   );
-  box-shadow:
-    inset -3px 0 #62e6d1,
-    0 8px 24px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
 }
+.admin-nav-active::before {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block: 10px;
+  width: 3px;
+  border-radius: 999px;
+  background: #62e6d1;
+  content: "";
+}
+
 .admin-header {
   border-bottom: 1px solid rgba(148, 163, 184, 0.12);
   background: rgba(8, 11, 18, 0.6);
@@ -697,30 +706,8 @@
 .admin-settings-card [data-slot="card-header"] {
   padding-top: 22px;
 }
-body [data-locale-tabs="en"] ~ form,
-body form:has([data-locale-tabs="en"]) {
-  direction: ltr;
-}
-body [data-locale-tabs="fa"] ~ form,
-body form:has([data-locale-tabs="fa"]) {
-  direction: rtl;
-}
-body [data-locale-tabs="en"] ~ form input:not([dir]),
-body [data-locale-tabs="en"] ~ form textarea:not([dir]),
-body form:has([data-locale-tabs="en"]) input:not([dir]),
-body form:has([data-locale-tabs="en"]) textarea:not([dir]) {
-  direction: ltr;
-  text-align: left;
-  unicode-bidi: plaintext;
-}
-body [data-locale-tabs="fa"] ~ form input:not([dir]),
-body [data-locale-tabs="fa"] ~ form textarea:not([dir]),
-body form:has([data-locale-tabs="fa"]) input:not([dir]),
-body form:has([data-locale-tabs="fa"]) textarea:not([dir]) {
-  direction: rtl;
-  text-align: right;
-  unicode-bidi: plaintext;
-}
+/* Dashboard direction comes from its RTL shell/provider, never the content tab.
+   Only the writing surface inside RichTextEditor follows the selected locale. */
 
 /* Premium admin dialogs. The portal is mounted on body, so scope through the
   admin shell marker while keeping the public site's dialogs untouched. */

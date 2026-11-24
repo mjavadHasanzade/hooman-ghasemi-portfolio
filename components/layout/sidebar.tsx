@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import {
   LayoutDashboard,
   Settings,
@@ -35,12 +34,11 @@ const navItems = [
 
 export function DashboardNavigation({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
-  const params = useParams<{ locale: string }>();
 
   return (
       <nav dir="rtl" aria-label="بخش‌های مدیریت" className="flex flex-col gap-1 px-3">
         {navItems.map((item) => {
-          const href = `/${params.locale}/dashboard${item.href === "/" ? "" : item.href}`;
+          const href = `/dashboard${item.href === "/" ? "" : item.href}`;
           const isActive = pathname.replace(/\/$/, "") === href;
           const Icon = item.icon;
 
@@ -68,7 +66,7 @@ export function DashboardNavigation({ onNavigate }: { onNavigate?: () => void })
 
 export function Sidebar() {
   return (
-    <aside className="admin-sidebar hidden w-72 shrink-0 md:block">
+    <aside className="admin-sidebar sticky top-0 hidden h-dvh w-72 shrink-0 self-start overflow-y-auto overscroll-contain md:block">
       <div className="admin-brand flex h-20 items-center gap-3 px-6">
         <span className="admin-brand-mark">E</span>
         <div>

@@ -97,10 +97,10 @@ export default function HeroPage() {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader><CardTitle>محتوای Hero</CardTitle></CardHeader>
-          <CardContent key={activeLocale} dir="rtl" className="space-y-6">
+          <CardContent dir="rtl" className="space-y-6">
             <ImagePicker label="تصویر پس‌زمینه" value={backgroundImage} onChange={(media) => form.setValue("backgroundImage", media, { shouldDirty: true })} />
             <LocaleTabs value={activeLocale} onChange={setActiveLocale} availableLocales={availableLocales} />
-            <div key={activeLocale} className="space-y-2">
+            <div className="space-y-2">
               <Label id="hero-title-label" htmlFor="hero-title">عنوان</Label>
               <RichTextField control={form.control} name={`${translationPath}.title`} id={"hero-title"} locale={activeLocale} required />
               <p className="text-xs text-muted-foreground">برای تعیین محل شکست تیتر از Enter یا Shift+Enter استفاده کنید؛ این شکست خط در سایت حفظ می‌شود.</p>
