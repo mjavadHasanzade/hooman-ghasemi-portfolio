@@ -134,7 +134,7 @@ export default async function ProjectPage({
             </p>
 
             <div
-              className="project-rich-text mt-8 max-w-lg border-s-2 border-teal-400/40 ps-5"
+              className="project-rich-text mt-8 max-w-lg border-s-2 border-teal-400/40 ps-5 text-justify"
             >
               <RichTextContent value={projectDescriptionHtml(project.description)} />
             </div>

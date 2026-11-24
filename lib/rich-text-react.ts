@@ -48,7 +48,7 @@ function toReactStyle(css: string): CSSProperties {
   return style;
 }
 
-function renderNode(node: ChildNode, key: number): ReactNode {
+function renderNode(node: ChildNode, key: number, preserveEmptyParagraphs: boolean): ReactNode {
   if (node.type === "text") return node.data;
   if (node.type !== "tag" || !allowedTags.has(node.name)) return null;
 
@@ -75,7 +75,16 @@ function renderNode(node: ChildNode, key: number): ReactNode {
   }
 
   if (node.name === "br" || node.name === "hr") return createElement(node.name, props);
-  return createElement(node.name, props, node.children.map(renderNode));
+  // Tiptap serializes an empty Enter-created paragraph as <p></p>.
+  // Without a line break it collapses to zero height in the public output.
+  if (node.name === "p" && node.children.length === 0 && preserveEmptyParagraphs) {
+    return createElement("p", props, createElement("br"));
+  }
+  return createElement(node.name, props, renderNodes(node.children, preserveEmptyParagraphs));
+}
+
+function renderNodes(nodes: ChildNode[], preserveEmptyParagraphs = true): ReactNode[] {
+  return nodes.map((node, key) => renderNode(node, key, preserveEmptyParagraphs));
 }
 
 export function RichTextContent({
@@ -89,13 +98,13 @@ export function RichTextContent({
   revealCount?: number;
   revealWords?: boolean;
 }) {
-  if (revealCount !== undefined) return parseDocument(revealRichText(value, revealCount, true)).children.map(renderNode);
-  if (revealWords) return parseDocument(richTextWordHtml(value)).children.map(renderNode);
+  if (revealCount !== undefined) return renderNodes(parseDocument(revealRichText(value, revealCount, true)).children);
+  if (revealWords) return renderNodes(parseDocument(richTextWordHtml(value)).children);
   const sanitized = richTextHtml(value);
   const html = inline
     ? sanitized.replace(/<br\s*\/?>/gi, " ").replace(/<\/(p|div|h[1-6])>/gi, "</$1> ")
     : sanitized;
-  return parseDocument(html).children.map(renderNode);
+  return renderNodes(parseDocument(html).children, !inline);
 }
 
 function findParagraph(nodes: ChildNode[]): ChildNode | undefined {
