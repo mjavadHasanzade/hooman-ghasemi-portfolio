@@ -289,7 +289,7 @@ export function RichTextEditor({
 
   return (
     <div
-      dir={dir}
+      dir="rtl"
       className={`overflow-hidden rounded-xl border border-slate-700 bg-slate-800/80 transition-colors focus-within:border-teal-500 focus-within:ring-3 focus-within:ring-teal-500/15 ${className}`}
     >
       <div className="flex flex-wrap items-center gap-1 border-b border-slate-700 bg-slate-900/60 px-2 py-1.5">
@@ -320,7 +320,6 @@ export function RichTextEditor({
         )}
         {([
           { mark: "textColor", label: "رنگ متن", fallback: "#e5e7eb" },
-          { mark: "textHighlight", label: "رنگ هایلایت", fallback: "#fde047" },
         ] as const).map(({ mark, label, fallback }) => (
           <div key={mark} className="flex items-center gap-1">
             <label className="flex items-center gap-1 px-1 text-xs text-slate-200">
@@ -359,7 +358,7 @@ export function RichTextEditor({
           {pixelOptions(fontSizes, editor.getAttributes("textSize").value)}
         </select>
 
-        {paragraphSpacing.map(({ attribute, label, values }) => (
+        {paragraphSpacing.filter(({ attribute }) => attribute === "lineHeight").map(({ attribute, label, values }) => (
           <select
             key={attribute}
             aria-label={label}

@@ -43,7 +43,7 @@ export function Header() {
           صفحهٔ اصلی
         </Link>
         <button className="admin-icon-button" title="اعلان‌ها" type="button"><Bell className="h-4 w-4" /></button>
-        <div className="hidden text-end text-sm sm:block">
+        <div className="hidden text-start text-sm sm:block">
           <div className="font-semibold text-slate-100">{user?.name}</div>
           <div className="text-xs text-slate-500">{user?.email}</div>
         </div>

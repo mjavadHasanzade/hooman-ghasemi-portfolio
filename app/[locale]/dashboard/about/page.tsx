@@ -66,7 +66,7 @@ function AboutTranslationForm({ locale }: { locale: Locale }) {
   }
 
   return (
-    <form dir={locale === "fa" ? "rtl" : "ltr"} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-6">
+    <form dir="rtl" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-6">
       <div className="space-y-2">
         <Label id={`about-label-${locale}-label`} htmlFor={`about-label-${locale}`}>برچسب</Label>
         <RichTextField control={form.control} name={"label"} id={`about-label-${locale}`} locale={locale} />

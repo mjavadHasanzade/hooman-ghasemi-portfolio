@@ -24,7 +24,7 @@ export function LocaleTabs({
   return (
     <div
       data-locale-tabs={value}
-      dir={value === "fa" ? "rtl" : "ltr"}
+      dir="rtl"
       className="flex gap-2 border-b"
       role="tablist"
       aria-label="زبان محتوا"

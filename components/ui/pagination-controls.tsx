@@ -1,6 +1,7 @@
 "use client";
 
 import { useLocale } from "next-intl";
+import { useDashboardDirection } from "@/components/layout/dashboard-direction";
 import { useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ export function PaginationControls({
   totalPages,
   onPageChange,
 }: PaginationControlsProps) {
+  const dashboardDirection = useDashboardDirection();
   const isPersian = useLocale() === "fa";
   useEffect(() => {
     if (page > totalPages) onPageChange(Math.max(1, totalPages));
@@ -24,7 +26,7 @@ export function PaginationControls({
   if (totalPages <= 1) return null;
 
   return (
-    <div dir={isPersian ? "rtl" : undefined} className="flex items-center justify-center gap-3 pt-4">
+    <div dir={dashboardDirection ?? (isPersian ? "rtl" : undefined)} className="flex items-center justify-center gap-3 pt-4">
       <Button
         variant="outline"
         size="icon"

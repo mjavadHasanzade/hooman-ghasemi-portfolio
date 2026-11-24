@@ -17,19 +17,20 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// Keep content sections in the same order as the public homepage.
 const navItems = [
   { href: "/", label: "داشبورد", icon: LayoutDashboard },
   { href: "/site-settings", label: "تنظیمات سایت", icon: Settings },
   { href: "/hero", label: "بخش Hero", icon: ImageIcon },
-  { href: "/about", label: "درباره من", icon: User },
-  { href: "/profile", label: "حساب کاربری", icon: KeyRound },
-  { href: "/footer", label: "فوتر", icon: FileText },
+  { href: "/services", label: "سرویس‌ها", icon: Layers3 },
   { href: "/tech-icons", label: "آیکون‌های تکنولوژی", icon: Wrench },
   { href: "/projects", label: "پروژه‌ها", icon: Briefcase },
-  { href: "/services", label: "سرویس‌ها", icon: Layers3 },
-  { href: "/contact-cta", label: "دعوت به اقدام", icon: MessageSquare },
+  { href: "/about", label: "درباره من", icon: User },
   { href: "/social-links", label: "شبکه‌های اجتماعی", icon: Share2 },
+  { href: "/contact-cta", label: "دعوت به اقدام", icon: MessageSquare },
+  { href: "/footer", label: "فوتر", icon: FileText },
   { href: "/media", label: "کتابخانه‌ی رسانه", icon: ImageIcon },
+  { href: "/profile", label: "حساب کاربری", icon: KeyRound },
 ];
 
 export function DashboardNavigation({ onNavigate }: { onNavigate?: () => void }) {
@@ -37,7 +38,7 @@ export function DashboardNavigation({ onNavigate }: { onNavigate?: () => void })
   const params = useParams<{ locale: string }>();
 
   return (
-      <nav aria-label="بخش‌های مدیریت" className="flex flex-col gap-1 px-3">
+      <nav dir="rtl" aria-label="بخش‌های مدیریت" className="flex flex-col gap-1 px-3">
         {navItems.map((item) => {
           const href = `/${params.locale}/dashboard${item.href === "/" ? "" : item.href}`;
           const isActive = pathname.replace(/\/$/, "") === href;
@@ -56,8 +57,8 @@ export function DashboardNavigation({ onNavigate }: { onNavigate?: () => void })
                   : "text-slate-400 hover:bg-white/5 hover:text-white",
               )}
             >
-              <Icon className="h-4 w-4" />
-              {item.label}
+              <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+              <span>{item.label}</span>
             </Link>
           );
         })}

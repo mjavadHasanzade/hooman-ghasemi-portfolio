@@ -72,11 +72,11 @@ function SectionHeadingsTranslationForm({ settings, locale }: { settings: SiteSe
   ] as const;
 
   return (
-    <form dir={locale === "fa" ? "rtl" : "ltr"} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-6">
+    <form dir="rtl" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-6">
       <div className="grid gap-5">
-        {fields.map(([name, englishLabel, persianLabel]) => (
+        {fields.map(([name, , persianLabel]) => (
           <div className="space-y-2" key={name}>
-            <Label id={`section-heading-${name}-${locale}-label`} htmlFor={`section-heading-${name}-${locale}`}>{locale === "fa" ? persianLabel : englishLabel}</Label>
+            <Label id={`section-heading-${name}-${locale}-label`} htmlFor={`section-heading-${name}-${locale}`}>{persianLabel}</Label>
             <RichTextField control={form.control} name={name} id={`section-heading-${name}-${locale}`} locale={locale} />
           </div>
         ))}

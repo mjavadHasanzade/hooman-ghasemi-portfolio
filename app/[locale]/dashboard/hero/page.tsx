@@ -97,7 +97,7 @@ export default function HeroPage() {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader><CardTitle>محتوای Hero</CardTitle></CardHeader>
-          <CardContent key={activeLocale} dir={activeLocale === "fa" ? "rtl" : "ltr"} className="space-y-6">
+          <CardContent key={activeLocale} dir="rtl" className="space-y-6">
             <ImagePicker label="تصویر پس‌زمینه" value={backgroundImage} onChange={(media) => form.setValue("backgroundImage", media, { shouldDirty: true })} />
             <LocaleTabs value={activeLocale} onChange={setActiveLocale} availableLocales={availableLocales} />
             <div key={activeLocale} className="space-y-2">

@@ -293,7 +293,7 @@ function ProjectDialog({
           </div>
         </DialogHeader>
         <form
-          dir={activeLocale === "fa" ? "rtl" : "ltr"}
+          dir="rtl"
           onSubmit={form.handleSubmit(onSubmit)}
           className="admin-project-form space-y-6"
         >
